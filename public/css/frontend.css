@@ -1,0 +1,186 @@
+/*
+ * File CSS ini di-load langsung dari public/css/frontend.css (bukan lewat Vite).
+ * Edit file ini, save, lalu reload browser -> perubahan langsung terlihat.
+ * Tidak perlu npm run dev / npm run build.
+ */
+
+/* Font Comfortaa di-load dari Google Fonts, lihat layouts/frontend.blade.php */
+html,
+body,
+h1, h2, h3, h4, h5, h6,
+.navbar,
+.btn,
+.form-control,
+.form-select,
+.card,
+.accordion-button {
+    font-family: 'Comfortaa', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.navbar-brand img {
+    max-height: 40px;
+}
+
+section {
+    scroll-margin-top: 70px;
+}
+
+.card {
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+/*
+ * Topbar (frontend/partials/topbar.blade.php): logo (header.blade.php)
+ * + menu (menu.blade.php) SATU <nav>/baris, logo kiri menu kanan.
+ *
+ * Default (halaman non-homepage, class "sticky-top"): background SOLID
+ * dari awal seperti sebelumnya.
+ */
+.site-topbar {
+    z-index: 1030;
+    background-color: #ffffff;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.95rem;
+    transition: background-color .25s ease, box-shadow .25s ease;
+}
+
+/*
+ * Homepage saja (class "site-topbar--overlay", lihat topbar.blade.php):
+ * position: fixed (BUKAN sticky) + transparan, supaya hero bisa
+ * full-bleed di belakangnya dari y=0. public/js/frontend.js nambahin
+ * class "topbar-scrolled" begitu halaman di-scroll — background jadi
+ * SOLID putih + shadow, dan JS-nya juga nuker class navbar-dark jadi
+ * navbar-light supaya warna teks menu ikut berubah dari putih ke gelap
+ * (dua-duanya WAJIB jalan bareng, background solid tapi teks masih
+ * putih = teks jadi tidak kelihatan, ini persis bug yang dilaporkan
+ * sebelumnya).
+ */
+.site-topbar--overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.site-topbar--overlay.topbar-scrolled {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+}
+
+/* Jarak antar item menu — lewat padding .nav-link (bukan margin li) supaya area klik-nya ikut lebar */
+.site-topbar .navbar-nav .nav-link {
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+}
+
+/*
+ * Hero/header slider homepage (frontend/partials/hero.blade.php), datanya
+ * diambil dari App\Models\WebHeader di backend Teleios.
+ *
+ * 100dvh (dynamic viewport height) dipakai SETELAH 100vh sebagai
+ * progressive enhancement — browser lama pakai 100vh, browser modern
+ * pakai 100dvh yang lebih akurat khususnya di mobile (100vh sering
+ * "kepotong" address bar browser mobile, 100dvh tidak).
+ *
+ * isolation: isolate MEMBUAT .hero-slide jadi stacking context sendiri
+ * (root cause fix untuk bug "tembus" sebelumnya): video/gambar/overlay
+ * di dalamnya pakai z-index negatif (-1/-2) supaya berada di BELAKANG
+ * teks & tombol, tapi tanpa isolation, elemen z-index negatif itu bisa
+ * "bocor" dan malah tampil di belakang elemen lain di luar .hero-slide
+ * (termasuk .site-topbar) tergantung urutan render browser.
+ */
+.hero-carousel .hero-slide,
+.hero-carousel .carousel-item {
+    min-height: 100vh;
+    min-height: 100dvh;
+    isolation: isolate;
+}
+
+.hero-slide {
+    min-height: 100vh;
+    min-height: 100dvh;
+    isolation: isolate;
+}
+
+/*
+ * Konten hero (headline + deskripsi + tombol CTA) SENGAJA rata kiri,
+ * bukan center — lihat .hero-content di dalam .col-lg-6 pada
+ * hero.blade.php. Deskripsinya pakai text-align: justify supaya rapi
+ * kalau teksnya panjang/beberapa baris.
+ */
+.hero-content {
+    text-align: left;
+}
+
+.hero-description {
+    text-align: justify;
+}
+
+@media (max-width: 991.98px) {
+    /* Justify kurang enak dibaca di kolom sempit (mobile) — balik ke rata kiri biasa */
+    .hero-description {
+        text-align: left;
+    }
+}
+
+/*
+ * Footer (frontend/partials/footer.blade.php) — kolom-kolom menu
+ * (App\Models\WebFooter, dikelompokkan per group_name lewat
+ * App\View\Composers\FooterComposer), box newsletter (tampilan saja,
+ * lihat komentar di footer.blade.php), lalu baris bawah: logo + copyright
+ * di kiri, ikon sosial + link legal di kanan.
+ */
+.site-footer {
+    background-color: #f4f3f1;
+    color: #1a1a1a;
+}
+
+.footer-col-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.footer-link-list li {
+    margin-bottom: 0.6rem;
+}
+
+.footer-link-list a,
+.footer-legal-links a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.footer-link-list a:hover,
+.footer-legal-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-newsletter-input::placeholder {
+    color: #6c757d;
+}
+
+.footer-divider {
+    border-top: 1px solid rgba(0, 0, 0, .1);
+    margin: 2.5rem 0 1.5rem;
+}
+
+.footer-copyright {
+    color: #6c757d;
+}
+
+.footer-social-icon {
+    color: #1a1a1a;
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.footer-social-icon:hover {
+    color: #000;
+}
