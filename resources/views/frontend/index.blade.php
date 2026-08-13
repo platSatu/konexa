@@ -1,6 +1,12 @@
 @extends('layouts.frontend')
 
-@section('title', 'Beranda - ' . config('app.name', 'Konexa'))
+{{--
+    Beranda pakai 'title_full' (bukan 'title' biasa) supaya title-nya
+    jadi kalimat jualan penuh, bukan ikut pola "Konexa : Beranda" —
+    lihat komentar 'title_full' di layouts/frontend.blade.php.
+--}}
+@section('title_full', 'Konexa | Solusi Modern untuk WhatsApp Bisnis Anda')
+@section('meta_description', 'Konexa adalah platform WhatsApp Business All-in-One — chatbot AI, broadcast anti-banned, CRM, dan otomasi pelanggan dalam satu dashboard.')
 
 @section('content')
 
@@ -8,63 +14,21 @@
 
     @include('frontend.partials.hero')
 
+    @include('frontend.partials.running-text')
+
     @include('frontend.partials.packages')
 
     @include('frontend.partials.features')
 
-    {{-- Tentang --}}
-    <section id="about" class="py-5">
-        <div class="container">
-            <h2 class="text-center mb-4">Tentang Kami</h2>
-            <p class="text-center text-muted mx-auto" style="max-width: 640px;">
-                Tulis konten tentang perusahaan/produk Anda di sini.
-            </p>
-        </div>
-    </section>
-
-    {{-- Layanan --}}
-    <section id="services" class="py-5 bg-light">
-        <div class="container">
-            <h2 class="text-center mb-4">Layanan</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="card-body text-center">
-                            <i class="bi bi-lightning-charge fs-1 text-primary"></i>
-                            <h5 class="card-title mt-3">Layanan 1</h5>
-                            <p class="card-text text-muted">Deskripsi layanan.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="card-body text-center">
-                            <i class="bi bi-shield-check fs-1 text-primary"></i>
-                            <h5 class="card-title mt-3">Layanan 2</h5>
-                            <p class="card-text text-muted">Deskripsi layanan.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="card-body text-center">
-                            <i class="bi bi-people fs-1 text-primary"></i>
-                            <h5 class="card-title mt-3">Layanan 3</h5>
-                            <p class="card-text text-muted">Deskripsi layanan.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- Kontak --}}
-    <section id="contact" class="py-5">
-        <div class="container">
-            <h2 class="text-center mb-4">Kontak</h2>
-            <p class="text-center text-muted">Info kontak / form kontak di sini.</p>
-        </div>
-    </section>
+    {{--
+        Section placeholder "Tentang Kami" / "Layanan" / "Kontak" (dummy
+        scaffolding dari awal proyek, isinya cuma teks generik "Tulis
+        konten... di sini") sudah DIHAPUS atas permintaan user — bukan
+        konten asli, dan tumpang tindih dengan section Fitur Unggulan di
+        atas (yang datanya asli dari App\Models\WebFeature). Kalau nanti
+        mau ada section "Tentang Kami" versi asli, tinggal tambahkan lagi
+        di sini dengan konten sungguhan (bukan placeholder).
+    --}}
 
     @include('frontend.partials.faq')
 

@@ -17,6 +17,18 @@ h1, h2, h3, h4, h5, h6,
     font-family: 'Comfortaa', 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
+/*
+ * Companion WAJIB untuk trik "100vw breakout" di .features-slider-wrap
+ * (lihat komentarnya di bawah, bagian Fitur Unggulan slider) — tanpa
+ * ini, elemen lebar 100vw bisa memicu scroll horizontal tak diinginkan
+ * di SELURUH halaman kalau browser punya scrollbar vertikal yang makan
+ * sedikit lebar viewport (100vw menghitung lebar TERMASUK scrollbar).
+ */
+html,
+body {
+    overflow-x: hidden;
+}
+
 .navbar-brand img {
     max-height: 40px;
 }
@@ -74,10 +86,70 @@ section {
     box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
 }
 
-/* Jarak antar item menu — lewat padding .nav-link (bukan margin li) supaya area klik-nya ikut lebar */
+/*
+ * Kontras teks menu waktu topbar TRANSPARAN (belum di-scroll, overlay
+ * langsung nimpa hero) — dilaporkan tidak kelihatan baik di desktop
+ * maupun mobile. Root cause: Bootstrap "navbar-dark" bawaan bikin
+ * .nav-link yang TIDAK aktif cuma rgba(255,255,255,.55) (55% putih) —
+ * itu didesain buat background yang BENAR-BENAR gelap (foto/video
+ * pekat), sementara background hero saat ini pola abu-abu medium
+ * (bukan gelap pekat), jadi 55% putih kontrasnya kurang. Dinaikkan ke
+ * .92 + ditambah text-shadow supaya tetap kebaca di atas background
+ * APA PUN (foto terang, pola ramai, dst) tanpa perlu ganti warna manual
+ * tiap kali background hero diganti dari Superadmin > Web > Headers.
+ */
+.site-topbar--overlay:not(.topbar-scrolled) .navbar-nav .nav-link {
+    text-shadow: 0 1px 4px rgba(0, 0, 0, .55);
+}
+
+.site-topbar--overlay:not(.topbar-scrolled).navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, .92);
+}
+
+.site-topbar--overlay:not(.topbar-scrolled).navbar-dark .navbar-nav .nav-link:hover,
+.site-topbar--overlay:not(.topbar-scrolled).navbar-dark .navbar-nav .nav-link.active {
+    color: #ffffff;
+}
+
+.site-topbar--overlay:not(.topbar-scrolled) .navbar-toggler {
+    border-color: rgba(255, 255, 255, .75);
+}
+
+.site-topbar--overlay:not(.topbar-scrolled) .navbar-toggler-icon {
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .5));
+}
+
+/*
+ * Menu mobile (hamburger di-klik, .navbar-collapse.show) khusus di
+ * homepage overlay: dikasih background solid gelap sendiri — TIDAK
+ * mengandalkan transparansi ke background hero di baliknya, karena
+ * panel menu yang terbuka bisa cukup tinggi dan background hero bisa
+ * berubah-ubah (foto terang/gelap tergantung yang diupload di
+ * Superadmin > Web > Headers). Background solid = kontras selalu
+ * terjamin apa pun isi hero-nya.
+ */
+@media (max-width: 991.98px) {
+    .site-topbar--overlay .navbar-collapse.show {
+        background-color: rgba(17, 17, 17, .92);
+        margin-top: 0.75rem;
+        padding: 0.5rem 1rem 1rem;
+        border-radius: 12px;
+    }
+
+    .site-topbar--overlay .navbar-collapse.show .nav-link {
+        text-shadow: none; /* tidak perlu lagi, background di belakangnya sudah solid gelap */
+    }
+}
+
+/*
+ * Jarak antar item menu — lewat padding .nav-link (bukan margin li)
+ * supaya area klik-nya ikut lebar. font-weight 700 supaya teks menu
+ * lebih tegas/bold (sebelumnya ikut default Bootstrap ~400).
+ */
 .site-topbar .navbar-nav .nav-link {
     padding-left: 0.9rem;
     padding-right: 0.9rem;
+    font-weight: 700;
 }
 
 /*
@@ -119,8 +191,23 @@ section {
     text-align: left;
 }
 
+/*
+ * Headline hero (h1.display-4.fw-bold di hero.blade.php) — sudah pakai
+ * fw-bold (font-weight: 700, bobot MAKSIMAL yang tersedia di font
+ * Comfortaa, lihat @import di layouts/frontend.blade.php: wght@300..700).
+ * Karena Comfortaa desainnya rounded/goresan tipis, 700 saja kadang
+ * masih kelihatan kurang "tegas" secara visual dibanding font lain di
+ * bobot yang sama — makanya ditambah -webkit-text-stroke supaya
+ * goresan hurufnya kelihatan lebih tebal tanpa perlu font-weight di
+ * atas 700 (yang memang tidak tersedia di family ini).
+ */
+.hero-content h1 {
+    -webkit-text-stroke: 0.6px currentColor;
+}
+
 .hero-description {
     text-align: justify;
+    font-weight: 700;
 }
 
 @media (max-width: 991.98px) {
@@ -179,8 +266,665 @@ section {
     color: #1a1a1a;
     font-size: 1.1rem;
     line-height: 1;
+    display: inline-flex;
+    align-items: center;
 }
 
 .footer-social-icon:hover {
     color: #000;
+}
+
+/* Ikon custom (upload gambar, App\Models\WebSetting::icon_instagram/icon_facebook/dst) — disamakan ukurannya dengan ikon font Bootstrap Icons di sebelahnya */
+.footer-social-icon-img {
+    width: 1.1rem;
+    height: 1.1rem;
+    object-fit: contain;
+    display: block;
+}
+
+/*
+ * Packages / pricing cards (frontend/partials/packages.blade.php) —
+ * data paket dari App\Models\Package + App\Models\PackageLimit lewat
+ * API Teleios. Kartu "unggulan" (badge TERPOPULER) ditentukan lewat
+ * heuristik posisi di blade (bukan kolom database), lihat komentar di
+ * file blade-nya. Tidak pakai class Bootstrap ".card" supaya style di
+ * bawah (termasuk hover) tidak bentrok dengan aturan ".card"/".card:hover"
+ * generik di atas.
+ */
+.package-card {
+    position: relative;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, .08);
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, .04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.package-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .09);
+}
+
+.package-card--featured {
+    border-color: var(--bs-primary);
+    box-shadow: 0 10px 30px rgba(13, 110, 253, .15);
+}
+
+.package-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--bs-primary);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 0.35rem 1rem;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+.package-name {
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.package-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+}
+
+.package-price-currency {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.package-price-amount {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.btn-package-outline {
+    border: 1.5px solid #1a1a1a;
+    color: #1a1a1a;
+    background-color: transparent;
+    font-weight: 600;
+}
+
+.btn-package-outline:hover {
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
+.btn-package-featured {
+    border: 1.5px solid var(--bs-primary);
+    background-color: var(--bs-primary);
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-package-featured:hover {
+    filter: brightness(0.92);
+    color: #fff;
+}
+
+.package-feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.package-feature-list li i {
+    color: var(--bs-primary);
+    margin-top: 0.15rem;
+}
+
+/*
+ * Fitur Unggulan slider (frontend/partials/features.blade.php) — geser
+ * horizontal manual pakai CSS scroll-snap (bukan carousel JS berat),
+ * lihat public/js/frontend.js untuk tombol panah, dot indicator, dan
+ * drag-to-scroll pakai mouse.
+ *
+ * Track slider-nya SENGAJA "bocor" keluar dari .container DI SEMUA
+ * breakpoint (bukan cuma mobile) + .features-slider sendiri tanpa
+ * padding kiri/kanan sama sekali — supaya kartu pertama & terakhir
+ * betul-betul masuk/keluar tepat dari tepi layar sungguhan, bukan
+ * berhenti di dalam padding container. Judul "Fitur Unggulan" di
+ * atasnya tetap normal di dalam .container, cuma track slider-nya saja
+ * yang full-bleed.
+ *
+ * PAKAI trik "100vw breakout" (width:100vw + left:50% + margin:-50vw),
+ * BUKAN negative-margin yang nebak nilai padding .container (versi
+ * sebelumnya masih nyisain gap karena var(--bs-gutter-x) ternyata tidak
+ * selalu terbaca sesuai yang diasumsikan). Trik 100vw ini murni
+ * berdasarkan lebar viewport asli — dijamin pas ke tepi layar berapa
+ * pun nilai padding .container-nya, tidak perlu tahu/tebak angkanya.
+ * Companion wajib: html/body overflow-x:hidden di bawah, supaya
+ * scrollbar vertikal browser tidak bikin 100vw memicu scroll horizontal
+ * tak diinginkan di seluruh halaman.
+ */
+.features-slider-wrap {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.features-slider {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    padding: 0.5rem 0 1.25rem; /* cuma vertikal, biar shadow kartu tidak kepotong — horizontal sengaja 0, lihat komentar di atas */
+    cursor: grab; /* kursor "tangan terbuka" nunjukin track ini bisa di-drag pakai mouse */
+}
+
+/* Ditambahkan/dilepas lewat JS (public/js/frontend.js) selama mouse aktif nge-drag */
+.features-slider.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+    scroll-snap-type: none; /* biar gerakannya smooth ngikutin mouse, snap balik aktif otomatis begitu drag dilepas */
+}
+
+.features-slider::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Edge */
+}
+
+.feature-slide {
+    scroll-snap-align: start;
+    /* Diperbesar dari 300px -> 340px supaya ada ruang lebih buat
+       .feature-card-icons (ikon-ikon yang akan menyusul) tanpa kartu
+       terasa sesak. */
+    flex: 0 0 340px;
+}
+
+.feature-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, .05);
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, .08);
+}
+
+.feature-card-media {
+    /* 4:3 (bukan 16:10) -> gambar lebih tinggi, kartu terasa lebih
+       besar/lega secara keseluruhan. */
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+}
+
+.feature-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.feature-card-body {
+    padding: 1.75rem;
+    flex: 1;
+}
+
+.feature-card-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+}
+
+/*
+ * Wadah ikon-ikon (belum ada field ikon di App\Models\WebFeature —
+ * ini cuma menyiapkan ruang/struktur). Isi-nya nanti bisa berupa
+ * <i class="bi ..."> atau <img> per ikon. Selama masih kosong,
+ * :empty langsung menyembunyikannya supaya tidak ada gap kosong aneh
+ * di kartu sebelum ikonnya benar-benar diisi.
+ */
+.feature-card-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+}
+
+.feature-card-icons:empty {
+    display: none;
+}
+
+.feature-card-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.features-slider-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, .1);
+    background-color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a1a1a;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.features-slider-btn:hover {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+}
+
+.features-slider-dots {
+    display: none;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+}
+
+.features-slider-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, .15);
+    transition: width 0.2s ease, background-color 0.2s ease;
+}
+
+.features-slider-dot.active {
+    width: 22px;
+    border-radius: 4px;
+    background-color: var(--bs-primary);
+}
+
+/*
+ * Mobile (<768px): kartu EDGE-TO-EDGE SUNGGUHAN — bukan "inset
+ * carousel" (kartu mengambang dengan jarak/shadow/rounded corner dari
+ * tepi layar seperti sebelumnya). border-radius & box-shadow dimatikan
+ * khusus di sini supaya kartu betul-betul menempel rata di kedua sisi
+ * layar tanpa ada jarak/gap sama sekali — persis definisi edge-to-edge
+ * carousel (bandingkan sama .feature-card default di atas yang masih
+ * rounded+shadow, dipakai di desktop/tablet sebagai "gallery" kartu
+ * mengambang). HANYA 1 kartu penuh layar per geseran, titik snap/geser
+ * dimulai PERSIS dari ujung layar (lihat komentar .features-slider-wrap
+ * di atas). Dot indicator tampil di sini menggantikan tombol panah.
+ */
+@media (max-width: 767.98px) {
+    .features-slider {
+        gap: 0;
+    }
+
+    .feature-slide {
+        flex: 0 0 100%;
+    }
+
+    .feature-card {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .feature-card:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .feature-card-media {
+        aspect-ratio: 4 / 3;
+    }
+
+    .feature-card-body {
+        padding: 1.5rem 1.25rem 2rem;
+    }
+
+    .features-slider-dots {
+        display: flex;
+    }
+}
+
+/*
+ * Running text / marquee (frontend/partials/running-text.blade.php) —
+ * teks WebSetting::running_text diulang & di-scroll otomatis tanpa
+ * henti pakai animasi CSS murni. Wrapper-nya pakai trik "100vw
+ * breakout" YANG SAMA dengan .features-slider-wrap di atas (lihat
+ * komentar lengkapnya di sana) supaya nempel rata dari ujung layar ke
+ * ujung layar, sesuai permintaan user ("seperti fitur").
+ */
+.running-text-section {
+    background-color: #f5efe2;
+    overflow: hidden;
+    padding: 1.5rem 0;
+}
+
+.running-text-wrap {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    overflow: hidden;
+}
+
+/*
+ * Track-nya berisi DUA copy identik dari .running-text-group
+ * (lihat komentar di running-text.blade.php) berjejer dalam satu baris
+ * (display:flex, width:max-content, tanpa wrap) lalu digeser
+ * (translateX) sejauh -50% (= persis lebar satu copy) terus-menerus —
+ * karena copy keduanya identik, pas "loncat" balik ke 0% matanya tidak
+ * nangkep jeda/patahan sama sekali (ilusi scroll tanpa akhir/infinite).
+ */
+.running-text-track {
+    display: flex;
+    width: max-content;
+    animation: running-text-scroll 22s linear infinite;
+}
+
+.running-text-group {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.running-text-item {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 0 1.5rem;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: #1a1a1a;
+}
+
+.running-text-dot {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--bs-primary);
+    border-radius: 4px;
+    background-color: transparent;
+    transform: rotate(45deg);
+}
+
+@keyframes running-text-scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* Hormati preferensi user yang minta animasi dikurangi di OS/browser-nya */
+@media (prefers-reduced-motion: reduce) {
+    .running-text-track {
+        animation: none;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .running-text-item {
+        padding: 0 1rem;
+    }
+}
+
+/*
+ * FAQ (frontend/partials/faq.blade.php) — accordion "card list" ala
+ * referensi desain terbaru user: judul besar "FAQs" di kiri disambung
+ * garis dekoratif (bulatan di kedua ujung) ke deskripsi singkat di
+ * kanan (.faq-header/.faq-heading-line/.faq-header-desc), tiap FAQ
+ * jadi card bulat (rounded, background krem) TERPISAH satu sama lain
+ * (bukan garis tipis nyambung kayak versi sebelumnya), ada bullet ikon
+ * hexagon kecil di depan pertanyaan, dan ikon plus/minus custom
+ * (dibuat dari 2 garis lewat ::before/::after, bukan chevron) di kanan
+ * yang garis vertikalnya hilang pas dibuka (jadi minus).
+ */
+.faq-section {
+    background-color: #ffffff;
+}
+
+/*
+ * Wrapper lebar penuh (bukan .container Bootstrap yang mentok di
+ * ~1320px) — max-width lebih besar biar "hampir fullscreen" di layar
+ * lebar sesuai referensi, tapi padding kiri/kanan-nya pakai clamp()
+ * supaya otomatis mengecil di layar sempit (tetap ada jarak aman ke
+ * tepi di mobile, tidak edge-to-edge).
+ */
+.faq-container {
+    width: 100%;
+    max-width: 1800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(1rem, 4vw, 4rem);
+    padding-right: clamp(1rem, 4vw, 4rem);
+}
+
+.faq-header {
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.faq-heading {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #1a1a1a;
+}
+
+.faq-heading-line {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 80px;
+    height: 2px;
+    background-color: #1a1a1a;
+    margin: 0 .75rem;
+}
+
+.faq-heading-line::before,
+.faq-heading-line::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+
+.faq-heading-line::before {
+    left: 0;
+    background-color: #fff;
+    border: 2px solid #1a1a1a;
+}
+
+.faq-heading-line::after {
+    right: 0;
+    background-color: #1a1a1a;
+}
+
+.faq-header-desc {
+    max-width: 380px;
+    line-height: 1.6;
+}
+
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.faq-item {
+    background-color: #f5efe2;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.faq-item-header {
+    margin: 0;
+    font-size: inherit;
+}
+
+.faq-item-button {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    background: none;
+    border: none;
+    padding: 1.5rem 1.75rem;
+    text-align: left;
+    cursor: pointer;
+}
+
+.faq-item-question-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+}
+
+.faq-item-bullet {
+    flex-shrink: 0;
+    margin-top: .25rem;
+    font-size: 1rem;
+    color: var(--bs-primary);
+}
+
+.faq-item-question {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #1a1a1a;
+}
+
+.faq-item-icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: .3rem;
+}
+
+.faq-item-icon::before,
+.faq-item-icon::after {
+    content: '';
+    position: absolute;
+    background-color: var(--bs-primary);
+    border-radius: 2px;
+}
+
+.faq-item-icon::before {
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    transform: translateY(-50%);
+}
+
+.faq-item-icon::after {
+    left: 50%;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    transform: translateX(-50%);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Bootstrap otomatis TIDAK menaruh class "collapsed" di tombol pas section-nya lagi terbuka — jadi ":not(.collapsed)" berarti "lagi expanded", garis vertikal ikon disembunyikan supaya jadi minus */
+.faq-item-button:not(.collapsed) .faq-item-icon::after {
+    transform: translateX(-50%) scaleY(0);
+    opacity: 0;
+}
+
+.faq-item-body {
+    padding: 0 1.75rem 1.5rem 3.25rem;
+    line-height: 1.7;
+}
+
+.faq-item-body a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+/*
+ * Halaman Kontak (resources/views/frontend/kontak.blade.php) — form +
+ * info alamat/peta. Layout & gaya elemen terinspirasi dari referensi
+ * desain yang dikirim user, TAPI sengaja "tanpa background" (tidak ada
+ * ilustrasi dekoratif/pattern seperti di referensi aslinya) — polos di
+ * atas background putih/off-white biasa.
+ */
+.contact-title {
+    font-weight: 700;
+}
+
+.contact-subtitle {
+    max-width: 640px;
+}
+
+.contact-form {
+    max-width: 760px;
+    margin-top: 2.5rem;
+}
+
+.contact-input {
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+}
+
+.contact-input:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, .15);
+}
+
+.contact-textarea {
+    resize: vertical;
+    min-height: 140px;
+}
+
+.contact-submit-btn {
+    background-color: var(--bs-primary);
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.75rem 2.5rem;
+    font-weight: 700;
+    border: none;
+}
+
+.contact-submit-btn:hover {
+    filter: brightness(0.92);
+    color: #fff;
+}
+
+.contact-info-section {
+    background-color: #f4f3f1; /* sama seperti .site-footer / .faq-section, biar senada */
+}
+
+.contact-map {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.contact-info-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
 }

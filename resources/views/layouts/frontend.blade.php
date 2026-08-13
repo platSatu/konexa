@@ -3,7 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', config('app.name', 'Konexa'))</title>
+
+    {{--
+        SEO: SATU sumber kebenaran untuk title & description tiap
+        halaman, dipakai ulang di <title>, og:*, dan twitter:* di bawah
+        (bukan tulis ulang manual per tag — biar tidak ada yang
+        ketinggalan/beda pas ada yang lupa update salah satunya).
+
+        - $__env->yieldContent(...) dipakai (bukan @yield biasa) karena
+          @yield cuma boleh dipanggil SEKALI per section; di sini section
+          yang sama ('title'/'meta_description') perlu dipakai berkali-
+          kali (title tag, og:title, twitter:title, dst).
+        - Prefix "Konexa : " di-hardcode DI SINI SAJA (satu tempat),
+          bukan diulang di tiap page — sebelumnya tiap halaman pakai
+          config('app.name', 'Konexa') buat suffix judul, tapi karena
+          .env APP_NAME defaultnya "Laravel" (lihat config/app.php) dan
+          fallback 'Konexa' di sisi Blade itu CUMA kepakai kalau
+          config('app.name') null (yang hampir tidak pernah terjadi),
+          title yang sungguhan tampil di production kemungkinan besar
+          "Beranda - Laravel", BUKAN "Beranda - Konexa". Hardcode di
+          sini menghilangkan ketergantungan ke APP_NAME sama sekali.
+        - Tiap halaman cukup @section('title', 'Beranda') /
+          @section('meta_description', '...') — lihat frontend/index.blade.php
+          dkk untuk contohnya.
+        - 'title_full' (OPSIONAL) — kalau diisi di sebuah halaman, INI
+          yang dipakai apa adanya sebagai <title> (skip prefix "Konexa : "
+          otomatis di atas). Dipakai khusus di Beranda supaya title-nya
+          bisa jadi kalimat jualan penuh ("Konexa | Solusi Modern untuk
+          WhatsApp Bisnis Anda") — bukan cuma "Konexa : Beranda" yang
+          kurang menjual buat halaman paling penting secara SEO. Halaman
+          lain (Artikel/Video/dst) TIDAK perlu set ini, biar tetap ikut
+          pola "Konexa : {Nama Halaman}" yang konsisten.
+    --}}
+    @php
+        $pageTitle = trim($__env->yieldContent('title', 'Beranda'));
+        $customFullTitle = trim($__env->yieldContent('title_full', ''));
+        $fullTitle = $customFullTitle !== '' ? $customFullTitle : 'Konexa : '.$pageTitle;
+        $pageDescription = trim($__env->yieldContent('meta_description', (string) data_get($webSetting, 'meta_description', '')));
+        $shareImage = data_get($webSetting, 'meta_images_url');
+    @endphp
+
+    <title>{{ $fullTitle }}</title>
+    <link rel="canonical" href="{{ url()->current() }}">
 
     {{--
         $webSetting datang dari App\View\Composers\WebSettingComposer
@@ -16,16 +57,41 @@
         <link rel="icon" href="{{ $webSetting['favicon_url'] }}">
     @endif
 
-    @if (data_get($webSetting, 'meta_description'))
-        <meta name="description" content="{{ $webSetting['meta_description'] }}">
+    @if ($pageDescription !== '')
+        <meta name="description" content="{{ $pageDescription }}">
     @endif
 
     @if (data_get($webSetting, 'meta_keywords'))
         <meta name="keywords" content="{{ $webSetting['meta_keywords'] }}">
     @endif
 
-    @if (data_get($webSetting, 'meta_images_url'))
-        <meta property="og:image" content="{{ $webSetting['meta_images_url'] }}">
+    {{--
+        Open Graph + Twitter Card — inilah yang dibaca WhatsApp/
+        Facebook/Telegram/dll pas link di-share, BUKAN <title> biasa.
+        Tanpa ini, judul/deskripsi/gambar yang muncul di preview share
+        bisa asal-asalan (atau kosong) meskipun <title> halaman sudah
+        benar. og:title & og:description sengaja pakai $fullTitle/
+        $pageDescription yang sama seperti <title>/meta description di
+        atas supaya konsisten di mana pun link-nya di-share.
+    --}}
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Konexa">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $fullTitle }}">
+    @if ($pageDescription !== '')
+        <meta property="og:description" content="{{ $pageDescription }}">
+    @endif
+    @if ($shareImage)
+        <meta property="og:image" content="{{ $shareImage }}">
+    @endif
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $fullTitle }}">
+    @if ($pageDescription !== '')
+        <meta name="twitter:description" content="{{ $pageDescription }}">
+    @endif
+    @if ($shareImage)
+        <meta name="twitter:image" content="{{ $shareImage }}">
     @endif
 
     {{-- Google Tag Manager --}}

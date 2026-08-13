@@ -30,7 +30,20 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer(
-            ['layouts.frontend', 'frontend.partials.header', 'frontend.partials.footer'],
+            [
+                'layouts.frontend',
+                'frontend.partials.header',
+                'frontend.partials.footer',
+                // Packages CTA button links to WhatsApp using $webSetting['handphone']
+                // when set — see frontend.partials.packages.
+                'frontend.partials.packages',
+                // Halaman Kontak butuh alamat/no. HP/email/embed Maps —
+                // lihat resources/views/frontend/kontak.blade.php.
+                'frontend.kontak',
+                // Running text/marquee butuh WebSetting::running_text —
+                // lihat frontend.partials.running-text.
+                'frontend.partials.running-text',
+            ],
             WebSettingComposer::class
         );
 

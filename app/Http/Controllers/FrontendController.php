@@ -58,4 +58,18 @@ class FrontendController extends Controller
 
         return view('frontend.video', compact('categoryVideos', 'videos'));
     }
+
+    /**
+     * Tampilkan halaman Kontak (form + info alamat/peta). $webSetting
+     * (alamat, no. HP, email, embed Maps) di-supply lewat
+     * App\View\Composers\WebSettingComposer — lihat pendaftarannya di
+     * App\Providers\AppServiceProvider::boot() untuk view
+     * 'frontend.kontak'. Form-nya sendiri UI saja untuk sekarang, belum
+     * terhubung ke backend mana pun (belum ada endpoint buat nerima
+     * submission-nya) — lihat catatan di resources/views/frontend/kontak.blade.php.
+     */
+    public function contact(): View
+    {
+        return view('frontend.kontak');
+    }
 }

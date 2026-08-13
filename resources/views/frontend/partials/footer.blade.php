@@ -87,20 +87,63 @@
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div class="d-flex align-items-center gap-3 flex-wrap">
                 <img src="{{ data_get($webSetting, 'logo_url') ?: asset('images/Logo.png') }}"
-                    alt="{{ config('app.name', 'Konexa') }}" height="28">
-                <span class="small footer-copyright">&copy; {{ date('Y') }} {{ config('app.name', 'Konexa') }}. All rights reserved.</span>
+                    alt="Konexa" height="28">
+                {{-- Di-hardcode "Konexa" (bukan config('app.name')) — sama seperti <title> di layouts/frontend.blade.php.
+                     Sebelumnya teks ini ikut config('app.name', 'Konexa'), tapi fallback itu nyaris tidak pernah
+                     kepakai (config('app.name') hampir selalu resolve ke string asli dari .env, bukan null), jadi
+                     kalau APP_NAME di .env bukan "Konexa" (mis. masih default "Laravel" atau kepencet jadi
+                     "teleios"), teks ini ikut salah tampil. Cek juga APP_NAME di file .env fe-konexa kalau masih
+                     salah setelah ini. --}}
+                <span class="small footer-copyright">&copy; {{ date('Y') }} Konexa. All rights reserved.</span>
             </div>
 
+            {{--
+                Tiap platform: link cuma muncul kalau *_url diisi di
+                Superadmin > Web > Pengaturan > Media Sosial. Ikon pakai
+                gambar custom (icon_*_url, upload) kalau diisi, fallback
+                ke ikon font Bootstrap Icons kalau tidak — supaya tetap
+                aman tampil meski admin belum sempat upload ikon
+                custom-nya. Twitter/X belum punya kolom ikon custom
+                (belum diminta), jadi selalu pakai ikon font.
+            --}}
             <div class="d-flex align-items-center gap-3 flex-wrap">
                 @if (data_get($webSetting, 'instagram_url'))
                     <a href="{{ $webSetting['instagram_url'] }}" target="_blank" rel="noopener" class="footer-social-icon" aria-label="Instagram">
-                        <i class="bi bi-instagram"></i>
+                        @if (data_get($webSetting, 'icon_instagram_url'))
+                            <img src="{{ $webSetting['icon_instagram_url'] }}" alt="Instagram" class="footer-social-icon-img">
+                        @else
+                            <i class="bi bi-instagram"></i>
+                        @endif
                     </a>
                 @endif
 
                 @if (data_get($webSetting, 'facebook_url'))
                     <a href="{{ $webSetting['facebook_url'] }}" target="_blank" rel="noopener" class="footer-social-icon" aria-label="Facebook">
-                        <i class="bi bi-facebook"></i>
+                        @if (data_get($webSetting, 'icon_facebook_url'))
+                            <img src="{{ $webSetting['icon_facebook_url'] }}" alt="Facebook" class="footer-social-icon-img">
+                        @else
+                            <i class="bi bi-facebook"></i>
+                        @endif
+                    </a>
+                @endif
+
+                @if (data_get($webSetting, 'youtube_url'))
+                    <a href="{{ $webSetting['youtube_url'] }}" target="_blank" rel="noopener" class="footer-social-icon" aria-label="YouTube">
+                        @if (data_get($webSetting, 'icon_youtube_url'))
+                            <img src="{{ $webSetting['icon_youtube_url'] }}" alt="YouTube" class="footer-social-icon-img">
+                        @else
+                            <i class="bi bi-youtube"></i>
+                        @endif
+                    </a>
+                @endif
+
+                @if (data_get($webSetting, 'tiktok_url'))
+                    <a href="{{ $webSetting['tiktok_url'] }}" target="_blank" rel="noopener" class="footer-social-icon" aria-label="TikTok">
+                        @if (data_get($webSetting, 'icon_tiktok_url'))
+                            <img src="{{ $webSetting['icon_tiktok_url'] }}" alt="TikTok" class="footer-social-icon-img">
+                        @else
+                            <i class="bi bi-tiktok"></i>
+                        @endif
                     </a>
                 @endif
 
