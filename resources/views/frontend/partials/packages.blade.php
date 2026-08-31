@@ -8,18 +8,19 @@
 
     "Dinamis campur statis" (sesuai instruksi user):
     - DINAMIS (dari database lewat API, ikut berubah kalau diedit di
-      Superadmin): nama paket, deskripsi, harga, durasi, dan daftar
+      Superadmin): nama paket, deskripsi, harga, durasi, daftar
       spesifikasi/limit (App\Models\PackageLimit + App\Models\
       LimitMetric — mis. jumlah broadcast/device/kontak, kalau sudah
-      diisi di Superadmin > Package > kelola limit).
-    - STATIS (logika tampilan saja, belum ada kolom database-nya):
-      badge "TERPOPULER" ditentukan dari POSISI paket di tengah urutan
-      harga (packages sudah di-order ASC by price dari
-      Api\Frontend\PackageController) — BUKAN dari field `is_featured`,
-      karena kolom itu belum ada di tabel `packages`. Kalau nanti mau
-      superadmin bisa pilih manual paket mana yang "unggulan", perlu
-      migration baru (`is_featured` boolean) + update PackageController.
-      Pemetaan ikon per jenis limit dan gaya tombol juga statis.
+      diisi di Superadmin > Package > kelola limit), DAN badge
+      "TERPOPULER" (dari kolom `packages.is_featured`, dicentang manual
+      per package di Superadmin > Package — lihat migration
+      2026_08_31_120000_add_is_featured_to_packages_table.php di
+      teleios). Sebelum 2026-08-31 badge ini heuristik posisi-tengah
+      statis; sekarang superadmin yang menentukan langsung, boleh lebih
+      dari satu package sekaligus.
+    - STATIS (logika tampilan saja, tidak ada kolom database-nya):
+      pemetaan ikon per jenis limit ($iconMap di bawah) dan gaya tombol
+      (featured vs outline).
 
     Kalau sebuah paket TIDAK punya baris PackageLimit sama sekali,
     daftar spesifikasi jatuh ke teks statis generik (fallback) supaya
@@ -48,12 +49,6 @@
             <p class="text-center text-muted mb-0">Paket belum tersedia saat ini.</p>
         @else
             @php
-                $totalPackages = count($packages);
-                // Heuristik statis: paket "unggulan" = posisi tengah dari
-                // urutan harga. Cukup untuk 3-4 paket gaya KVM1/2/4/8 di
-                // referensi. Kalau cuma 1-2 paket, tidak ada yang ditandai.
-                $featuredIndex = $totalPackages >= 3 ? (int) floor(($totalPackages - 1) / 2) : -1;
-
                 // Pemetaan kata kunci pada LimitMetric.key -> ikon Bootstrap
                 // Icons. Statis (belum ada kolom "icon" di limit_metrics),
                 // cocokkan/​tambah sendiri kalau ada key metric baru.
@@ -78,7 +73,7 @@
             <div class="row g-4 justify-content-center">
                 @foreach ($packages as $index => $package)
                     @php
-                        $isFeatured = $index === $featuredIndex;
+                        $isFeatured = (bool) ($package['is_featured'] ?? false);
 
                         // Urutan tampil di frontend selalu tetap: Pengiriman
                         // Broadcast -> Device -> Kontak (permintaan user,
