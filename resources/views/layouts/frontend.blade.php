@@ -123,8 +123,15 @@
         CSS custom di bawah ini di-load LANGSUNG dari folder public (bukan lewat Vite/build).
         Jadi kalau file public/css/frontend.css diedit lalu browser di-reload,
         perubahan langsung terlihat tanpa perlu npm run build/dev.
+
+        Query string ?v=<filemtime> di bawah ini cache-buster: begitu file
+        frontend.css disave (mtime-nya berubah), URL-nya ikut berubah, jadi
+        browser pengunjung otomatis ambil versi terbaru alih-alih terus
+        pakai copy lama dari cache -- tanpa ini, perubahan warna/style
+        sering "tidak muncul" di browser sampai user hard-refresh manual
+        (Ctrl+Shift+R), padahal filenya di server sudah benar.
     -->
-    <link rel="stylesheet" href="{{ asset('css/frontend.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/frontend.css') }}?v={{ filemtime(public_path('css/frontend.css')) }}">
 
     @stack('styles')
 </head>
