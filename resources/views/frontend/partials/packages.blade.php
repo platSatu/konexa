@@ -79,7 +79,24 @@
                 @foreach ($packages as $index => $package)
                     @php
                         $isFeatured = $index === $featuredIndex;
-                        $limits = $package['limits'] ?? [];
+
+                        // Urutan tampil di frontend selalu tetap: Pengiriman
+                        // Broadcast -> Device -> Kontak (permintaan user,
+                        // 2026-08-31). "Company" (branch_count) sengaja
+                        // TIDAK ditampilkan di sini meskipun datanya tetap
+                        // ada & benar di backend/Superadmin.
+                        $rawLimits = $package['limits'] ?? [];
+                        $limitDisplayOrder = ['broadcast', 'device', 'contact'];
+                        $limits = [];
+                        foreach ($limitDisplayOrder as $needle) {
+                            foreach ($rawLimits as $rawLimit) {
+                                $key = strtolower($rawLimit['limit_metric']['key'] ?? '');
+                                if (str_contains($key, $needle)) {
+                                    $limits[] = $rawLimit;
+                                    break;
+                                }
+                            }
+                        }
 
                         $waHref = match (true) {
                             $waNumber !== '' => 'https://wa.me/' . $waNumber . '?text=' . rawurlencode('Halo, saya tertarik dengan paket ' . ($package['name'] ?? '') . '. Bisa dibantu info lebih lanjut?'),
