@@ -405,8 +405,23 @@ section {
     font-weight: 600;
 }
 
-.btn-package-featured:hover {
-    filter: brightness(0.92);
+/*
+ * Eksplisit set background-color/border-color di sini (bukan cuma
+ * filter: brightness() seperti sebelumnya) -- Bootstrap punya aturan
+ * bawaan ".btn:hover" yang spesifisitasnya SAMA/lebih tinggi dari
+ * class custom ini dan mencoba pakai CSS variable
+ * (--bs-btn-hover-bg/--bs-btn-hover-color) yang TIDAK PERNAH diisi
+ * untuk tombol custom seperti ini. Kalau tidak dinyatakan eksplisit di
+ * sini, ".btn:hover" bawaan Bootstrap menang dan background-nya jatuh
+ * ke transparent saat hover -- teks putihnya jadi tidak kelihatan sama
+ * sekali di atas kartu putih. Warna gelap di bawah sama dengan shade
+ * hover ".btn-primary" supaya konsisten satu sistem warna.
+ */
+.btn-package-featured:hover,
+.btn-package-featured:focus,
+.btn-package-featured:active {
+    background-color: #c95345;
+    border-color: #c95345;
     color: #fff;
 }
 
