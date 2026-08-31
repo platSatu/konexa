@@ -4,6 +4,44 @@
  * Tidak perlu npm run dev / npm run build.
  */
 
+/*
+ * Override warna "primary" Bootstrap (default biru #0d6efd) supaya
+ * konsisten dengan warna brand logo Konexa (merah-oranye) di SELURUH
+ * frontend -- badge TERPOPULER, badge kategori (bg-primary-subtle +
+ * text-primary), tombol .btn-package-featured / .btn-primary, ikon,
+ * dan elemen lain yang sudah pakai var(--bs-primary) di file ini.
+ * Warna diambil langsung dari logo Konexa. Diletakkan di bawah ini,
+ * SETELAH bootstrap.min.css di-load (lihat layouts/frontend.blade.php),
+ * jadi menang di cascade tanpa perlu !important. (Permintaan user,
+ * 2026-08-31 -- samakan dengan warna logo.)
+ */
+:root {
+    --bs-primary: #DB5B4C;
+    --bs-primary-rgb: 219, 91, 76;
+    --bs-primary-bg-subtle: #FBE5E2;
+    --bs-primary-border-subtle: #F2C6C0;
+    --bs-primary-text-emphasis: #83372E;
+}
+
+/*
+ * .btn-primary Bootstrap men-generate warnanya dari nilai literal saat
+ * dikompilasi (bukan var(--bs-primary)), jadi tetap perlu di-override
+ * manual di sini supaya tombol seperti di frontend/partials/hero.blade.php
+ * ikut ganti warna, bukan cuma elemen custom yang sudah pakai
+ * var(--bs-primary).
+ */
+.btn-primary {
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: #c95345;
+    --bs-btn-hover-border-color: #c95345;
+    --bs-btn-active-bg: #b74c3f;
+    --bs-btn-active-border-color: #b74c3f;
+    --bs-btn-disabled-bg: var(--bs-primary);
+    --bs-btn-disabled-border-color: var(--bs-primary);
+    --bs-btn-focus-shadow-rgb: var(--bs-primary-rgb);
+}
+
 /* Font Comfortaa di-load dari Google Fonts, lihat layouts/frontend.blade.php */
 html,
 body,
