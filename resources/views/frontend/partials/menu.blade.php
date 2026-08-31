@@ -23,7 +23,7 @@
                 href="{{ route('frontend.contact') }}">Contact</a>
         </li>
         <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-            <a class="btn btn-warning fw-semibold px-3" href="https://app.konexa.id/auth/login">Login</a>
+            <a class="btn btn-primary fw-semibold px-4" href="https://app.konexa.id/auth/login">Login</a>
         </li>
     </ul>
 </div>
