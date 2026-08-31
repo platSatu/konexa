@@ -118,10 +118,6 @@
 
                             <h5 class="package-name mb-1">{{ $package['name'] ?? '-' }}</h5>
 
-                            @if (! empty($package['description']))
-                                <p class="package-description text-muted small mb-3">{{ $package['description'] }}</p>
-                            @endif
-
                             <div class="package-price mb-1">
                                 <span class="package-price-currency">Rp</span>
                                 <span class="package-price-amount">{{ number_format((float) ($package['price'] ?? 0), 0, ',', '.') }}</span>
@@ -167,6 +163,10 @@
                                     </li>
                                 @endforelse
                             </ul>
+
+                            @if (! empty($package['description']))
+                                <p class="package-description text-muted small mt-3 mb-0">{{ $package['description'] }}</p>
+                            @endif
                         </div>
                     </div>
                 @endforeach
