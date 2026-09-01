@@ -32,6 +32,16 @@ use Throwable;
  * request keluar ini sebelum halamannya sendiri selesai dimuat. Sama
  * seperti TeleiosApiService: gagal lapor cuma di-log, tidak pernah
  * melempar exception yang bisa menjatuhkan halaman.
+ *
+ * PENTING: data dari handle() dititipkan lewat $request->attributes,
+ * BUKAN property instance ($this->...). Laravel me-resolve middleware
+ * route lewat container SECARA TERPISAH untuk fase terminate() (lihat
+ * Router::gatherRouteMiddleware(), dipanggil dari
+ * Kernel::terminateMiddleware()) — jadi $this saat terminate()
+ * dipanggil BUKAN objek yang sama dengan $this saat handle() dipanggil,
+ * dan property instance yang diisi di handle() akan selalu kosong lagi
+ * di terminate(). $request sendiri, sebaliknya, adalah objek yang sama
+ * persis di kedua fase, jadi aman dipakai buat nitip data antar fase.
  */
 class LogVisitorMiddleware
 {
@@ -39,10 +49,7 @@ class LogVisitorMiddleware
 
     private const VISITOR_COOKIE_DAYS = 365;
 
-    /**
-     * @var array<string, mixed>|null
-     */
-    private ?array $payload = null;
+    private const PAYLOAD_ATTRIBUTE = 'visitor_log_payload';
 
     public function handle(Request $request, Closure $next): Response
     {
@@ -54,24 +61,25 @@ class LogVisitorMiddleware
             Cookie::queue(self::VISITOR_COOKIE, $visitorId, self::VISITOR_COOKIE_DAYS * 24 * 60);
         }
 
-        // Disiapkan di sini selagi $request masih lengkap — dikirim
-        // nanti di terminate(), lihat alasannya di docblock class di
-        // atas.
-        $this->payload = [
+        // Dititipkan lewat $request->attributes (bukan property $this)
+        // -- lihat docblock class di atas kenapa.
+        $request->attributes->set(self::PAYLOAD_ATTRIBUTE, [
             'visitor_id' => $visitorId,
             'ip_address' => $request->ip(),
             'user_agent' => (string) $request->userAgent(),
             'path' => '/'.ltrim($request->path(), '/'),
             'referrer' => $request->headers->get('referer'),
             'visited_at' => now()->toIso8601String(),
-        ];
+        ]);
 
         return $next($request);
     }
 
     public function terminate(Request $request, Response $response): void
     {
-        if (! $this->payload) {
+        $payload = $request->attributes->get(self::PAYLOAD_ATTRIBUTE);
+
+        if (! $payload) {
             return;
         }
 
