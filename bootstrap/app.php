@@ -11,7 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Dipasang manual per-route di routes/web.php (bukan global),
+        // supaya cuma 5 halaman publik yang kecatat, bukan semua route
+        // termasuk /up health check -- lihat App\Http\Middleware\
+        // LogVisitorMiddleware.
+        $middleware->alias([
+            'log.visitor' => \App\Http\Middleware\LogVisitorMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
