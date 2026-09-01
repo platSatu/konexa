@@ -77,12 +77,6 @@ class LogVisitorMiddleware
 
     public function terminate(Request $request, Response $response): void
     {
-        // TODO(debug sementara): hapus baris Log::info ini setelah
-        // dikonfirmasi terminate() benar-benar jalan di production.
-        Log::info('LogVisitorMiddleware: terminate() dipanggil.', [
-            'has_payload' => (bool) $request->attributes->get(self::PAYLOAD_ATTRIBUTE),
-        ]);
-
         $payload = $request->attributes->get(self::PAYLOAD_ATTRIBUTE);
 
         if (! $payload) {
