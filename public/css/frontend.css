@@ -125,6 +125,31 @@ section {
 }
 
 /*
+ * FIX (2026-09-18) bug "patah-patah" pas buka/tutup menu mobile, TAPI
+ * cuma kerasa setelah di-scroll (dilaporkan user) — beda dari fix
+ * ".collapsing" di atas, ini penyebab KEDUA yang terpisah:
+ *
+ * .navbar-collapse ada di DALAM <nav id="siteTopbar"> yang sama (bukan
+ * elemen terpisah) — begitu menu dibuka di mobile, dia numpuk ke bawah
+ * lewat flex-wrap, jadi tinggi <nav>-nya sendiri IKUT membesar selama
+ * animasi height berjalan. Kalau nav-nya lagi punya box-shadow (cuma
+ * terjadi pas topbar-scrolled, lihat rule tepat di atas — pas belum
+ * discroll box-shadow-nya "none" jadi tidak kerasa), browser HARUS
+ * hitung ulang & gambar ulang bayangan itu di sepanjang tepi box yang
+ * terus berubah ukuran, di SETIAP frame animasi — ini yang bikin
+ * terasa patah/berat, khusus pas sudah di-scroll.
+ *
+ * Fix: sembunyikan sementara box-shadow itu SELAMA menu mobile lagi
+ * animasi buka/tutup atau lagi kebuka (nav-nya lagi berubah ukuran),
+ * balik normal begitu sudah selesai (tertutup penuh/kebuka penuh tanpa
+ * animasi lagi). :has() didukung semua browser modern.
+ */
+.site-topbar--overlay.topbar-scrolled:has(.navbar-collapse.collapsing),
+.site-topbar--overlay.topbar-scrolled:has(.navbar-collapse.show) {
+    box-shadow: none;
+}
+
+/*
  * Kontras teks menu waktu topbar TRANSPARAN (belum di-scroll, overlay
  * langsung nimpa hero) — dilaporkan tidak kelihatan baik di desktop
  * maupun mobile. Root cause: Bootstrap "navbar-dark" bawaan bikin
@@ -167,15 +192,51 @@ section {
  * terjamin apa pun isi hero-nya.
  */
 @media (max-width: 991.98px) {
-    .site-topbar--overlay .navbar-collapse.show {
+    /*
+     * FIX (2026-09-18) bug "patah-patah" pas buka/tutup menu mobile di
+     * homepage: sebelumnya background-color/margin-top/padding di atas
+     * cuma nempel di ".show" (state SETELAH animasi Bootstrap selesai).
+     * Bootstrap collapse animasinya lewat class ".collapsing" (dipasang
+     * dari detik pertama toggler diklik, baik pas buka maupun tutup),
+     * .show baru ditambahkan/dilepas TEPAT DI AWAL/AKHIR proses itu —
+     * jadi background gelap + margin + padding ini kemarin "muncul/
+     * hilang" mendadak (snap) persis di titik itu, bukan ikut smooth
+     * bareng animasi height-nya -> itu yang kelihatan seperti "patah".
+     * Fix: style yang sama juga dipasang selama ".collapsing" supaya
+     * konsisten dari awal sampai akhir buka/tutup, tidak ada lompatan.
+     */
+    .site-topbar--overlay .navbar-collapse.show,
+    .site-topbar--overlay .navbar-collapse.collapsing {
         background-color: rgba(17, 17, 17, .92);
         margin-top: 0.75rem;
         padding: 0.5rem 1rem 1rem;
         border-radius: 12px;
     }
 
-    .site-topbar--overlay .navbar-collapse.show .nav-link {
+    /*
+     * FIX (2026-09-18): warna teks link di sini SEBELUMNYA ikut warna
+     * dari class "navbar-light"/"navbar-dark" yang di-toggle JS pas
+     * scroll (lihat frontend.js) — pas topbar-scrolled aktif (navbar-
+     * light), Bootstrap bikin teks nav-link jadi GELAP karena didesain
+     * buat background topbar yang solid PUTIH. Padahal panel menu
+     * mobile ini backgroundnya SELALU gelap (rgba(17,17,17,.92) di
+     * atas), scrolled ataupun belum — jadi teks gelap di atas panel
+     * gelap jadi nyaris tidak kelihatan begitu sudah di-scroll. Warna
+     * teks di sini di-paksa selalu terang, TIDAK ikut navbar-light/dark.
+     */
+    .site-topbar--overlay .navbar-collapse.show .nav-link,
+    .site-topbar--overlay .navbar-collapse.collapsing .nav-link {
         text-shadow: none; /* tidak perlu lagi, background di belakangnya sudah solid gelap */
+        color: rgba(255, 255, 255, .92);
+    }
+
+    .site-topbar--overlay .navbar-collapse.show .nav-link:hover,
+    .site-topbar--overlay .navbar-collapse.show .nav-link:focus,
+    .site-topbar--overlay .navbar-collapse.show .nav-link.active,
+    .site-topbar--overlay .navbar-collapse.collapsing .nav-link:hover,
+    .site-topbar--overlay .navbar-collapse.collapsing .nav-link:focus,
+    .site-topbar--overlay .navbar-collapse.collapsing .nav-link.active {
+        color: #ffffff;
     }
 }
 
@@ -980,4 +1041,46 @@ section {
     background-color: #ffffff;
     border-radius: 16px;
     padding: 2rem;
+}
+
+/*
+ * Tombol floating "Chat WhatsApp" — fixed di pojok kanan-bawah viewport,
+ * tampil di semua halaman frontend (lihat partials/footer.blade.php,
+ * di-include di tiap halaman). Warna hijau khas WhatsApp (#25D366)
+ * supaya langsung dikenali sebagai tombol chat WhatsApp.
+ */
+.whatsapp-float-btn {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #25d366;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 1050;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.whatsapp-float-btn:hover,
+.whatsapp-float-btn:focus {
+    color: #fff;
+    background-color: #1ebe5b;
+    transform: scale(1.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 575.98px) {
+    .whatsapp-float-btn {
+        right: 16px;
+        bottom: 16px;
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+    }
 }

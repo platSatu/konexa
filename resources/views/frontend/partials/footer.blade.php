@@ -1,3 +1,16 @@
+{{--
+    Nomor WhatsApp untuk tombol floating "Chat WhatsApp" di pojok
+    kanan-bawah (lihat .whatsapp-float-btn di public/css/frontend.css).
+    Normalisasi nomor sama persis seperti $waNumber di
+    partials/packages.blade.php, supaya format link wa.me konsisten
+    di seluruh halaman (0xxx -> 62xxx, buang karakter non-digit).
+--}}
+@php
+    $waNumber = preg_replace('/\D/', '', (string) data_get($webSetting, 'handphone'));
+    if ($waNumber !== '' && str_starts_with($waNumber, '0')) {
+        $waNumber = '62' . substr($waNumber, 1);
+    }
+@endphp
 <footer class="site-footer">
     <div class="container py-5">
         <div class="row gy-4">
@@ -51,26 +64,24 @@
                     <button type="submit" class="btn btn-dark rounded-pill px-4">Submit</button>
                 </form>
 
-                {{-- $webSetting datang dari App\View\Composers\WebSettingComposer --}}
-                @if (data_get($webSetting, 'address') || data_get($webSetting, 'handphone') || data_get($webSetting, 'email'))
+                {{--
+                    $webSetting datang dari App\View\Composers\WebSettingComposer.
+                    Nomor HP SENGAJA tidak ditampilkan lagi sebagai teks di sini
+                    (2026-09-18, permintaan user) — sudah terwakili oleh tombol
+                    floating WhatsApp (.whatsapp-float-btn, lihat bawah file ini)
+                    yang tampil di semua halaman, jadi tidak perlu dobel.
+                --}}
+                @if (data_get($webSetting, 'address') || data_get($webSetting, 'email'))
                     <div class="small mt-3 footer-contact">
                         @if (data_get($webSetting, 'address'))
                             <p class="mb-1">{{ $webSetting['address'] }}</p>
                         @endif
 
-                        <p class="mb-0">
-                            @if (data_get($webSetting, 'handphone'))
-                                <a href="tel:{{ $webSetting['handphone'] }}">{{ $webSetting['handphone'] }}</a>
-                            @endif
-
-                            @if (data_get($webSetting, 'handphone') && data_get($webSetting, 'email'))
-                                &nbsp;&middot;&nbsp;
-                            @endif
-
-                            @if (data_get($webSetting, 'email'))
+                        @if (data_get($webSetting, 'email'))
+                            <p class="mb-0">
                                 <a href="mailto:{{ $webSetting['email'] }}">{{ $webSetting['email'] }}</a>
-                            @endif
-                        </p>
+                            </p>
+                        @endif
                     </div>
                 @endif
 
@@ -160,3 +171,9 @@
         </div>
     </div>
 </footer>
+{{-- Tombol floating "Chat WhatsApp", fixed di pojok kanan-bawah viewport, tampil di semua halaman (footer di-include di tiap halaman frontend). --}}
+@if ($waNumber !== '')
+    <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener" class="whatsapp-float-btn" aria-label="Chat via WhatsApp">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+@endif
