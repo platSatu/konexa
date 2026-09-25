@@ -144,7 +144,7 @@
                                     </a>
 
                                     <ul class="package-feature-list list-unstyled mb-0 flex-grow-1">
-                                        @forelse ($limits as $limit)
+                                        @foreach ($limits as $limit)
                                             @php
                                                 $metric = $limit['limit_metric'] ?? [];
                                                 $metricKey = strtolower($metric['key'] ?? '');
@@ -166,7 +166,14 @@
                                                     @if (! empty($metric['unit'])) {{ $metric['unit'] }}@endif{{ $perMonth ? '/bulan' : '' }}
                                                 </span>
                                             </li>
-                                        @empty
+                                        @endforeach
+                                        @foreach ($package['feature_lines'] ?? [] as $feature)
+                                            <li>
+                                                <i class="bi bi-check-circle-fill"></i>
+                                                <span>{{ $feature }}</span>
+                                            </li>
+                                        @endforeach
+                                        @if (empty($limits) && empty($package['feature_lines']))
                                             <li>
                                                 <i class="bi bi-check-circle-fill"></i>
                                                 <span>Fitur lengkap sesuai kebutuhan bisnis Anda</span>
@@ -175,12 +182,8 @@
                                                 <i class="bi bi-headset"></i>
                                                 <span>Dukungan pelanggan responsif</span>
                                             </li>
-                                        @endforelse
+                                        @endif
                                     </ul>
-
-                                    @if (! empty($package['description']))
-                                        <p class="package-description text-muted small mt-3 mb-0">{{ $package['description'] }}</p>
-                                    @endif
                                 </div>
                             </div>
                         @endforeach

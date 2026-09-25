@@ -88,6 +88,7 @@ class FrontendController extends Controller
             'services' => $this->serviceNames($package),
             'column_label' => $this->columnLabel($package),
             'months' => $this->months($package),
+            'feature_lines' => $this->featureLines($package),
         ]);
 
         $maxServices = $packages->max(fn (array $package) => count($package['services'])) ?? 0;
@@ -125,6 +126,21 @@ class FrontendController extends Controller
         }
 
         return $names->filter()->unique()->sort()->values()->all();
+    }
+
+    /**
+     * Deskripsi paket sebagai daftar fitur: satu baris = satu fitur
+     * (sama dengan Package::featureLines() di teleios).
+     *
+     * @return array<int, string>
+     */
+    private function featureLines(array $package): array
+    {
+        return collect(preg_split('/\R/', (string) ($package['description'] ?? '')))
+            ->map(fn (string $line) => trim((string) preg_replace('/^[\s\-*•]+/u', '', $line)))
+            ->filter()
+            ->values()
+            ->all();
     }
 
     private function months(array $package): int
