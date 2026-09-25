@@ -993,10 +993,6 @@ section {
     max-width: 640px;
 }
 
-.contact-form {
-    max-width: 760px;
-    margin-top: 2.5rem;
-}
 
 .contact-input {
     border: 1px solid rgba(0, 0, 0, .15);
@@ -1028,19 +1024,58 @@ section {
     color: #fff;
 }
 
-.contact-info-section {
-    background-color: #f4f3f1; /* sama seperti .site-footer / .faq-section, biar senada */
-}
-
-.contact-map {
-    border-radius: 16px;
-    overflow: hidden;
-}
-
-.contact-info-card {
+.contact-form-card {
     background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, .06);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+.contact-channel {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, .06);
     border-radius: 16px;
-    padding: 2rem;
+    padding: 1.1rem 1.25rem;
+    color: inherit;
+    text-decoration: none;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+a.contact-channel:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .07);
+    color: inherit;
+}
+
+.contact-channel-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    background: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary);
+}
+
+.contact-channel-icon--wa {
+    background: #e7f8ee;
+    color: #25d366;
+}
+
+/* Honeypot form Kontak: disembunyikan dari manusia, tetap ada di DOM untuk bot. */
+.contact-hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
 }
 
 /*

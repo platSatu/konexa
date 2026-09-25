@@ -179,6 +179,35 @@ class TeleiosApiService
     }
 
     /**
+     * Kirim pesan form Kontak ke Teleios (POST /api/frontend/contact-messages).
+     * Mengembalikan Response apa adanya (201 / 422 / 429) supaya pemanggil
+     * bisa menampilkan pesan yang sesuai, atau null kalau Teleios tidak
+     * bisa dihubungi / konfigurasi kosong.
+     */
+    public function sendContactMessage(array $payload): ?Response
+    {
+        $baseUrl = config('services.teleios.url');
+        $key = config('services.teleios.key');
+
+        if (! $baseUrl || ! $key) {
+            Log::warning('TeleiosApiService: missing base URL or API key, contact message not sent.');
+
+            return null;
+        }
+
+        try {
+            return Http::withHeaders(['X-API-KEY' => $key])
+                ->acceptJson()
+                ->timeout(8)
+                ->post(rtrim($baseUrl, '/').'/api/frontend/contact-messages', $payload);
+        } catch (Throwable $e) {
+            Log::warning('TeleiosApiService: contact message request threw an exception.', ['message' => $e->getMessage()]);
+
+            return null;
+        }
+    }
+
+    /**
      * Shared GET + auth-header + error-handling for every endpoint
      * above. Returns null (rather than throwing or returning an empty
      * Response) on any failure — missing config, non-2xx status, or a

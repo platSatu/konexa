@@ -15,3 +15,9 @@ Route::middleware('log.visitor')->group(function () {
     Route::get('/video', [FrontendController::class, 'videos'])->name('frontend.videos');
     Route::get('/kontak', [FrontendController::class, 'contact'])->name('frontend.contact');
 });
+
+// Kirim form Kontak -- di luar grup log.visitor (bukan kunjungan halaman).
+// throttle: maks 5 kiriman / 10 menit per IP, di atas batas yang sama di Teleios.
+Route::post('/kontak', [FrontendController::class, 'sendContact'])
+    ->middleware('throttle:5,10')
+    ->name('frontend.contact.send');

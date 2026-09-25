@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Services\TeleiosApiService;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class FrontendController extends Controller
@@ -92,17 +98,82 @@ class FrontendController extends Controller
     }
 
     /**
-     * Tampilkan halaman Kontak (form + info alamat/peta). $webSetting
-     * (alamat, no. HP, email, embed Maps) di-supply lewat
-     * App\View\Composers\WebSettingComposer — lihat pendaftarannya di
-     * App\Providers\AppServiceProvider::boot() untuk view
-     * 'frontend.kontak'. Form-nya sendiri UI saja untuk sekarang, belum
-     * terhubung ke backend mana pun (belum ada endpoint buat nerima
-     * submission-nya) — lihat catatan di resources/views/frontend/kontak.blade.php.
+     * Pilihan topik form Kontak -- harus sama dengan
+     * App\Models\WebContactMessage::TOPICS di Teleios.
+     */
+    public const CONTACT_TOPICS = ['Chatbot AI', 'Broadcast WhatsApp', 'CRM & Sales Pipeline', 'Paket & Harga', 'Tagihan Online', 'Lainnya'];
+
+    /** Form yang dikirim lebih cepat dari ini (detik) hampir pasti bot. */
+    private const CONTACT_MIN_SECONDS = 3;
+
+    /**
+     * Halaman Kontak. $webSetting (alamat, no. HP, email) datang dari
+     * App\View\Composers\WebSettingComposer. form_token = waktu form
+     * dibuka (terenkripsi) untuk cek jeda di sendContact().
      */
     public function contact(): View
     {
-        return view('frontend.kontak');
+        return view('frontend.kontak', [
+            'topics' => self::CONTACT_TOPICS,
+            'formToken' => encrypt(now()->timestamp),
+        ]);
+    }
+
+    /**
+     * Kirim form Kontak ke Teleios (disimpan + email ke Pengaturan Web).
+     * Anti-spam di sisi ini: CSRF (grup web), throttle route, honeypot
+     * "website" (harus kosong), jeda minimal sejak form dibuka, validasi.
+     * Bot yang kena honeypot/jeda diberi respon "berhasil" palsu supaya
+     * tidak belajar cara lolos.
+     */
+    public function sendContact(Request $request): RedirectResponse
+    {
+        $success = redirect()->route('frontend.contact')
+            ->with('contact_success', 'Terima kasih! Pesan Anda sudah kami terima. Tim kami akan segera menghubungi Anda.');
+
+        if (filled($request->input('website')) || ! $this->contactTokenIsHuman((string) $request->input('form_token'))) {
+            return $success;
+        }
+
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'email:rfc', 'max:150'],
+            'phone' => ['required', 'string', 'regex:/^\+?[0-9][0-9\s\-]{7,19}$/'],
+            'topic' => ['required', Rule::in(self::CONTACT_TOPICS)],
+            'message' => ['required', 'string', 'min:10', 'max:3000'],
+        ], [
+            'phone.regex' => 'Nomor HP hanya boleh angka, spasi, atau tanda -, minimal 8 digit.',
+            'message.min' => 'Pesan minimal 10 karakter.',
+        ]);
+
+        $response = $this->teleiosApi->sendContactMessage($data + [
+            'ip_address' => $request->ip(),
+            'user_agent' => Str::limit((string) $request->userAgent(), 250, ''),
+        ]);
+
+        if ($response?->successful()) {
+            return $success;
+        }
+
+        $error = match ($response?->status()) {
+            422, 429 => (string) $response->json('message', 'Pesan tidak dapat dikirim.'),
+            default => 'Maaf, pesan belum bisa dikirim saat ini. Silakan coba lagi atau hubungi kami lewat WhatsApp.',
+        };
+
+        throw ValidationException::withMessages(['contact' => $error]);
+    }
+
+    private function contactTokenIsHuman(string $token): bool
+    {
+        try {
+            $openedAt = (int) decrypt($token);
+        } catch (DecryptException) {
+            return false;
+        }
+
+        $elapsed = now()->timestamp - $openedAt;
+
+        return $elapsed >= self::CONTACT_MIN_SECONDS && $elapsed <= 60 * 60 * 6;
     }
 
     /**
