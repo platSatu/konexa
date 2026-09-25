@@ -18,7 +18,11 @@
     default Bootstrap. Class "collapse" pada div jawaban WAJIB tetap ada
     (itu yang jadi hook buat JS collapse-nya, bukan class "accordion").
 --}}
-<section id="faq" class="py-5 faq-section">
+@php
+    // Bingkai dari Susunan Beranda (Teleios) -- judul, background, tombol.
+    $section = ($section ?? []) + ['style' => '', 'is_dark' => false];
+@endphp
+<section id="faq" class="py-5 faq-section {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
     {{--
         container-fluid + .faq-container (bukan .container Bootstrap biasa)
         supaya lebar section ini bisa jauh lebih lebar dari container
@@ -30,11 +34,11 @@
     <div class="container-fluid faq-container">
         <div class="faq-header d-flex flex-column flex-lg-row align-items-lg-center justify-content-lg-between gap-3 gap-lg-4 mb-4 mb-lg-5">
             <div class="d-flex align-items-center gap-3 flex-grow-1">
-                <h2 class="faq-heading mb-0">FAQs</h2>
+                <h2 class="faq-heading mb-0">{{ ($section['title'] ?? null) ?: 'FAQs' }}</h2>
                 <span class="faq-heading-line d-none d-lg-block" aria-hidden="true"></span>
             </div>
-            <p class="faq-header-desc text-muted mb-0">
-                Temukan jawaban atas pertanyaan umum seputar chatbot AI, broadcast WhatsApp, CRM, dan paket harga Bizbos.
+            <p class="faq-header-desc {{ $section['is_dark'] ? 'text-white-50' : 'text-muted' }} mb-0">
+                {{ ($section['subtitle'] ?? null) ?: 'Temukan jawaban atas pertanyaan umum seputar chatbot AI, broadcast WhatsApp, CRM, dan paket harga Bizbos.' }}
             </p>
         </div>
 
@@ -67,5 +71,7 @@
                 @endforeach
             </div>
         @endif
+
+        @include('frontend.partials.sections._buttons')
     </div>
 </section>

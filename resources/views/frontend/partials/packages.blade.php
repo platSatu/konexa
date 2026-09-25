@@ -41,14 +41,16 @@
     fallback-nya sudah dihapus dari frontend.index (lihat komentar di
     file itu), jadi TIDAK dipakai lagi sebagai anchor di sini.
 --}}
-<section id="packages" class="py-5 bg-light">
+@php
+    // Bingkai dari Susunan Beranda (Teleios) -- judul, background, tombol.
+    $section = ($section ?? []) + ['style' => '', 'is_dark' => false];
+@endphp
+<section id="packages" class="py-5 {{ $section['style'] === '' ? 'bg-light' : '' }} {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold mb-2">Paket Layanan</h2>
-            <p class="text-muted mx-auto mb-0" style="max-width: 560px;">
-                Pilih paket sesuai layanan yang dibutuhkan bisnis Anda. Paket berlaku untuk setiap branch.
-            </p>
-        </div>
+        @include('frontend.partials.sections._heading', [
+            'defaultTitle' => 'Paket Layanan',
+            'defaultSubtitle' => 'Pilih paket sesuai layanan yang dibutuhkan bisnis Anda. Paket berlaku untuk setiap branch.',
+        ])
 
         @if (empty($packageGroups))
             <p class="text-center text-muted mb-0">Paket belum tersedia saat ini.</p>
@@ -191,5 +193,7 @@
                 </div>
             @endforeach
         @endif
+
+        @include('frontend.partials.sections._buttons')
     </div>
 </section>

@@ -24,14 +24,16 @@
     judul yang otomatis tersembunyi (CSS :empty) selama belum dipakai,
     jadi aman ditambahkan sekarang tanpa mengubah tampilan dulu.
 --}}
-<section id="features" class="py-5 features-section">
+@php
+    // Bingkai dari Susunan Beranda (Teleios) -- judul, background, tombol.
+    $section = ($section ?? []) + ['style' => '', 'is_dark' => false];
+@endphp
+<section id="features" class="py-5 features-section {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold mb-2">Fitur Unggulan</h2>
-            <p class="text-muted mx-auto mb-0" style="max-width: 560px;">
-                Semua yang Anda butuhkan untuk mengelola percakapan WhatsApp bisnis dalam satu platform — dari otomasi berbasis AI sampai manajemen pelanggan yang terintegrasi.
-            </p>
-        </div>
+        @include('frontend.partials.sections._heading', [
+            'defaultTitle' => 'Fitur Unggulan',
+            'defaultSubtitle' => 'Semua yang Anda butuhkan untuk mengelola percakapan WhatsApp bisnis dalam satu platform — dari otomasi berbasis AI sampai manajemen pelanggan yang terintegrasi.',
+        ])
 
         @if (empty($features))
             <p class="text-center text-muted mb-0">Belum ada fitur saat ini.</p>
@@ -84,5 +86,7 @@
                 <div class="features-slider-dots" id="featuresSliderDots"></div>
             @endif
         @endif
+
+        @include('frontend.partials.sections._buttons')
     </div>
 </section>

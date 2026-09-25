@@ -12,18 +12,50 @@ class FrontendController extends Controller
     }
 
     /**
-     * Tampilkan halaman frontend (beranda), termasuk katalog kategori
-     * aplikasi & packages yang diambil dari backend Teleios lewat API.
+     * Section beranda yang dikenal view ini. Section bawaan punya partial
+     * sendiri; section tambahan dirender lewat frontend.partials.sections.frame.
+     */
+    private const BUILTIN_SECTIONS = ['hero', 'running_text', 'packages', 'features', 'faq'];
+
+    private const EXTRA_SECTIONS = ['articles', 'icon_grid', 'cards', 'logos', 'stats', 'testimonials', 'text_media', 'banner'];
+
+    /**
+     * Beranda, disusun dari section yang diatur di Teleios (Superadmin >
+     * Web > Susunan Beranda). Kalau Teleios tidak bisa dihubungi atau
+     * belum ada section, pakai susunan default (sama seperti sebelumnya).
+     * Data section bawaan hanya diambil kalau section-nya memang tampil.
      */
     public function index(): View
     {
-        $categoryApplications = $this->teleiosApi->getCategoryApplications();
-        $packageGroups = $this->groupPackages($this->teleiosApi->getPackages());
-        $faqs = $this->teleiosApi->getFaqs();
-        $features = $this->teleiosApi->getFeatures();
-        $headers = $this->teleiosApi->getHeaders();
+        $sections = collect($this->teleiosApi->getHomeSections())
+            ->filter(fn (array $section) => in_array($section['type'] ?? null, [...self::BUILTIN_SECTIONS, ...self::EXTRA_SECTIONS], true));
 
-        return view('frontend.index', compact('categoryApplications', 'packageGroups', 'faqs', 'features', 'headers'));
+        if ($sections->isEmpty()) {
+            $sections = collect(self::BUILTIN_SECTIONS)->map(fn (string $type) => ['type' => $type]);
+        }
+
+        $sections = $sections->map(fn (array $section) => $section + $this->sectionStyle($section))->values();
+        $types = $sections->pluck('type')->all();
+        $has = fn (string $type) => in_array($type, $types, true);
+
+        return view('frontend.index', [
+            'sections' => $sections,
+            'headers' => $has('hero') ? $this->teleiosApi->getHeaders() : [],
+            'packageGroups' => $has('packages') ? $this->groupPackages($this->teleiosApi->getPackages()) : [],
+            'features' => $has('features') ? $this->teleiosApi->getFeatures() : [],
+            'faqs' => $has('faq') ? $this->teleiosApi->getFaqs() : [],
+        ]);
+    }
+
+    /**
+     * Detail artikel (/artikel/{slug}).
+     */
+    public function article(string $slug): View
+    {
+        $article = $this->teleiosApi->getArticle($slug);
+        abort_if(empty($article), 404);
+
+        return view('frontend.artikel-detail', compact('article'));
     }
 
     /**
@@ -71,6 +103,34 @@ class FrontendController extends Controller
     public function contact(): View
     {
         return view('frontend.kontak');
+    }
+
+    /**
+     * Inline style background section + penanda "gelap" (teks putih) untuk
+     * background gambar/video. Nilai dari API dicek ulang di sini (warna
+     * harus hex, URL harus http/https) supaya tidak bisa menyisipkan CSS.
+     *
+     * @return array{style: string, is_dark: bool}
+     */
+    private function sectionStyle(array $section): array
+    {
+        $background = $section['background'] ?? [];
+        $type = $background['type'] ?? 'none';
+        $color = (string) ($background['color'] ?? '');
+        $image = (string) ($background['image_url'] ?? '');
+
+        if ($type === 'color' && preg_match('/^#[0-9a-fA-F]{6}$/', $color)) {
+            return ['style' => "background-color: {$color};", 'is_dark' => false];
+        }
+
+        if ($type === 'image' && preg_match('#^https?://[^\s\'"()]+$#', $image)) {
+            return [
+                'style' => "background-image: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('{$image}'); background-size: cover; background-position: center;",
+                'is_dark' => true,
+            ];
+        }
+
+        return ['style' => '', 'is_dark' => $type === 'video' && ! empty($background['video_url'])];
     }
 
     /**

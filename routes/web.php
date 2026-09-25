@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('log.visitor')->group(function () {
     Route::get('/', [FrontendController::class, 'index'])->name('frontend.index');
     Route::get('/artikel', [FrontendController::class, 'articles'])->name('frontend.articles');
+    Route::get('/artikel/{slug}', [FrontendController::class, 'article'])->where('slug', '[a-z0-9-]+')->name('frontend.articles.show');
     Route::get('/syarat-dan-ketentuan', [FrontendController::class, 'terms'])->name('frontend.terms');
     Route::get('/video', [FrontendController::class, 'videos'])->name('frontend.videos');
     Route::get('/kontak', [FrontendController::class, 'contact'])->name('frontend.contact');

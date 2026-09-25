@@ -40,7 +40,8 @@
         $customFullTitle = trim($__env->yieldContent('title_full', ''));
         $fullTitle = $customFullTitle !== '' ? $customFullTitle : 'Bizbos : '.$pageTitle;
         $pageDescription = trim($__env->yieldContent('meta_description', (string) data_get($webSetting, 'meta_description', '')));
-        $shareImage = data_get($webSetting, 'meta_images_url');
+        // Halaman boleh mengganti gambar share lewat @section('meta_image', ...) (mis. detail artikel).
+        $shareImage = trim($__env->yieldContent('meta_image', '')) ?: data_get($webSetting, 'meta_images_url');
     @endphp
 
     <title>{{ $fullTitle }}</title>

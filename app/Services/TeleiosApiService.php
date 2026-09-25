@@ -104,6 +104,28 @@ class TeleiosApiService
     }
 
     /**
+     * Susunan section beranda (Teleios: Superadmin > Web > Susunan
+     * Beranda, App\Models\WebHomeSection). Kosong kalau Teleios tidak
+     * bisa dihubungi -- FrontendController lalu memakai susunan default.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function getHomeSections(): array
+    {
+        return $this->request('/api/frontend/home-sections')?->json('data', []) ?? [];
+    }
+
+    /**
+     * Detail satu artikel + artikel terkait, atau null kalau tidak ada.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getArticle(string $slug): ?array
+    {
+        return $this->request('/api/frontend/articles/'.rawurlencode($slug))?->json('data');
+    }
+
+    /**
      * Homepage hero/header slides — see App\Models\WebHeader on the
      * Teleios side (superadmin-managed, Superadmin > Web > Headers).
      * Only active slides, already ordered by sort_order. Each row

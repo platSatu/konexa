@@ -12,25 +12,33 @@
 
     @include('frontend.partials.topbar')
 
-    @include('frontend.partials.hero')
-
-    @include('frontend.partials.running-text')
-
-    @include('frontend.partials.packages')
-
-    @include('frontend.partials.features')
-
     {{--
-        Section placeholder "Tentang Kami" / "Layanan" / "Kontak" (dummy
-        scaffolding dari awal proyek, isinya cuma teks generik "Tulis
-        konten... di sini") sudah DIHAPUS atas permintaan user — bukan
-        konten asli, dan tumpang tindih dengan section Fitur Unggulan di
-        atas (yang datanya asli dari App\Models\WebFeature). Kalau nanti
-        mau ada section "Tentang Kami" versi asli, tinggal tambahkan lagi
-        di sini dengan konten sungguhan (bukan placeholder).
+        Beranda disusun dari section yang diatur di Teleios (Superadmin >
+        Web > Susunan Beranda) -- lihat FrontendController::index(). Section
+        bawaan memakai partial lamanya; section tambahan lewat
+        partials.sections.frame (bingkai + isi per tipe).
     --}}
-
-    @include('frontend.partials.faq')
+    @foreach ($sections as $section)
+        @switch($section['type'])
+            @case('hero')
+                @include('frontend.partials.hero')
+                @break
+            @case('running_text')
+                @include('frontend.partials.running-text')
+                @break
+            @case('packages')
+                @include('frontend.partials.packages', ['section' => $section])
+                @break
+            @case('features')
+                @include('frontend.partials.features', ['section' => $section])
+                @break
+            @case('faq')
+                @include('frontend.partials.faq', ['section' => $section])
+                @break
+            @default
+                @include('frontend.partials.sections.frame', ['section' => $section])
+        @endswitch
+    @endforeach
 
     @include('frontend.partials.footer')
 
