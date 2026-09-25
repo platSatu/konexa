@@ -1,8 +1,8 @@
 @extends('layouts.frontend')
 
-{{-- Layout menambahkan prefix "Konexa : " otomatis, lihat layouts/frontend.blade.php --}}
+{{-- Layout menambahkan prefix "Bizbos : " otomatis, lihat layouts/frontend.blade.php --}}
 @section('title', 'Artikel')
-@section('meta_description', 'Kumpulan artikel dan tips seputar WhatsApp Business, otomasi pelanggan, dan strategi digital marketing dari Konexa.')
+@section('meta_description', 'Kumpulan artikel dan tips seputar WhatsApp Business, otomasi pelanggan, dan strategi digital marketing dari Bizbos.')
 
 @section('content')
 

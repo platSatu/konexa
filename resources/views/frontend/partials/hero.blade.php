@@ -39,7 +39,7 @@
         <div class="container py-5">
             <div class="row">
                 <div class="col-12 col-lg-6 hero-content">
-                    <h1 class="display-4 fw-bold">Selamat Datang di Konexa</h1>
+                    <h1 class="display-4 fw-bold">Selamat Datang di Bizbos</h1>
                     <p class="lead hero-description">Deskripsi singkat layanan atau produk Anda di sini.</p>
                     <a href="#about" class="btn btn-primary btn-lg mt-3">Selengkapnya</a>
                 </div>

@@ -1,8 +1,8 @@
 @extends('layouts.frontend')
 
-{{-- Layout menambahkan prefix "Konexa : " otomatis, lihat layouts/frontend.blade.php --}}
+{{-- Layout menambahkan prefix "Bizbos : " otomatis, lihat layouts/frontend.blade.php --}}
 @section('title', 'Kontak')
-@section('meta_description', 'Hubungi tim Konexa — tanya apa saja soal chatbot AI, broadcast WhatsApp, CRM, atau paket harga. Kami siap membantu.')
+@section('meta_description', 'Hubungi tim Bizbos — tanya apa saja soal chatbot AI, broadcast WhatsApp, CRM, atau paket harga. Kami siap membantu.')
 
 @section('content')
 
@@ -16,7 +16,7 @@
     --}}
     <section class="py-5 contact-hero">
         <div class="container">
-            <p class="text-center text-muted small mb-2">Konexa &bull; Kontak</p>
+            <p class="text-center text-muted small mb-2">Bizbos &bull; Kontak</p>
             <h1 class="text-center contact-title mb-3">Hubungi Kami</h1>
             <p class="text-center text-muted mx-auto contact-subtitle">
                 Ada pertanyaan soal chatbot AI, broadcast WhatsApp, CRM, atau paket harga? Tim kami siap membantu menjawab semuanya.
@@ -80,7 +80,7 @@
     <section class="py-5 contact-info-section">
         <div class="container">
             <p class="text-center text-muted small mb-2">Kontak</p>
-            <h2 class="text-center mb-5">Ngobrol dengan Tim Konexa</h2>
+            <h2 class="text-center mb-5">Ngobrol dengan Tim Bizbos</h2>
 
             <div class="row g-4 align-items-stretch justify-content-center">
                 @if (data_get($webSetting, 'gmaps'))

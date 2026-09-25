@@ -98,14 +98,14 @@
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div class="d-flex align-items-center gap-3 flex-wrap">
                 <img src="{{ data_get($webSetting, 'logo_url') ?: asset('images/Logo.png') }}"
-                    alt="Konexa" height="28">
-                {{-- Di-hardcode "Konexa" (bukan config('app.name')) — sama seperti <title> di layouts/frontend.blade.php.
-                     Sebelumnya teks ini ikut config('app.name', 'Konexa'), tapi fallback itu nyaris tidak pernah
+                    alt="Bizbos" height="28">
+                {{-- Di-hardcode "Bizbos" (bukan config('app.name')) — sama seperti <title> di layouts/frontend.blade.php.
+                     Sebelumnya teks ini ikut config('app.name', 'Bizbos'), tapi fallback itu nyaris tidak pernah
                      kepakai (config('app.name') hampir selalu resolve ke string asli dari .env, bukan null), jadi
-                     kalau APP_NAME di .env bukan "Konexa" (mis. masih default "Laravel" atau kepencet jadi
+                     kalau APP_NAME di .env bukan "Bizbos" (mis. masih default "Laravel" atau kepencet jadi
                      "teleios"), teks ini ikut salah tampil. Cek juga APP_NAME di file .env fe-konexa kalau masih
                      salah setelah ini. --}}
-                <span class="small footer-copyright">&copy; {{ date('Y') }} Konexa. All rights reserved.</span>
+                <span class="small footer-copyright">&copy; {{ date('Y') }} Bizbos. All rights reserved.</span>
             </div>
 
             {{--

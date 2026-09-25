@@ -2,11 +2,11 @@
 
 {{--
     Beranda pakai 'title_full' (bukan 'title' biasa) supaya title-nya
-    jadi kalimat jualan penuh, bukan ikut pola "Konexa : Beranda" —
+    jadi kalimat jualan penuh, bukan ikut pola "Bizbos : Beranda" —
     lihat komentar 'title_full' di layouts/frontend.blade.php.
 --}}
-@section('title_full', 'Konexa | Solusi Modern untuk WhatsApp Bisnis Anda')
-@section('meta_description', 'Konexa adalah platform WhatsApp Business All-in-One — chatbot AI, broadcast anti-banned, CRM, dan otomasi pelanggan dalam satu dashboard.')
+@section('title_full', 'Bizbos | Solusi Modern untuk WhatsApp Bisnis Anda')
+@section('meta_description', 'Bizbos adalah platform WhatsApp Business All-in-One — chatbot AI, broadcast anti-banned, CRM, dan otomasi pelanggan dalam satu dashboard.')
 
 @section('content')
 

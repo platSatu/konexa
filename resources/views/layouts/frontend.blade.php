@@ -14,31 +14,31 @@
           @yield cuma boleh dipanggil SEKALI per section; di sini section
           yang sama ('title'/'meta_description') perlu dipakai berkali-
           kali (title tag, og:title, twitter:title, dst).
-        - Prefix "Konexa : " di-hardcode DI SINI SAJA (satu tempat),
+        - Prefix "Bizbos : " di-hardcode DI SINI SAJA (satu tempat),
           bukan diulang di tiap page — sebelumnya tiap halaman pakai
-          config('app.name', 'Konexa') buat suffix judul, tapi karena
+          config('app.name', 'Bizbos') buat suffix judul, tapi karena
           .env APP_NAME defaultnya "Laravel" (lihat config/app.php) dan
-          fallback 'Konexa' di sisi Blade itu CUMA kepakai kalau
+          fallback 'Bizbos' di sisi Blade itu CUMA kepakai kalau
           config('app.name') null (yang hampir tidak pernah terjadi),
           title yang sungguhan tampil di production kemungkinan besar
-          "Beranda - Laravel", BUKAN "Beranda - Konexa". Hardcode di
+          "Beranda - Laravel", BUKAN "Beranda - Bizbos". Hardcode di
           sini menghilangkan ketergantungan ke APP_NAME sama sekali.
         - Tiap halaman cukup @section('title', 'Beranda') /
           @section('meta_description', '...') — lihat frontend/index.blade.php
           dkk untuk contohnya.
         - 'title_full' (OPSIONAL) — kalau diisi di sebuah halaman, INI
-          yang dipakai apa adanya sebagai <title> (skip prefix "Konexa : "
+          yang dipakai apa adanya sebagai <title> (skip prefix "Bizbos : "
           otomatis di atas). Dipakai khusus di Beranda supaya title-nya
-          bisa jadi kalimat jualan penuh ("Konexa | Solusi Modern untuk
-          WhatsApp Bisnis Anda") — bukan cuma "Konexa : Beranda" yang
+          bisa jadi kalimat jualan penuh ("Bizbos | Solusi Modern untuk
+          WhatsApp Bisnis Anda") — bukan cuma "Bizbos : Beranda" yang
           kurang menjual buat halaman paling penting secara SEO. Halaman
           lain (Artikel/Video/dst) TIDAK perlu set ini, biar tetap ikut
-          pola "Konexa : {Nama Halaman}" yang konsisten.
+          pola "Bizbos : {Nama Halaman}" yang konsisten.
     --}}
     @php
         $pageTitle = trim($__env->yieldContent('title', 'Beranda'));
         $customFullTitle = trim($__env->yieldContent('title_full', ''));
-        $fullTitle = $customFullTitle !== '' ? $customFullTitle : 'Konexa : '.$pageTitle;
+        $fullTitle = $customFullTitle !== '' ? $customFullTitle : 'Bizbos : '.$pageTitle;
         $pageDescription = trim($__env->yieldContent('meta_description', (string) data_get($webSetting, 'meta_description', '')));
         $shareImage = data_get($webSetting, 'meta_images_url');
     @endphp
@@ -75,7 +75,7 @@
         atas supaya konsisten di mana pun link-nya di-share.
     --}}
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Konexa">
+    <meta property="og:site_name" content="Bizbos">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="{{ $fullTitle }}">
     @if ($pageDescription !== '')

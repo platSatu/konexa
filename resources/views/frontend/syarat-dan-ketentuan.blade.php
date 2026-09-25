@@ -1,8 +1,8 @@
 @extends('layouts.frontend')
 
-{{-- Layout menambahkan prefix "Konexa : " otomatis, lihat layouts/frontend.blade.php --}}
+{{-- Layout menambahkan prefix "Bizbos : " otomatis, lihat layouts/frontend.blade.php --}}
 @section('title', 'Syarat dan Ketentuan')
-@section('meta_description', 'Syarat dan ketentuan penggunaan layanan Konexa — baca sebelum menggunakan platform WhatsApp Business kami.')
+@section('meta_description', 'Syarat dan ketentuan penggunaan layanan Bizbos — baca sebelum menggunakan platform WhatsApp Business kami.')
 
 @section('content')
 

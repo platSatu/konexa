@@ -34,7 +34,7 @@
                 <span class="faq-heading-line d-none d-lg-block" aria-hidden="true"></span>
             </div>
             <p class="faq-header-desc text-muted mb-0">
-                Temukan jawaban atas pertanyaan umum seputar chatbot AI, broadcast WhatsApp, CRM, dan paket harga Konexa.
+                Temukan jawaban atas pertanyaan umum seputar chatbot AI, broadcast WhatsApp, CRM, dan paket harga Bizbos.
             </p>
         </div>
 
