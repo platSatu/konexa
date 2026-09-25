@@ -14,6 +14,7 @@ Route::middleware('log.visitor')->group(function () {
     Route::get('/syarat-dan-ketentuan', [FrontendController::class, 'terms'])->name('frontend.terms');
     Route::get('/video', [FrontendController::class, 'videos'])->name('frontend.videos');
     Route::get('/kontak', [FrontendController::class, 'contact'])->name('frontend.contact');
+    Route::get('/page/{slug}', [FrontendController::class, 'page'])->where('slug', '[a-z0-9-]+')->name('frontend.page');
 });
 
 // Kirim form Kontak -- di luar grup log.visitor (bukan kunjungan halaman).
