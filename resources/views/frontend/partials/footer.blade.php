@@ -105,7 +105,8 @@
                      kalau APP_NAME di .env bukan "Bizbos" (mis. masih default "Laravel" atau kepencet jadi
                      "teleios"), teks ini ikut salah tampil. Cek juga APP_NAME di file .env fe-konexa kalau masih
                      salah setelah ini. --}}
-                <span class="small footer-copyright">&copy; {{ date('Y') }} Bizbos. All rights reserved.</span>
+                {{-- Nama PT dari Superadmin > Web > Pengaturan (company_name, nullable) -- kosong = "Bizbos". --}}
+                <span class="small footer-copyright">&copy; {{ date('Y') }} {{ rtrim((string) (data_get($webSetting, 'company_name') ?: 'Bizbos'), '.') }}. All rights reserved.</span>
             </div>
 
             {{--
