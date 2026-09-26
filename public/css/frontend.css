@@ -500,6 +500,85 @@ section {
     margin-top: 0.15rem;
 }
 
+/* Tab kelompok paket -- pill, bisa digeser di layar kecil. */
+.package-tabs {
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 0.25rem;
+}
+
+.package-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.package-tabs .nav-link {
+    white-space: nowrap;
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-radius: 999px;
+    color: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.5rem 1.1rem;
+}
+
+.package-tabs .nav-link.active {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+}
+
+.package-swipe-hint {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}
+
+@media (max-width: 767.98px) {
+    .package-tabs {
+        justify-content: flex-start;
+        margin-inline: calc(var(--bs-gutter-x, 1.5rem) * -0.5);
+        padding-inline: calc(var(--bs-gutter-x, 1.5rem) * 0.5);
+    }
+
+    /* Kartu digeser ke samping, satu kartu per layar + intip kartu berikutnya. */
+    .package-row {
+        flex-wrap: nowrap;
+        justify-content: flex-start !important;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        padding-top: 1rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .package-row::-webkit-scrollbar {
+        display: none;
+    }
+
+    .package-row > [class*="col-"] {
+        flex: 0 0 85%;
+        max-width: 85%;
+        scroll-snap-align: center;
+    }
+
+    .package-card,
+    .package-card:hover {
+        transform: none;
+    }
+
+    .package-card {
+        padding: 1.25rem !important;
+    }
+
+    .package-price-amount {
+        font-size: 1.75rem;
+    }
+}
+
 /*
  * Fitur Unggulan slider (frontend/partials/features.blade.php) — geser
  * horizontal manual pakai CSS scroll-snap (bukan carousel JS berat),
@@ -1208,4 +1287,103 @@ a.contact-channel:hover {
 .article-body p {
     font-size: 1.05rem;
     line-height: 1.8;
+}
+
+/* ------------------------------------------------------------------
+ * Halaman dinamis /page/{slug} (resources/views/frontend/page.blade.php)
+ * ------------------------------------------------------------------ */
+.page-hero {
+    background-color: #f4f3f1;
+}
+
+.page-hero--image {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+}
+
+.doc-toc {
+    position: sticky;
+    top: 100px;
+    border-left: 2px solid var(--bs-primary-bg-subtle);
+    padding-left: 1rem;
+}
+
+.doc-toc li {
+    margin-bottom: .5rem;
+    font-size: .9rem;
+}
+
+.doc-toc a,
+.doc-toc-mobile a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.doc-toc a:hover,
+.doc-toc-mobile a:hover {
+    color: var(--bs-primary);
+}
+
+.doc-toc-mobile {
+    background-color: #f4f3f1;
+    border-radius: 12px;
+    padding: .9rem 1.1rem;
+}
+
+.doc-body {
+    font-size: 1.05rem;
+    line-height: 1.85;
+}
+
+.doc-body h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    scroll-margin-top: 100px;
+}
+
+.doc-body h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 1.75rem;
+    margin-bottom: .75rem;
+    scroll-margin-top: 100px;
+}
+
+.doc-body h2:first-child,
+.doc-body h3:first-child {
+    margin-top: 0;
+}
+
+.doc-body ul,
+.doc-body ol {
+    padding-left: 1.4rem;
+}
+
+.doc-body li {
+    margin-bottom: .35rem;
+}
+
+.doc-body a {
+    color: var(--bs-primary);
+}
+
+.doc-body table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+}
+
+.doc-body th,
+.doc-body td {
+    border: 1px solid rgba(0, 0, 0, .1);
+    padding: .5rem .75rem;
+}
+
+.doc-body blockquote {
+    border-left: 4px solid var(--bs-primary);
+    background-color: #f8f7f5;
+    padding: .75rem 1rem;
+    margin: 1.25rem 0;
 }

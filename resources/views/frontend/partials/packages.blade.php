@@ -23,7 +23,9 @@
       (featured vs outline).
 
     Paket dikelompokkan per kombinasi layanan (category application):
-    satu baris per kelompok, kolom urut Trial -> durasi pendek -> panjang.
+    satu TAB per kelompok, kolom urut Trial -> durasi pendek -> panjang.
+    Di HP kartu dalam satu tab digeser ke samping (scroll-snap, tanpa JS
+    tambahan), jadi halaman tidak memanjang ke bawah.
     Pengelompokan & nama kolom dihitung di FrontendController::
     groupPackages() -- view ini hanya menampilkan $packageGroups.
 
@@ -76,12 +78,36 @@
                     $waNumber = '62' . substr($waNumber, 1);
                 }
                 $contactEmail = data_get($webSetting, 'email');
+
+                // Satu tab per kelompok layanan supaya halaman tidak memanjang;
+                // tab awal = kelompok yang punya paket TERPOPULER.
+                $activeGroup = collect($packageGroups)->search(
+                    fn ($group) => collect($group['packages'])->contains(fn ($p) => ! empty($p['is_featured']))
+                ) ?: 0;
             @endphp
 
+            @if (count($packageGroups) > 1)
+                <ul class="nav nav-pills package-tabs mb-4" role="tablist">
+                    @foreach ($packageGroups as $group)
+                        <li class="nav-item" role="presentation">
+                            <button type="button" class="nav-link {{ $loop->index === $activeGroup ? 'active' : '' }}"
+                                data-bs-toggle="pill" data-bs-target="#package-group-{{ $loop->index }}" role="tab"
+                                aria-controls="package-group-{{ $loop->index }}" aria-selected="{{ $loop->index === $activeGroup ? 'true' : 'false' }}">
+                                {{ $group['label'] }}
+                            </button>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+
+            <div class="tab-content">
+
             @foreach ($packageGroups as $group)
-                <div class="package-group {{ $loop->last ? '' : 'mb-5' }}">
-                    <div class="text-center mb-4">
-                        <h3 class="h4 fw-bold mb-2">{{ $group['label'] }}</h3>
+                <div class="tab-pane fade {{ $loop->index === $activeGroup ? 'show active' : '' }}" id="package-group-{{ $loop->index }}" role="tabpanel">
+                    <div class="text-center mb-3 mb-md-4">
+                        @if (count($packageGroups) === 1)
+                            <h3 class="h4 fw-bold mb-2">{{ $group['label'] }}</h3>
+                        @endif
                         <div class="d-flex flex-wrap justify-content-center gap-2">
                             @foreach ($group['services'] as $service)
                                 <span class="badge bg-primary-subtle text-primary">{{ $service }}</span>
@@ -89,7 +115,11 @@
                         </div>
                     </div>
 
-                    <div class="row g-4 justify-content-center">
+                    @if (count($group['packages']) > 1)
+                        <p class="package-swipe-hint d-md-none">Geser untuk melihat paket lain <i class="bi bi-arrow-right"></i></p>
+                    @endif
+
+                    <div class="row g-4 justify-content-center package-row">
                         @foreach ($group['packages'] as $package)
                             @php
                                 $isFeatured = (bool) ($package['is_featured'] ?? false);
@@ -192,6 +222,7 @@
                     </div>
                 </div>
             @endforeach
+            </div>
         @endif
 
         @include('frontend.partials.sections._buttons')
