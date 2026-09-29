@@ -98,15 +98,10 @@
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div class="d-flex align-items-center gap-3 flex-wrap">
                 <img src="{{ data_get($webSetting, 'logo_url') ?: asset('images/Logo.png') }}"
-                    alt="Bizbos" height="28">
-                {{-- Di-hardcode "Bizbos" (bukan config('app.name')) — sama seperti <title> di layouts/frontend.blade.php.
-                     Sebelumnya teks ini ikut config('app.name', 'Bizbos'), tapi fallback itu nyaris tidak pernah
-                     kepakai (config('app.name') hampir selalu resolve ke string asli dari .env, bukan null), jadi
-                     kalau APP_NAME di .env bukan "Bizbos" (mis. masih default "Laravel" atau kepencet jadi
-                     "teleios"), teks ini ikut salah tampil. Cek juga APP_NAME di file .env fe-konexa kalau masih
-                     salah setelah ini. --}}
-                {{-- Nama PT dari Superadmin > Web > Pengaturan (company_name, nullable) -- kosong = "Bizbos". --}}
-                <span class="small footer-copyright">&copy; {{ date('Y') }} {{ rtrim((string) (data_get($webSetting, 'company_name') ?: 'Bizbos'), '.') }}. All rights reserved.</span>
+                    alt="{{ config('app.name') }}" height="28">
+                {{-- Nama brand dari APP_NAME (.env). --}}
+                {{-- Nama PT dari Superadmin > Web > Pengaturan (company_name, nullable) -- kosong = APP_NAME. --}}
+                <span class="small footer-copyright">&copy; {{ date('Y') }} {{ rtrim((string) (data_get($webSetting, 'company_name') ?: config('app.name')), '.') }}. All rights reserved.</span>
             </div>
 
             {{--

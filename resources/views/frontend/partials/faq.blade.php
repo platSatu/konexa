@@ -38,7 +38,7 @@
                 <span class="faq-heading-line d-none d-lg-block" aria-hidden="true"></span>
             </div>
             <p class="faq-header-desc {{ $section['is_dark'] ? 'text-white-50' : 'text-muted' }} mb-0">
-                {{ ($section['subtitle'] ?? null) ?: 'Temukan jawaban atas pertanyaan umum seputar chatbot AI, broadcast WhatsApp, CRM, dan paket harga Bizbos.' }}
+                {{ ($section['subtitle'] ?? null) ?: 'Temukan jawaban atas pertanyaan umum seputar chatbot AI, broadcast WhatsApp, CRM, dan paket harga '.config('app.name').'.' }}
             </p>
         </div>
 

@@ -1,12 +1,11 @@
 @extends('layouts.frontend')
 
 {{--
-    Beranda pakai 'title_full' (bukan 'title' biasa) supaya title-nya
-    jadi kalimat jualan penuh, bukan ikut pola "Bizbos : Beranda" —
-    lihat komentar 'title_full' di layouts/frontend.blade.php.
+    Beranda pakai 'title_full' (kalimat jualan penuh). Meta description
+    sengaja TIDAK diisi di sini supaya memakai isian Teleios (Superadmin >
+    Web > Pengaturan Web > Meta Description). Nama dari APP_NAME.
 --}}
-@section('title_full', 'Bizbos | Solusi Modern untuk WhatsApp Bisnis Anda')
-@section('meta_description', 'Bizbos adalah platform WhatsApp Business All-in-One — chatbot AI, broadcast anti-banned, CRM, dan otomasi pelanggan dalam satu dashboard.')
+@section('title_full', config('app.name').' | Solusi Modern untuk WhatsApp Bisnis Anda')
 
 @section('content')
 

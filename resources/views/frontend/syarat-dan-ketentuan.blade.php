@@ -1,8 +1,8 @@
 @extends('layouts.frontend')
 
-{{-- Layout menambahkan prefix "Bizbos : " otomatis, lihat layouts/frontend.blade.php --}}
+{{-- Layout menambahkan prefix "{APP_NAME} : " otomatis, lihat layouts/frontend.blade.php --}}
 @section('title', 'Syarat dan Ketentuan')
-@section('meta_description', 'Syarat dan ketentuan penggunaan layanan Bizbos — baca sebelum menggunakan platform WhatsApp Business kami.')
+@section('meta_description', 'Syarat dan ketentuan penggunaan layanan '.config('app.name').' — baca sebelum menggunakan platform WhatsApp Business kami.')
 
 @section('content')
 

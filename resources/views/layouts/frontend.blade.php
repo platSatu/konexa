@@ -5,40 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {{--
-        SEO: SATU sumber kebenaran untuk title & description tiap
-        halaman, dipakai ulang di <title>, og:*, dan twitter:* di bawah
-        (bukan tulis ulang manual per tag — biar tidak ada yang
-        ketinggalan/beda pas ada yang lupa update salah satunya).
-
-        - $__env->yieldContent(...) dipakai (bukan @yield biasa) karena
-          @yield cuma boleh dipanggil SEKALI per section; di sini section
-          yang sama ('title'/'meta_description') perlu dipakai berkali-
-          kali (title tag, og:title, twitter:title, dst).
-        - Prefix "Bizbos : " di-hardcode DI SINI SAJA (satu tempat),
-          bukan diulang di tiap page — sebelumnya tiap halaman pakai
-          config('app.name', 'Bizbos') buat suffix judul, tapi karena
-          .env APP_NAME defaultnya "Laravel" (lihat config/app.php) dan
-          fallback 'Bizbos' di sisi Blade itu CUMA kepakai kalau
-          config('app.name') null (yang hampir tidak pernah terjadi),
-          title yang sungguhan tampil di production kemungkinan besar
-          "Beranda - Laravel", BUKAN "Beranda - Bizbos". Hardcode di
-          sini menghilangkan ketergantungan ke APP_NAME sama sekali.
-        - Tiap halaman cukup @section('title', 'Beranda') /
-          @section('meta_description', '...') — lihat frontend/index.blade.php
-          dkk untuk contohnya.
-        - 'title_full' (OPSIONAL) — kalau diisi di sebuah halaman, INI
-          yang dipakai apa adanya sebagai <title> (skip prefix "Bizbos : "
-          otomatis di atas). Dipakai khusus di Beranda supaya title-nya
-          bisa jadi kalimat jualan penuh ("Bizbos | Solusi Modern untuk
-          WhatsApp Bisnis Anda") — bukan cuma "Bizbos : Beranda" yang
-          kurang menjual buat halaman paling penting secara SEO. Halaman
-          lain (Artikel/Video/dst) TIDAK perlu set ini, biar tetap ikut
-          pola "Bizbos : {Nama Halaman}" yang konsisten.
+        SEO: satu sumber untuk title & description tiap halaman, dipakai
+        ulang di <title>, og:* dan twitter:*.
+        - Nama brand diambil dari APP_NAME (.env) lewat $appName, jadi
+          tidak ada nama yang diketik manual di view.
+        - Halaman cukup @section('title', 'Artikel'); hasilnya "{APP_NAME} : Artikel".
+        - 'title_full' (opsional) dipakai apa adanya sebagai <title> (Beranda).
+        - meta_description: dari halaman, kalau kosong pakai Pengaturan Web
+          Teleios (meta_description).
     --}}
     @php
+        $appName = (string) config('app.name');
         $pageTitle = trim($__env->yieldContent('title', 'Beranda'));
         $customFullTitle = trim($__env->yieldContent('title_full', ''));
-        $fullTitle = $customFullTitle !== '' ? $customFullTitle : 'Bizbos : '.$pageTitle;
+        $fullTitle = $customFullTitle !== '' ? $customFullTitle : $appName.' : '.$pageTitle;
         $pageDescription = trim($__env->yieldContent('meta_description', (string) data_get($webSetting, 'meta_description', '')));
         // Halaman boleh mengganti gambar share lewat @section('meta_image', ...) (mis. detail artikel).
         $shareImage = trim($__env->yieldContent('meta_image', '')) ?: data_get($webSetting, 'meta_images_url');
@@ -76,7 +56,7 @@
         atas supaya konsisten di mana pun link-nya di-share.
     --}}
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Bizbos">
+    <meta property="og:site_name" content="{{ $appName }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="{{ $fullTitle }}">
     @if ($pageDescription !== '')

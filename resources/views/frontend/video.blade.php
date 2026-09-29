@@ -1,8 +1,8 @@
 @extends('layouts.frontend')
 
-{{-- Layout menambahkan prefix "Bizbos : " otomatis, lihat layouts/frontend.blade.php --}}
+{{-- Layout menambahkan prefix "{APP_NAME} : " otomatis, lihat layouts/frontend.blade.php --}}
 @section('title', 'Video')
-@section('meta_description', 'Tonton video tutorial dan demo fitur-fitur Bizbos untuk mengelola WhatsApp Business Anda lebih efisien.')
+@section('meta_description', 'Tonton video tutorial dan demo fitur-fitur '.config('app.name').' untuk mengelola WhatsApp Business Anda lebih efisien.')
 
 @section('content')
 

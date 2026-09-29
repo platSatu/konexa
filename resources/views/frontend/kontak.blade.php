@@ -1,8 +1,8 @@
 @extends('layouts.frontend')
 
-{{-- Layout menambahkan prefix "Bizbos : " otomatis, lihat layouts/frontend.blade.php --}}
+{{-- Layout menambahkan prefix "{APP_NAME} : " otomatis, lihat layouts/frontend.blade.php --}}
 @section('title', 'Kontak')
-@section('meta_description', 'Hubungi tim Bizbos — tanya apa saja soal chatbot AI, broadcast WhatsApp, CRM, atau paket harga. Kami siap membantu.')
+@section('meta_description', 'Hubungi tim '.config('app.name').' — tanya apa saja soal chatbot AI, broadcast WhatsApp, CRM, atau paket harga. Kami siap membantu.')
 
 @section('content')
 
@@ -21,7 +21,7 @@
     <section class="py-5 contact-hero">
         <div class="container">
             <div class="text-center mb-5">
-                <p class="text-muted small mb-2">Bizbos &bull; Kontak</p>
+                <p class="text-muted small mb-2">{{ config('app.name') }} &bull; Kontak</p>
                 <h1 class="contact-title mb-3">Hubungi Kami</h1>
                 <p class="text-muted mx-auto contact-subtitle mb-0">
                     Ada pertanyaan soal chatbot AI, broadcast WhatsApp, CRM, atau paket harga? Tim kami siap membantu menjawab semuanya.
