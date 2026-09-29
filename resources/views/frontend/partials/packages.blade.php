@@ -170,7 +170,7 @@
                                         @endif
                                     </p>
 
-                                    <a href="{{ $waHref }}" target="_blank" rel="noopener"
+                                    <a href="{{ $waHref }}" target="_blank" rel="noopener" data-track-name="{{ $package['name'] ?? 'Paket' }}"
                                         class="btn {{ $isFeatured ? 'btn-package-featured' : 'btn-package-outline' }} w-100 mb-4">
                                         {{ $isTrial ? 'Coba Gratis' : 'Pilih Paket' }}
                                     </a>

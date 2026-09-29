@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 // 'log.visitor' (App\Http\Middleware\LogVisitorMiddleware) cuma di 5
@@ -22,3 +23,6 @@ Route::middleware('log.visitor')->group(function () {
 Route::post('/kontak', [FrontendController::class, 'sendContact'])
     ->middleware('throttle:5,10')
     ->name('frontend.contact.send');
+
+// Sitemap untuk Google Search Console (di luar log.visitor: yang datang crawler).
+Route::get('/sitemap.xml', SitemapController::class)->name('frontend.sitemap');

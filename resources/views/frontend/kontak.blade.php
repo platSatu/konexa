@@ -145,6 +145,10 @@
 @endsection
 
 @push('scripts')
+    @if (session('contact_success'))
+        {{-- Pesan berhasil terkirim -> event Lead untuk pixel iklan (lihat partials/tracking). --}}
+        <script>window.bizbosTrack && bizbosTrack('lead_form', { content_name: 'Form Kontak' });</script>
+    @endif
     <script>
         // Cegah klik ganda (pesan terkirim dua kali).
         document.getElementById('contactForm')?.addEventListener('submit', function () {

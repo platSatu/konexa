@@ -97,19 +97,11 @@
 
     {{-- Google Tag Manager --}}
     @if (data_get($webSetting, 'google_tag'))
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','{{ $webSetting['google_tag'] }}');</script>
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',{{ \Illuminate\Support\Js::from((string) $webSetting['google_tag']) }});</script>
     @endif
 
-    {{-- Google Analytics (GA4) --}}
-    @if (data_get($webSetting, 'google_analytics'))
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $webSetting['google_analytics'] }}"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '{{ $webSetting['google_analytics'] }}');
-        </script>
-    @endif
+    {{-- GA4, Google Ads, Meta Pixel, TikTok Pixel + event retargeting --}}
+    @include('frontend.partials.tracking')
 
     <!-- Google Fonts: Comfortaa (dipakai untuk seluruh font-family, lihat public/css/frontend.css) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -140,7 +132,7 @@
 
     {{-- Google Tag Manager (noscript, wajib persis setelah <body>) --}}
     @if (data_get($webSetting, 'google_tag'))
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $webSetting['google_tag'] }}"
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ urlencode($webSetting['google_tag']) }}"
             height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     @endif
 
