@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\TeleiosApiService;
 use App\View\Composers\FooterComposer;
+use App\View\Composers\PageLinksComposer;
 use App\View\Composers\WebSettingComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -50,5 +51,8 @@ class AppServiceProvider extends ServiceProvider
         // Footer link groups (Support/About/Sales/Explore-style columns)
         // — only frontend.partials.footer needs this, see FooterComposer.
         View::composer('frontend.partials.footer', FooterComposer::class);
+
+        // Link halaman dinamis di navbar -- lihat PageLinksComposer.
+        View::composer('frontend.partials.menu', PageLinksComposer::class);
     }
 }

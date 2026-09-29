@@ -33,7 +33,20 @@ class FooterComposer
 
     public function compose(View $view): void
     {
-        $footers = collect($this->teleiosApi->getFooters());
+        // Halaman dinamis ber-flag "Footer" (Superadmin > Web > Halaman) ikut
+        // jadi link: nama kolom sama dengan grup Web > Footer = digabung,
+        // selain itu jadi kolom baru. Urutan: link Footer dulu, lalu halaman.
+        $pageLinks = collect($this->teleiosApi->getPages())
+            ->filter(fn (array $page) => ! empty($page['show_in_footer']) && filled($page['footer_group'] ?? null))
+            ->sortBy([['footer_order', 'asc'], ['title', 'asc']])
+            ->map(fn (array $page) => [
+                'name' => $page['title'],
+                'group_name' => $page['footer_group'],
+                'link' => route('frontend.page', $page['slug']),
+                'target_blank' => false,
+            ]);
+
+        $footers = collect($this->teleiosApi->getFooters())->concat($pageLinks);
 
         $groups = $footers
             ->filter(fn (array $row) => filled($row['group_name'] ?? null))

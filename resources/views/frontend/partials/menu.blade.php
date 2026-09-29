@@ -16,7 +16,14 @@
                 aria-current="{{ request()->routeIs('frontend.index') ? 'page' : 'false' }}"
                 href="{{ route('frontend.index') }}">Home</a>
         </li>
-        <li class="nav-item"><a class="nav-link" href="#">Product</a></li>
+        {{-- Halaman dinamis ber-flag "Menu atas" (App\View\Composers\PageLinksComposer). --}}
+        @foreach ($navPages as $navPage)
+            @php $isCurrentPage = request()->routeIs('frontend.page') && request()->route('slug') === $navPage['slug']; @endphp
+            <li class="nav-item">
+                <a class="nav-link {{ $isCurrentPage ? 'active' : '' }}" aria-current="{{ $isCurrentPage ? 'page' : 'false' }}"
+                    href="{{ route('frontend.page', $navPage['slug']) }}">{{ $navPage['title'] }}</a>
+            </li>
+        @endforeach
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('frontend.contact') ? 'active' : '' }}"
                 aria-current="{{ request()->routeIs('frontend.contact') ? 'page' : 'false' }}"

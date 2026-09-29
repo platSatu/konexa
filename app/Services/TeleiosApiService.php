@@ -36,6 +36,11 @@ class TeleiosApiService
     private bool $webSettingFetched = false;
 
     /**
+     * @var array<int, array<string, mixed>>|null
+     */
+    private ?array $pages = null;
+
+    /**
      * @return array<int, array<string, mixed>>
      */
     public function getCategoryApplications(): array
@@ -113,6 +118,28 @@ class TeleiosApiService
     public function getHomeSections(): array
     {
         return $this->request('/api/frontend/home-sections')?->json('data', []) ?? [];
+    }
+
+    /**
+     * Link halaman dinamis untuk navbar & footer (Teleios: Superadmin > Web
+     * > Halaman). Di-memo per request (class ini singleton) karena menu dan
+     * footer sama-sama membutuhkannya.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function getPages(): array
+    {
+        return $this->pages ??= ($this->request('/api/frontend/pages')?->json('data', []) ?? []);
+    }
+
+    /**
+     * Isi satu halaman dinamis (/page/{slug}), atau null kalau tidak ada.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getPage(string $slug): ?array
+    {
+        return $this->request('/api/frontend/pages/'.rawurlencode($slug))?->json('data');
     }
 
     /**

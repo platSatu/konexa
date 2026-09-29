@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Services\TeleiosApiService;
+use App\Support\MarkdownDocument;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -33,24 +35,63 @@ class FrontendController extends Controller
      */
     public function index(): View
     {
-        $sections = collect($this->teleiosApi->getHomeSections())
-            ->filter(fn (array $section) => in_array($section['type'] ?? null, [...self::BUILTIN_SECTIONS, ...self::EXTRA_SECTIONS], true));
+        $sections = collect($this->teleiosApi->getHomeSections());
 
         if ($sections->isEmpty()) {
             $sections = collect(self::BUILTIN_SECTIONS)->map(fn (string $type) => ['type' => $type]);
         }
 
-        $sections = $sections->map(fn (array $section) => $section + $this->sectionStyle($section))->values();
+        return view('frontend.index', $this->sectionViewData($sections));
+    }
+
+    /**
+     * Halaman dinamis (/page/{slug}) dari Teleios Superadmin > Web > Halaman.
+     * Dokumen: Markdown dirender aman + daftar isi. Landing: section seperti
+     * beranda (tanpa Hero/Running Text -- halaman punya header sendiri).
+     */
+    public function page(string $slug): View
+    {
+        $page = $this->teleiosApi->getPage($slug);
+        abort_if(empty($page), 404);
+
+        $data = [
+            'page' => $page,
+            'heroStyle' => $this->sectionStyle(['background' => ['type' => 'image', 'image_url' => $page['hero_image_url'] ?? null]]),
+        ];
+
+        if (($page['type'] ?? null) === 'landing') {
+            $sections = collect($page['sections'] ?? [])->reject(fn (array $section) => in_array($section['type'] ?? null, ['hero', 'running_text'], true));
+            $data += $this->sectionViewData($sections);
+        } else {
+            $data['document'] = MarkdownDocument::render($page['content'] ?? '');
+        }
+
+        return view('frontend.page', $data);
+    }
+
+    /**
+     * Section yang dikenal + style background tersanitasi, beserta data
+     * section bawaan yang hanya diambil kalau section-nya memang tampil.
+     *
+     * @return array<string, mixed>
+     */
+    private function sectionViewData(Collection $sections): array
+    {
+        $sections = $sections
+            ->filter(fn (array $section) => in_array($section['type'] ?? null, [...self::BUILTIN_SECTIONS, ...self::EXTRA_SECTIONS], true))
+            ->map(fn (array $section) => $section + $this->sectionStyle($section))
+            ->values();
+
         $types = $sections->pluck('type')->all();
         $has = fn (string $type) => in_array($type, $types, true);
 
-        return view('frontend.index', [
+        return [
             'sections' => $sections,
             'headers' => $has('hero') ? $this->teleiosApi->getHeaders() : [],
             'packageGroups' => $has('packages') ? $this->groupPackages($this->teleiosApi->getPackages()) : [],
             'features' => $has('features') ? $this->teleiosApi->getFeatures() : [],
             'faqs' => $has('faq') ? $this->teleiosApi->getFaqs() : [],
-        ]);
+        ];
     }
 
     /**
