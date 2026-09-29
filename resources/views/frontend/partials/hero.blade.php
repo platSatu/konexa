@@ -59,6 +59,14 @@
             </div>
         @endif
 
+        {{-- Performa (LCP): gambar slide pertama langsung diunduh sejak <head>, tidak menunggu CSS. --}}
+        @php $firstHeader = collect($headers)->first() ?? []; @endphp
+        @if (($firstHeader['background_type'] ?? 'image') !== 'video' && ! empty($firstHeader['background_images_url']))
+            @push('styles')
+                <link rel="preload" as="image" href="{{ $firstHeader['background_images_url'] }}" fetchpriority="high">
+            @endpush
+        @endif
+
         <div class="carousel-inner">
             @foreach ($headers as $index => $header)
                 <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
