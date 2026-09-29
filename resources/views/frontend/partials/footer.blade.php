@@ -98,7 +98,7 @@
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div class="d-flex align-items-center gap-3 flex-wrap">
                 <img src="{{ data_get($webSetting, 'logo_url') ?: asset('images/Logo.png') }}"
-                    alt="{{ config('app.name') }}" height="28">
+                    alt="{{ config('app.name') }}" height="28" loading="lazy">
                 {{-- Nama brand dari APP_NAME (.env). --}}
                 {{-- Nama PT dari Superadmin > Web > Pengaturan (company_name, nullable) -- kosong = APP_NAME. --}}
                 <span class="small footer-copyright">&copy; {{ date('Y') }} {{ rtrim((string) (data_get($webSetting, 'company_name') ?: config('app.name')), '.') }}. All rights reserved.</span>
@@ -117,7 +117,7 @@
                 @if (data_get($webSetting, 'instagram_url'))
                     <a href="{{ $webSetting['instagram_url'] }}" target="_blank" rel="noopener" class="footer-social-icon" aria-label="Instagram">
                         @if (data_get($webSetting, 'icon_instagram_url'))
-                            <img src="{{ $webSetting['icon_instagram_url'] }}" alt="Instagram" class="footer-social-icon-img">
+                            <img src="{{ $webSetting['icon_instagram_url'] }}" alt="Instagram" class="footer-social-icon-img" loading="lazy">
                         @else
                             <i class="bi bi-instagram"></i>
                         @endif
@@ -127,7 +127,7 @@
                 @if (data_get($webSetting, 'facebook_url'))
                     <a href="{{ $webSetting['facebook_url'] }}" target="_blank" rel="noopener" class="footer-social-icon" aria-label="Facebook">
                         @if (data_get($webSetting, 'icon_facebook_url'))
-                            <img src="{{ $webSetting['icon_facebook_url'] }}" alt="Facebook" class="footer-social-icon-img">
+                            <img src="{{ $webSetting['icon_facebook_url'] }}" alt="Facebook" class="footer-social-icon-img" loading="lazy">
                         @else
                             <i class="bi bi-facebook"></i>
                         @endif
@@ -137,7 +137,7 @@
                 @if (data_get($webSetting, 'youtube_url'))
                     <a href="{{ $webSetting['youtube_url'] }}" target="_blank" rel="noopener" class="footer-social-icon" aria-label="YouTube">
                         @if (data_get($webSetting, 'icon_youtube_url'))
-                            <img src="{{ $webSetting['icon_youtube_url'] }}" alt="YouTube" class="footer-social-icon-img">
+                            <img src="{{ $webSetting['icon_youtube_url'] }}" alt="YouTube" class="footer-social-icon-img" loading="lazy">
                         @else
                             <i class="bi bi-youtube"></i>
                         @endif
@@ -147,7 +147,7 @@
                 @if (data_get($webSetting, 'tiktok_url'))
                     <a href="{{ $webSetting['tiktok_url'] }}" target="_blank" rel="noopener" class="footer-social-icon" aria-label="TikTok">
                         @if (data_get($webSetting, 'icon_tiktok_url'))
-                            <img src="{{ $webSetting['icon_tiktok_url'] }}" alt="TikTok" class="footer-social-icon-img">
+                            <img src="{{ $webSetting['icon_tiktok_url'] }}" alt="TikTok" class="footer-social-icon-img" loading="lazy">
                         @else
                             <i class="bi bi-tiktok"></i>
                         @endif

@@ -71,11 +71,12 @@
                             </video>
                         @elseif (! empty($header['background_images_url']))
                             @if (! empty($header['thumbnail_background_images_url']))
-                                <img src="{{ $header['thumbnail_background_images_url'] }}" alt="" aria-hidden="true"
+                                <img src="{{ $header['thumbnail_background_images_url'] }}" alt="" aria-hidden="true" decoding="async" @if ($index > 0) loading="lazy" @endif
                                     class="position-absolute top-0 start-0 w-100 h-100"
                                     style="object-fit: cover; z-index: -3; filter: blur(20px); transform: scale(1.1);">
                             @endif
-                            <img src="{{ $header['background_images_url'] }}" alt="{{ $header['text'] ?? '' }}"
+                            <img src="{{ $header['background_images_url'] }}" alt="{{ $header['text'] ?? '' }}" decoding="async"
+                                @if ($index === 0) fetchpriority="high" @else loading="lazy" @endif
                                 class="position-absolute top-0 start-0 w-100 h-100" style="object-fit: cover; z-index: -2;">
                         @endif
                         <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark" style="opacity: 0.55; z-index: -1;"></div>

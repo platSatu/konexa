@@ -31,15 +31,15 @@
                                         <div class="ratio ratio-16x9 bg-dark">
                                             @if (! empty($video['youtube_embed_url']))
                                                 <iframe src="{{ $video['youtube_embed_url'] }}"
-                                                    title="{{ $video['title'] }}" allowfullscreen></iframe>
+                                                    title="{{ $video['title'] }}" loading="lazy" allowfullscreen></iframe>
                                             @elseif (! empty($video['videos_url']))
-                                                <video controls
+                                                <video controls preload="none"
                                                     poster="{{ $video['thumbnail_url'] ?? '' }}">
                                                     <source src="{{ $video['videos_url'] }}">
                                                 </video>
                                             @elseif (! empty($video['thumbnail_url']))
                                                 <img src="{{ $video['thumbnail_url'] }}" class="w-100 h-100"
-                                                    style="object-fit: cover;" alt="{{ $video['title'] }}">
+                                                    style="object-fit: cover;" alt="{{ $video['title'] }}" loading="lazy">
                                             @endif
                                         </div>
                                         <div class="card-body d-flex flex-column">

@@ -4,7 +4,7 @@
             <div class="home-icon-item text-center h-100">
                 <div class="home-icon-badge mx-auto mb-3">
                     @if (! empty($item['image_url']))
-                        <img src="{{ $item['image_url'] }}" alt="{{ $item['title'] }}">
+                        <img src="{{ $item['image_url'] }}" alt="{{ $item['title'] }}" loading="lazy">
                     @else
                         <i class="bi bi-{{ $item['icon'] }}"></i>
                     @endif

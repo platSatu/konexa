@@ -32,7 +32,7 @@
             @endif
 
             @if (! empty($article['images_url']))
-                <img src="{{ $article['images_url'] }}" alt="{{ $article['title'] }}" class="img-fluid rounded-4 w-100 mb-4">
+                <img src="{{ $article['images_url'] }}" alt="{{ $article['title'] }}" class="img-fluid rounded-4 w-100 mb-4" fetchpriority="high">
             @endif
 
             <div class="article-body">

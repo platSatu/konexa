@@ -84,13 +84,26 @@
     @include('frontend.partials.tracking')
 
     <!-- Google Fonts: Comfortaa (dipakai untuk seluruh font-family, lihat public/css/frontend.css) -->
+    {{--
+        Performa (PageSpeed): koneksi ke CDN & server gambar Teleios dibuka
+        lebih awal (preconnect). Font & ikon dimuat tanpa menahan tampilan
+        halaman (preload -> stylesheet), fallback <noscript>. Bootstrap CSS
+        tetap blocking karena layout bergantung padanya.
+    --}}
+    @php $imageHost = parse_url((string) config('services.teleios.url'), PHP_URL_HOST); @endphp
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    @if ($imageHost)
+        <link rel="preconnect" href="https://{{ $imageHost }}">
+    @endif
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap"></noscript>
 
     <!-- Bootstrap 5 (CDN) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"></noscript>
 
     <!--
         CSS custom di bawah ini di-load LANGSUNG dari folder public (bukan lewat Vite/build).
@@ -119,10 +132,10 @@
     @yield('content')
 
     <!-- Bootstrap 5 JS Bundle (CDN) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 
     <!-- JS custom, sama seperti CSS di atas: edit file lalu reload, tanpa build -->
-    <script src="{{ asset('js/frontend.js') }}"></script>
+    <script src="{{ asset('js/frontend.js') }}?v={{ filemtime(public_path('js/frontend.js')) }}" defer></script>
 
     @stack('scripts')
 </body>
