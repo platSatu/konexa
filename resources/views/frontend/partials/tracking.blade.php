@@ -64,6 +64,9 @@
                 var event = EVENTS[name];
                 data = data || {};
                 if (!event) return;
+                // TikTok/Meta minta content_id; pakai content_name (nama paket) bila tidak diisi.
+                if (!data.content_id && data.content_name) data.content_id = String(data.content_name).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                if (!data.content_type) data.content_type = 'product';
                 try {
                     if (window.fbq) fbq('track', event.meta, data);
                     if (window.ttq) ttq.track(event.tiktok, data);
