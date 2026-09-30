@@ -160,9 +160,6 @@
                     </a>
                 @endif
 
-                <span class="small footer-legal-links">
-                    <a href="{{ route('frontend.terms') }}">Syarat dan Ketentuan</a>
-                </span>
             </div>
         </div>
     </div>

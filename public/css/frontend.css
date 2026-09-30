@@ -337,14 +337,12 @@ section {
     margin-bottom: 0.6rem;
 }
 
-.footer-link-list a,
-.footer-legal-links a {
+.footer-link-list a {
     color: inherit;
     text-decoration: none;
 }
 
-.footer-link-list a:hover,
-.footer-legal-links a:hover {
+.footer-link-list a:hover {
     text-decoration: underline;
 }
 
