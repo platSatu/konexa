@@ -123,7 +123,19 @@ class FrontendController extends Controller
     {
         $termCondition = $this->teleiosApi->getTermCondition();
 
-        return view('frontend.syarat-dan-ketentuan', compact('termCondition'));
+        // Tampil seperti halaman Dokumen lain (Markdown aman + daftar isi).
+        $page = [
+            'title' => $termCondition['name'] ?? 'Syarat dan Ketentuan',
+            'type' => 'document',
+            'meta_description' => 'Syarat dan ketentuan penggunaan layanan '.config('app.name').'.',
+            'updated_at' => $termCondition['updated_at'] ?? null,
+        ];
+
+        return view('frontend.page', [
+            'page' => $page,
+            'heroStyle' => $this->sectionStyle([]),
+            'document' => MarkdownDocument::render($termCondition['descriptions'] ?? 'Syarat dan ketentuan belum tersedia saat ini.'),
+        ]);
     }
 
     /**
