@@ -23,27 +23,21 @@
         <section class="py-5">
             <div class="container">
                 <div class="row g-5 justify-content-center">
-                    @if (count($document['toc']) >= 2)
+                    @php $showNav = count($nav) > 1 || count($document['toc']) >= 2; @endphp
+                    @if ($showNav)
                         <aside class="col-lg-3 d-none d-lg-block">
-                            <nav class="doc-toc" aria-label="Daftar isi">
-                                <p class="fw-bold small text-uppercase text-muted mb-2">Daftar isi</p>
-                                <ul class="list-unstyled mb-0">
-                                    @foreach ($document['toc'] as $heading)
-                                        <li class="{{ $heading['level'] === 3 ? 'ps-3' : '' }}"><a href="#{{ $heading['id'] }}">{{ $heading['text'] }}</a></li>
-                                    @endforeach
-                                </ul>
+                            <nav class="doc-toc" aria-label="Daftar dokumen">
+                                @include('frontend.partials._doc-nav', ['nav' => $nav, 'toc' => $document['toc']])
                             </nav>
                         </aside>
                     @endif
                     <div class="col-lg-8">
-                        @if (count($document['toc']) >= 2)
+                        @if ($showNav)
                             <details class="doc-toc-mobile d-lg-none mb-4">
                                 <summary class="fw-semibold">Daftar isi</summary>
-                                <ul class="list-unstyled mt-2 mb-0">
-                                    @foreach ($document['toc'] as $heading)
-                                        <li class="{{ $heading['level'] === 3 ? 'ps-3' : '' }}"><a href="#{{ $heading['id'] }}">{{ $heading['text'] }}</a></li>
-                                    @endforeach
-                                </ul>
+                                <div class="mt-2">
+                                    @include('frontend.partials._doc-nav', ['nav' => $nav, 'toc' => $document['toc']])
+                                </div>
                             </details>
                         @endif
 
@@ -65,3 +59,24 @@
 
     @include('frontend.partials.footer')
 @endsection
+
+@push('scripts')
+    {{-- Sorot sub-bagian yang sedang dibaca di sidebar (kedua sidebar: desktop & mobile). --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var headings = document.querySelectorAll('.doc-body h2[id], .doc-body h3[id]');
+            if (!headings.length || !('IntersectionObserver' in window)) return;
+
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    document.querySelectorAll('[data-doc-section]').forEach(function (link) {
+                        link.classList.toggle('is-current', link.dataset.docSection === entry.target.id);
+                    });
+                });
+            }, { rootMargin: '-100px 0px -65% 0px' });
+
+            headings.forEach(function (heading) { observer.observe(heading); });
+        });
+    </script>
+@endpush

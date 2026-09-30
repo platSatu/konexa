@@ -28,6 +28,12 @@ class FrontendController extends Controller
     private const EXTRA_SECTIONS = ['articles', 'icon_grid', 'cards', 'logos', 'stats', 'testimonials', 'text_media', 'banner'];
 
     /**
+     * Grup halaman Dokumen legal (Teleios Web > Halaman, kolom footer_group).
+     * Sidebar grup ini diawali Syarat & Ketentuan, yang punya modul sendiri.
+     */
+    private const LEGAL_GROUP = 'Legal';
+
+    /**
      * Beranda, disusun dari section yang diatur di Teleios (Superadmin >
      * Web > Susunan Beranda). Kalau Teleios tidak bisa dihubungi atau
      * belum ada section, pakai susunan default (sama seperti sebelumnya).
@@ -64,6 +70,7 @@ class FrontendController extends Controller
             $data += $this->sectionViewData($sections);
         } else {
             $data['document'] = MarkdownDocument::render($page['content'] ?? '');
+            $data['nav'] = $this->documentNav($page['footer_group'] ?? null, route('frontend.page', $slug), (string) $page['title']);
         }
 
         return view('frontend.page', $data);
@@ -135,7 +142,35 @@ class FrontendController extends Controller
             'page' => $page,
             'heroStyle' => $this->sectionStyle([]),
             'document' => MarkdownDocument::render($termCondition['descriptions'] ?? 'Syarat dan ketentuan belum tersedia saat ini.'),
+            'nav' => $this->documentNav(self::LEGAL_GROUP, route('frontend.terms'), $page['title']),
         ]);
+    }
+
+    /**
+     * Sidebar halaman Dokumen: semua dokumen satu grup, urut footer_order
+     * lalu judul. Yang sedang dibuka ditandai 'active' (sub-bagiannya
+     * ditampilkan di view). Minimal berisi dokumen yang sedang dibuka.
+     *
+     * @return array<int, array{title: string, url: string, active: bool}>
+     */
+    private function documentNav(?string $group, string $currentUrl, string $currentTitle): array
+    {
+        $nav = collect($group ? $this->teleiosApi->getPages() : [])
+            ->filter(fn (array $item) => ($item['footer_group'] ?? null) === $group
+                && preg_match('/^[a-z0-9-]+$/', (string) ($item['slug'] ?? '')))
+            ->sortBy([['footer_order', 'asc'], ['title', 'asc']])
+            ->map(fn (array $item) => ['title' => $item['title'], 'url' => route('frontend.page', $item['slug'])])
+            ->values();
+
+        if ($group === self::LEGAL_GROUP) {
+            $nav->prepend(['title' => 'Syarat & Ketentuan', 'url' => route('frontend.terms')]);
+        }
+
+        if (! $nav->contains('url', $currentUrl)) {
+            $nav->prepend(['title' => $currentTitle, 'url' => $currentUrl]);
+        }
+
+        return $nav->map(fn (array $item) => $item + ['active' => $item['url'] === $currentUrl])->all();
     }
 
     /**
