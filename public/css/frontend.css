@@ -321,7 +321,7 @@ section {
  * (App\Models\WebFooter, dikelompokkan per group_name lewat
  * App\View\Composers\FooterComposer), box newsletter (tampilan saja,
  * lihat komentar di footer.blade.php), lalu baris bawah: logo + copyright
- * di kiri, ikon sosial + link legal di kanan.
+ * di kiri, ikon sosial di kanan, dipisah garis selebar container.
  */
 .site-footer {
     background-color: #f4f3f1;
@@ -350,9 +350,14 @@ section {
     color: #6c757d;
 }
 
+/* Garis pemisah selebar container (sejajar logo s/d ikon sosial terakhir),
+   dengan jarak lega ke kolom menu di atas dan baris logo di bawah.
+   opacity: 1 menimpa bawaan Bootstrap <hr> (0.25) yang membuat garis
+   nyaris tak terlihat. */
 .footer-divider {
-    border-top: 1px solid rgba(0, 0, 0, .1);
-    margin: 2.5rem 0 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, .15);
+    opacity: 1;
+    margin: 3rem 0 2rem;
 }
 
 .footer-copyright {
