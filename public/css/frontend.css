@@ -392,8 +392,14 @@ section {
  * style di bawah (termasuk hover) tidak bentrok dengan aturan
  * ".card"/".card:hover" generik di atas.
  */
+/* Latar beda dari section Fitur (krem polos): putih dengan cahaya lembut
+   merah bizbos di kiri atas & kuning di kanan bawah, supaya dua section
+   yang bersebelahan tetap terasa terpisah. */
 .packages-section--tinted {
-    background-color: #fbf6f3;
+    background-color: #fff;
+    background-image:
+        radial-gradient(ellipse 55% 45% at 0% 0%, rgba(219, 91, 76, .2), transparent 70%),
+        radial-gradient(ellipse 50% 45% at 100% 100%, rgba(255, 200, 87, .32), transparent 70%);
 }
 
 .package-card {
