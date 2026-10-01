@@ -23,6 +23,9 @@
     sebagai poster, gambar pakai thumbnail_background_images_url sebagai
     blur-up, sama-sama "turunan" dari media utamanya.
 
+    Sisi kanan (.hero-visual) berisi ilustrasi alur statis
+    (frontend/partials/hero-flow.blade.php); di bawah lg pindah ke bawah teks.
+
     color_headline / color_description (hex, di-set per slide di
     Superadmin > Web > Headers) dipakai sebagai warna teks headline &
     deskripsi kalau diisi — kalau kosong, warna teks ikut default class
@@ -37,11 +40,14 @@
         <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark" style="opacity: 0.55; z-index: -1;"></div>
 
         <div class="container py-5">
-            <div class="row">
+            <div class="row align-items-center g-5">
                 <div class="col-12 col-lg-6 hero-content">
                     <h1 class="display-4 fw-bold">Selamat Datang di {{ config('app.name') }}</h1>
                     <p class="lead hero-description">Deskripsi singkat layanan atau produk Anda di sini.</p>
                     <a href="#about" class="btn btn-primary btn-lg mt-3">Selengkapnya</a>
+                </div>
+                <div class="col-12 col-lg-6 hero-visual">
+                    @include('frontend.partials.hero-flow', ['uid' => 'hero-flow'])
                 </div>
             </div>
         </div>
@@ -90,7 +96,7 @@
                         <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark" style="opacity: 0.55; z-index: -1;"></div>
 
                         <div class="container py-5">
-                            <div class="row">
+                            <div class="row align-items-center g-5">
                                 <div class="col-12 col-lg-6 hero-content">
                                     @if (! empty($header['text']))
                                         <h1 class="display-4 fw-bold"
@@ -103,6 +109,9 @@
                                     @if (($header['button_action'] ?? 'inactive') === 'active' && ! empty($header['button_text']) && ! empty($header['button_link']))
                                         <a href="{{ $header['button_link'] }}" class="btn btn-primary btn-lg mt-3">{{ $header['button_text'] }}</a>
                                     @endif
+                                </div>
+                                <div class="col-12 col-lg-6 hero-visual">
+                                    @include('frontend.partials.hero-flow', ['uid' => 'hero-flow-'.$index])
                                 </div>
                             </div>
                         </div>

@@ -317,6 +317,121 @@ section {
 }
 
 /*
+ * Ilustrasi alur hero (frontend/partials/hero-flow.blade.php): dashboard ->
+ * modul -> pengguna. Garis putus-putus "mengalir" (stroke-dashoffset),
+ * kartu melayang pelan, titik kuning bergerak lewat <animateMotion>.
+ * Di bawah lg ilustrasi turun ke bawah teks; di HP keterangan kecil
+ * disembunyikan & judul kartu diperbesar supaya tetap terbaca.
+ */
+.hero-visual {
+    animation: rise-in .8s ease .15s both;
+}
+
+.hero-flow {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.hero-flow-card {
+    fill: #fff;
+    filter: drop-shadow(0 10px 24px rgba(0, 0, 0, .25));
+}
+
+.hero-flow-card--hub {
+    stroke: var(--bs-primary);
+    stroke-width: 2.5;
+}
+
+.hero-flow-brand {
+    font: 700 24px 'Comfortaa', sans-serif;
+    fill: var(--bs-primary);
+}
+
+.hero-flow-title {
+    font: 700 19px 'Comfortaa', sans-serif;
+    fill: #2b1b17;
+}
+
+.hero-flow-sub {
+    font: 500 13px 'Comfortaa', sans-serif;
+    fill: #7a6a66;
+}
+
+.hero-flow-rail {
+    fill: none;
+    stroke: rgba(255, 255, 255, .18);
+    stroke-width: 7;
+    stroke-linecap: round;
+}
+
+.hero-flow-line {
+    fill: none;
+    stroke: #f6b8ae;
+    stroke-width: 2.5;
+    stroke-dasharray: 7 7;
+    animation: hero-flow-dash 1.2s linear infinite;
+}
+
+.hero-flow-dot {
+    fill: #ffc857;
+    filter: drop-shadow(0 0 6px #ffc857);
+}
+
+.hero-flow-pulse {
+    fill: var(--bs-primary);
+    opacity: .35;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hero-flow-pulse 2.4s ease-out infinite;
+}
+
+.hero-flow-node {
+    animation: float-soft 5s ease-in-out infinite;
+}
+
+@keyframes hero-flow-dash {
+    to { stroke-dashoffset: -28; }
+}
+
+@keyframes hero-flow-pulse {
+    0% { transform: scale(.9); opacity: .45; }
+    100% { transform: scale(1.35); opacity: 0; }
+}
+
+@media (max-width: 991.98px) {
+    .hero-visual {
+        max-width: 560px;
+        margin-inline: auto;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .hero-flow-sub {
+        display: none;
+    }
+
+    .hero-flow-title {
+        font-size: 20px;
+        transform: translateY(9px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-visual,
+    .hero-flow-line,
+    .hero-flow-pulse,
+    .hero-flow-node {
+        animation: none;
+    }
+
+    .hero-flow-dot {
+        display: none;
+    }
+}
+
+/*
  * Footer (frontend/partials/footer.blade.php) — kolom-kolom menu
  * (App\Models\WebFooter, dikelompokkan per group_name lewat
  * App\View\Composers\FooterComposer), box newsletter (tampilan saja,
