@@ -8,9 +8,10 @@
 
     Section ini disembunyikan total kalau running_text kosong.
 
-    Wrapper .running-text-wrap pakai trik "100vw breakout" (lihat
-    komentar Running text di public/css/frontend.css) supaya nempel
-    rata dari ujung layar ke ujung layar seperti diminta.
+    Wrapper .running-text-wrap pakai trik "100vw breakout" yang SAMA
+    persis dengan .features-slider-wrap di section Fitur Unggulan
+    (lihat komentar lengkapnya di public/css/frontend.css) supaya
+    nempel rata dari ujung layar ke ujung layar seperti diminta.
 
     Teknik infinite-scroll-nya: .running-text-track berisi DUA copy
     identik dari .running-text-group (satu asli buat ditampilkan, satu

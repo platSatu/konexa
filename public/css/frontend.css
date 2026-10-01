@@ -56,8 +56,8 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /*
- * Companion WAJIB untuk trik "100vw breakout" (dipakai running text,
- * lihat bagian Running text di bawah) — tanpa
+ * Companion WAJIB untuk trik "100vw breakout" di .features-slider-wrap
+ * (lihat komentarnya di bawah, bagian Fitur Unggulan slider) — tanpa
  * ini, elemen lebar 100vw bisa memicu scroll horizontal tak diinginkan
  * di SELURUH halaman kalau browser punya scrollbar vertikal yang makan
  * sedikit lebar viewport (100vw menghitung lebar TERMASUK scrollbar).
@@ -583,117 +583,215 @@ section {
 }
 
 /*
- * Fitur Unggulan -- Bento Grid (frontend/partials/features.blade.php).
- * Pola berulang tiap 6 kartu: kartu ke-1 besar (4 kolom x 2 baris), sisanya
- * kecil (2 kolom). Tablet: 2 kolom, kartu ke-1 selebar penuh. Mobile:
- * ditumpuk. Gambar mengisi area media (object-fit: cover, rata atas) --
- * paling rapi dengan gambar seragam 1600x1200, isi penting di tengah.
- * Background lembut dipakai kalau section belum diberi background lewat
- * Susunan Beranda (Teleios), supaya terlihat terpisah dari section putih.
+ * Fitur Unggulan slider (frontend/partials/features.blade.php) — geser
+ * horizontal manual pakai CSS scroll-snap (bukan carousel JS berat),
+ * lihat public/js/frontend.js untuk tombol panah, dot indicator, dan
+ * drag-to-scroll pakai mouse.
+ *
+ * Track slider-nya SENGAJA "bocor" keluar dari .container DI SEMUA
+ * breakpoint (bukan cuma mobile) + .features-slider sendiri tanpa
+ * padding kiri/kanan sama sekali — supaya kartu pertama & terakhir
+ * betul-betul masuk/keluar tepat dari tepi layar sungguhan, bukan
+ * berhenti di dalam padding container. Judul "Fitur Unggulan" di
+ * atasnya tetap normal di dalam .container, cuma track slider-nya saja
+ * yang full-bleed.
+ *
+ * PAKAI trik "100vw breakout" (width:100vw + left:50% + margin:-50vw),
+ * BUKAN negative-margin yang nebak nilai padding .container (versi
+ * sebelumnya masih nyisain gap karena var(--bs-gutter-x) ternyata tidak
+ * selalu terbaca sesuai yang diasumsikan). Trik 100vw ini murni
+ * berdasarkan lebar viewport asli — dijamin pas ke tepi layar berapa
+ * pun nilai padding .container-nya, tidak perlu tahu/tebak angkanya.
+ * Companion wajib: html/body overflow-x:hidden di bawah, supaya
+ * scrollbar vertikal browser tidak bikin 100vw memicu scroll horizontal
+ * tak diinginkan di seluruh halaman.
  */
-.features-section--tinted {
-    background-color: color-mix(in srgb, var(--bs-primary) 5%, #fff);
+.features-slider-wrap {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
 }
 
-.features-bento {
-    display: grid;
-    grid-template-columns: 1fr;
+.features-slider {
+    display: flex;
     gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    padding: 0.5rem 0 1.25rem; /* cuma vertikal, biar shadow kartu tidak kepotong — horizontal sengaja 0, lihat komentar di atas */
+    cursor: grab; /* kursor "tangan terbuka" nunjukin track ini bisa di-drag pakai mouse */
+}
+
+/* Ditambahkan/dilepas lewat JS (public/js/frontend.js) selama mouse aktif nge-drag */
+.features-slider.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+    scroll-snap-type: none; /* biar gerakannya smooth ngikutin mouse, snap balik aktif otomatis begitu drag dilepas */
+}
+
+.features-slider::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Edge */
+}
+
+.feature-slide {
+    scroll-snap-align: start;
+    /* Diperbesar dari 300px -> 340px supaya ada ruang lebih buat
+       .feature-card-icons (ikon-ikon yang akan menyusul) tanpa kartu
+       terasa sesak. */
+    flex: 0 0 340px;
 }
 
 .feature-card {
-    background-color: #fff;
-    color: #1a1a1a;
-    border: 1px solid rgba(0, 0, 0, .05);
-    border-radius: 24px;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, .05);
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, .05);
     overflow: hidden;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    transition: transform .25s ease, box-shadow .25s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .feature-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, .08);
-}
-
-.feature-card-body {
-    padding: 1.75rem 1.75rem 1.25rem;
-}
-
-.feature-card-title {
-    font-weight: 700;
-    font-size: 1.2rem;
-    margin-bottom: .5rem;
-}
-
-.feature-card-text {
-    font-size: .95rem;
-    line-height: 1.6;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, .08);
 }
 
 .feature-card-media {
-    margin: auto 1.25rem 1.25rem;
-    border-radius: 16px;
+    /* 4:3 (bukan 16:10) -> gambar lebih tinggi, kartu terasa lebih
+       besar/lega secara keseluruhan. */
+    aspect-ratio: 4 / 3;
     overflow: hidden;
-    aspect-ratio: 16 / 10;
-    background-color: color-mix(in srgb, var(--bs-primary) 8%, #fff);
 }
 
 .feature-card-media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: top center;
     display: block;
-    transition: transform .4s ease;
 }
 
-.feature-card:hover .feature-card-media img {
-    transform: scale(1.04);
+.feature-card-body {
+    padding: 1.75rem;
+    flex: 1;
 }
 
-@media (min-width: 768px) {
-    .features-bento {
-        grid-template-columns: repeat(2, 1fr);
+.feature-card-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+}
+
+/*
+ * Wadah ikon-ikon (belum ada field ikon di App\Models\WebFeature —
+ * ini cuma menyiapkan ruang/struktur). Isi-nya nanti bisa berupa
+ * <i class="bi ..."> atau <img> per ikon. Selama masih kosong,
+ * :empty langsung menyembunyikannya supaya tidak ada gap kosong aneh
+ * di kartu sebelum ikonnya benar-benar diisi.
+ */
+.feature-card-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+}
+
+.feature-card-icons:empty {
+    display: none;
+}
+
+.feature-card-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.features-slider-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, .1);
+    background-color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a1a1a;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.features-slider-btn:hover {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+}
+
+.features-slider-dots {
+    display: none;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+}
+
+.features-slider-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, .15);
+    transition: width 0.2s ease, background-color 0.2s ease;
+}
+
+.features-slider-dot.active {
+    width: 22px;
+    border-radius: 4px;
+    background-color: var(--bs-primary);
+}
+
+/*
+ * Mobile (<768px): kartu EDGE-TO-EDGE SUNGGUHAN — bukan "inset
+ * carousel" (kartu mengambang dengan jarak/shadow/rounded corner dari
+ * tepi layar seperti sebelumnya). border-radius & box-shadow dimatikan
+ * khusus di sini supaya kartu betul-betul menempel rata di kedua sisi
+ * layar tanpa ada jarak/gap sama sekali — persis definisi edge-to-edge
+ * carousel (bandingkan sama .feature-card default di atas yang masih
+ * rounded+shadow, dipakai di desktop/tablet sebagai "gallery" kartu
+ * mengambang). HANYA 1 kartu penuh layar per geseran, titik snap/geser
+ * dimulai PERSIS dari ujung layar (lihat komentar .features-slider-wrap
+ * di atas). Dot indicator tampil di sini menggantikan tombol panah.
+ */
+@media (max-width: 767.98px) {
+    .features-slider {
+        gap: 0;
     }
 
-    .feature-card:nth-child(6n + 1) {
-        grid-column: span 2;
-    }
-}
-
-@media (min-width: 992px) {
-    .features-bento {
-        grid-template-columns: repeat(6, 1fr);
-        grid-auto-flow: dense;
+    .feature-slide {
+        flex: 0 0 100%;
     }
 
     .feature-card {
-        grid-column: span 2;
+        border-radius: 0;
+        box-shadow: none;
     }
 
-    .feature-card:nth-child(6n + 1) {
-        grid-column: span 4;
-        grid-row: span 2;
+    .feature-card:hover {
+        transform: none;
+        box-shadow: none;
     }
 
-    .feature-card:nth-child(6n + 1) .feature-card-title {
-        font-size: 1.6rem;
+    .feature-card-media {
+        aspect-ratio: 4 / 3;
     }
 
-    .feature-card:nth-child(6n + 1) .feature-card-media {
-        flex: 1;
-        aspect-ratio: auto;
-        min-height: 280px;
+    .feature-card-body {
+        padding: 1.5rem 1.25rem 2rem;
     }
-}
 
-@media (prefers-reduced-motion: reduce) {
-    .feature-card,
-    .feature-card-media img {
-        transition: none;
+    .features-slider-dots {
+        display: flex;
     }
 }
 
@@ -701,9 +799,9 @@ section {
  * Running text / marquee (frontend/partials/running-text.blade.php) —
  * teks WebSetting::running_text diulang & di-scroll otomatis tanpa
  * henti pakai animasi CSS murni. Wrapper-nya pakai trik "100vw
- * breakout" (width:100vw + left:50% + margin:-50vw, ditemani html/body
- * overflow-x:hidden di atas) supaya nempel rata dari ujung layar ke
- * ujung layar.
+ * breakout" YANG SAMA dengan .features-slider-wrap di atas (lihat
+ * komentar lengkapnya di sana) supaya nempel rata dari ujung layar ke
+ * ujung layar, sesuai permintaan user ("seperti fitur").
  */
 .running-text-section {
     background-color: #f5efe2;
