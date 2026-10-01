@@ -56,8 +56,8 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /*
- * Companion WAJIB untuk trik "100vw breakout" di .features-slider-wrap
- * (lihat komentarnya di bawah, bagian Fitur Unggulan slider) — tanpa
+ * Companion WAJIB untuk trik "100vw breakout" (dipakai running text,
+ * lihat bagian Running text di bawah) — tanpa
  * ini, elemen lebar 100vw bisa memicu scroll horizontal tak diinginkan
  * di SELURUH halaman kalau browser punya scrollbar vertikal yang makan
  * sedikit lebar viewport (100vw menghitung lebar TERMASUK scrollbar).
@@ -583,225 +583,204 @@ section {
 }
 
 /*
- * Fitur Unggulan slider (frontend/partials/features.blade.php) — geser
- * horizontal manual pakai CSS scroll-snap (bukan carousel JS berat),
- * lihat public/js/frontend.js untuk tombol panah, dot indicator, dan
- * drag-to-scroll pakai mouse.
- *
- * Track slider-nya SENGAJA "bocor" keluar dari .container DI SEMUA
- * breakpoint (bukan cuma mobile) + .features-slider sendiri tanpa
- * padding kiri/kanan sama sekali — supaya kartu pertama & terakhir
- * betul-betul masuk/keluar tepat dari tepi layar sungguhan, bukan
- * berhenti di dalam padding container. Judul "Fitur Unggulan" di
- * atasnya tetap normal di dalam .container, cuma track slider-nya saja
- * yang full-bleed.
- *
- * PAKAI trik "100vw breakout" (width:100vw + left:50% + margin:-50vw),
- * BUKAN negative-margin yang nebak nilai padding .container (versi
- * sebelumnya masih nyisain gap karena var(--bs-gutter-x) ternyata tidak
- * selalu terbaca sesuai yang diasumsikan). Trik 100vw ini murni
- * berdasarkan lebar viewport asli — dijamin pas ke tepi layar berapa
- * pun nilai padding .container-nya, tidak perlu tahu/tebak angkanya.
- * Companion wajib: html/body overflow-x:hidden di bawah, supaya
- * scrollbar vertikal browser tidak bikin 100vw memicu scroll horizontal
- * tak diinginkan di seluruh halaman.
+ * Fitur Unggulan -- Bento Grid (frontend/partials/features.blade.php).
+ * Ukuran kotak (big/wide/tall/small) dipilih di Blade dari pola 12 kotak
+ * berulang; warna kotak di sini lewat :nth-child (pola 12 warna). Desktop
+ * 4 kolom x baris 180px (12 fitur = 5 baris), tablet 3 kolom, HP 2 baris
+ * digeser ke samping supaya tidak memanjang ke bawah. Gambar fitur tampil
+ * utuh (contain) di pojok kanan bawah -- paling bagus PNG transparan atau
+ * latar polos senada.
  */
-.features-slider-wrap {
-    width: 100vw;
+.features-section--tinted {
+    background-color: #fbf6f3;
+}
+
+.features-bento {
+    --row: 180px;
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: var(--row);
+    grid-auto-flow: dense;
+}
+
+.feature-tile {
+    --bg: #fff;
+    --fg: #1f1a17;
     position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-}
-
-.features-slider {
-    display: flex;
-    gap: 1.25rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-    padding: 0.5rem 0 1.25rem; /* cuma vertikal, biar shadow kartu tidak kepotong — horizontal sengaja 0, lihat komentar di atas */
-    cursor: grab; /* kursor "tangan terbuka" nunjukin track ini bisa di-drag pakai mouse */
-}
-
-/* Ditambahkan/dilepas lewat JS (public/js/frontend.js) selama mouse aktif nge-drag */
-.features-slider.is-dragging {
-    cursor: grabbing;
-    user-select: none;
-    scroll-snap-type: none; /* biar gerakannya smooth ngikutin mouse, snap balik aktif otomatis begitu drag dilepas */
-}
-
-.features-slider::-webkit-scrollbar {
-    display: none; /* Chrome/Safari/Edge */
-}
-
-.feature-slide {
-    scroll-snap-align: start;
-    /* Diperbesar dari 300px -> 340px supaya ada ruang lebih buat
-       .feature-card-icons (ikon-ikon yang akan menyusul) tanpa kartu
-       terasa sesak. */
-    flex: 0 0 340px;
-}
-
-.feature-card {
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, .05);
+    isolation: isolate;
     overflow: hidden;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 22px;
+    border: 1px solid rgba(0, 0, 0, .06);
+    background-color: var(--bg);
+    color: var(--fg);
+    transition: transform .25s ease, box-shadow .25s ease;
 }
 
-.feature-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 26px rgba(0, 0, 0, .08);
+.feature-tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .1);
 }
 
-.feature-card-media {
-    /* 4:3 (bukan 16:10) -> gambar lebih tinggi, kartu terasa lebih
-       besar/lega secara keseluruhan. */
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
+/* Pola 12 warna (senada merah bizbos) */
+.feature-tile:nth-child(12n + 1)  { --bg: var(--bs-primary); --fg: #fff; }
+.feature-tile:nth-child(12n + 2)  { --bg: #ffe8a3; }
+.feature-tile:nth-child(12n + 3)  { --bg: #fff; }
+.feature-tile:nth-child(12n + 4)  { --bg: #cdefd9; }
+.feature-tile:nth-child(12n + 5)  { --bg: #2b1b17; --fg: #fff; }
+.feature-tile:nth-child(12n + 6)  { --bg: #e9ddff; }
+.feature-tile:nth-child(12n + 7)  { --bg: #d6ecff; }
+.feature-tile:nth-child(12n + 8)  { --bg: #ffd8c9; }
+.feature-tile:nth-child(12n + 9)  { --bg: #fff; }
+.feature-tile:nth-child(12n + 10) { --bg: #ffe8a3; }
+.feature-tile:nth-child(12n + 11) { --bg: #2b1b17; --fg: #fff; }
+.feature-tile:nth-child(12n + 12) { --bg: #cdefd9; }
+
+.feature-tile--big  { grid-column: span 2; grid-row: span 2; }
+.feature-tile--wide { grid-column: span 2; }
+.feature-tile--tall { grid-row: span 2; }
+
+.feature-tile-text {
+    position: relative;
+    z-index: 2;
+    max-width: 75%;
+    padding: 18px 20px;
 }
 
-.feature-card-media img {
+.feature-tile--big .feature-tile-text  { max-width: 62%; padding: 26px 28px; }
+.feature-tile--wide .feature-tile-text { max-width: 50%; }
+
+.feature-tile-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.feature-tile--big .feature-tile-title { font-size: 1.75rem; }
+
+.feature-tile-desc {
+    margin: .5rem 0 0;
+    font-size: .8125rem;
+    line-height: 1.5;
+    opacity: .8;
+}
+
+.feature-tile--small .feature-tile-desc,
+.feature-tile--tall .feature-tile-desc {
+    display: none;
+}
+
+.feature-tile-art {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    transition: transform .4s ease;
+}
+
+.feature-tile-art img {
+    display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    display: block;
+    object-fit: contain;
+    object-position: right bottom;
 }
 
-.feature-card-body {
-    padding: 1.75rem;
-    flex: 1;
-}
+.feature-tile:hover .feature-tile-art { transform: scale(1.05) translate(-2%, -2%); }
 
-.feature-card-title {
-    font-weight: 700;
-    font-size: 1.2rem;
-    margin-bottom: 0.75rem;
-}
+.feature-tile--big .feature-tile-art   { width: 68%; height: 60%; }
+.feature-tile--wide .feature-tile-art  { width: 48%; height: 100%; }
+.feature-tile--tall .feature-tile-art  { width: 100%; height: 62%; }
+.feature-tile--small .feature-tile-art { width: 62%; height: 62%; }
 
-/*
- * Wadah ikon-ikon (belum ada field ikon di App\Models\WebFeature —
- * ini cuma menyiapkan ruang/struktur). Isi-nya nanti bisa berupa
- * <i class="bi ..."> atau <img> per ikon. Selama masih kosong,
- * :empty langsung menyembunyikannya supaya tidak ada gap kosong aneh
- * di kartu sebelum ikonnya benar-benar diisi.
- */
-.feature-card-icons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-bottom: 0.9rem;
-}
-
-.feature-card-icons:empty {
-    display: none;
-}
-
-.feature-card-text {
-    font-size: 0.95rem;
-    line-height: 1.6;
-}
-
-.features-slider-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid rgba(0, 0, 0, .1);
-    background-color: #ffffff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #1a1a1a;
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-.features-slider-btn:hover {
-    background-color: var(--bs-primary);
-    border-color: var(--bs-primary);
+/* Deskripsi kotak kecil/tinggi muncul saat hover (desktop) */
+.feature-tile-hover {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 3;
+    margin: 0;
+    padding: 16px 20px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, .6));
     color: #fff;
+    font-size: .8125rem;
+    line-height: 1.5;
+    transform: translateY(100%);
+    transition: transform .3s ease;
 }
 
-.features-slider-dots {
-    display: none;
-    justify-content: center;
-    gap: 0.4rem;
-    margin-top: 0.5rem;
+.feature-tile:hover .feature-tile-hover { transform: translateY(0); }
+
+.features-swipe-hint { display: none; }
+
+@media (max-width: 991.98px) {
+    .features-bento {
+        --row: 170px;
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
-.features-slider-dot {
-    width: 8px;
-    height: 8px;
-    padding: 0;
-    border: none;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, .15);
-    transition: width 0.2s ease, background-color 0.2s ease;
-}
-
-.features-slider-dot.active {
-    width: 22px;
-    border-radius: 4px;
-    background-color: var(--bs-primary);
-}
-
-/*
- * Mobile (<768px): kartu EDGE-TO-EDGE SUNGGUHAN — bukan "inset
- * carousel" (kartu mengambang dengan jarak/shadow/rounded corner dari
- * tepi layar seperti sebelumnya). border-radius & box-shadow dimatikan
- * khusus di sini supaya kartu betul-betul menempel rata di kedua sisi
- * layar tanpa ada jarak/gap sama sekali — persis definisi edge-to-edge
- * carousel (bandingkan sama .feature-card default di atas yang masih
- * rounded+shadow, dipakai di desktop/tablet sebagai "gallery" kartu
- * mengambang). HANYA 1 kartu penuh layar per geseran, titik snap/geser
- * dimulai PERSIS dari ujung layar (lihat komentar .features-slider-wrap
- * di atas). Dot indicator tampil di sini menggantikan tombol panah.
- */
+/* HP: 2 baris digeser ke samping -- tinggi tetap berapa pun jumlah fitur */
 @media (max-width: 767.98px) {
-    .features-slider {
-        gap: 0;
+    .features-bento {
+        grid-template-columns: none;
+        grid-template-rows: repeat(2, 176px);
+        grid-auto-flow: column dense;
+        grid-auto-columns: 40vw; /* kotak besar = 80vw, kotak berikutnya mengintip sebagai tanda bisa digeser */
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        margin: 0 calc(var(--bs-gutter-x, 1.5rem) * -.5);
+        padding: 0 calc(var(--bs-gutter-x, 1.5rem) * .5) 6px;
+        scroll-padding: 0 calc(var(--bs-gutter-x, 1.5rem) * .5);
     }
 
-    .feature-slide {
-        flex: 0 0 100%;
+    .features-bento::-webkit-scrollbar { display: none; }
+
+    .feature-tile { scroll-snap-align: start; }
+    .feature-tile:hover { transform: none; box-shadow: none; }
+    .feature-tile:hover .feature-tile-art { transform: none; }
+    .feature-tile-hover { display: none; }
+
+    .feature-tile-text,
+    .feature-tile--wide .feature-tile-text { max-width: 100%; padding: 14px 16px; }
+    .feature-tile--big .feature-tile-text { max-width: 85%; padding: 20px; }
+    .feature-tile-title { font-size: .95rem; }
+    .feature-tile--big .feature-tile-title { font-size: 1.35rem; }
+
+    /* Tanpa hover di HP: deskripsi singkat tampil di semua kotak */
+    .feature-tile--small .feature-tile-desc,
+    .feature-tile--tall .feature-tile-desc {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
-    .feature-card {
-        border-radius: 0;
-        box-shadow: none;
-    }
+    .feature-tile--small .feature-tile-art { width: 48%; height: 48%; }
 
-    .feature-card:hover {
-        transform: none;
-        box-shadow: none;
+    .features-swipe-hint {
+        display: block;
+        margin-top: .875rem;
+        text-align: center;
+        font-size: .8125rem;
+        opacity: .7;
     }
+}
 
-    .feature-card-media {
-        aspect-ratio: 4 / 3;
-    }
-
-    .feature-card-body {
-        padding: 1.5rem 1.25rem 2rem;
-    }
-
-    .features-slider-dots {
-        display: flex;
-    }
+@media (prefers-reduced-motion: reduce) {
+    .feature-tile,
+    .feature-tile-art,
+    .feature-tile-hover { transition: none; }
 }
 
 /*
  * Running text / marquee (frontend/partials/running-text.blade.php) —
  * teks WebSetting::running_text diulang & di-scroll otomatis tanpa
  * henti pakai animasi CSS murni. Wrapper-nya pakai trik "100vw
- * breakout" YANG SAMA dengan .features-slider-wrap di atas (lihat
- * komentar lengkapnya di sana) supaya nempel rata dari ujung layar ke
- * ujung layar, sesuai permintaan user ("seperti fitur").
+ * breakout" (width:100vw + left:50% + margin:-50vw, ditemani html/body
+ * overflow-x:hidden di atas) supaya nempel rata dari ujung layar ke
+ * ujung layar.
  */
 .running-text-section {
     background-color: #f5efe2;

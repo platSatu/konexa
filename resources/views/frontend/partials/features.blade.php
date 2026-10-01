@@ -1,34 +1,16 @@
 {{--
-    Fitur unggulan, diambil dari API backend Teleios (lihat
-    App\Services\TeleiosApiService::getFeatures()).
-
-    Ditampilkan sebagai slider horizontal yang digeser MANUAL (native
-    browser scroll + CSS scroll-snap, bukan library carousel/JS berat) —
-    bukan grid yang menumpuk ke bawah seperti versi sebelumnya:
-    - Desktop/tablet (>=768px): beberapa kartu terlihat sekaligus,
-      digeser lewat drag mouse/trackpad atau tombol panah kiri/kanan
-      (lihat public/js/frontend.js bagian "Features slider").
-    - Mobile (<768px): kartu EDGE-TO-EDGE sungguhan — bukan kartu
-      mengambang dengan jarak/shadow/rounded corner dari tepi layar
-      (itu namanya "inset carousel", beda dari edge-to-edge), tapi
-      betul-betul menempel rata di kedua sisi layar (border-radius &
-      shadow dimatikan khusus breakpoint ini, lihat frontend.css). HANYA
-      1 kartu penuh layar per geseran, track-nya "bocor" sampai ke tepi
-      layar lewat negative margin di .features-slider-wrap supaya area
-      geser dimulai PERSIS dari ujung layar. Tombol panah disembunyikan
-      di breakpoint ini, diganti indikator titik (dot) di bawah kartu.
-
-    Ukuran kartu diperbesar (lihat .feature-card-media & .feature-card-body
-    di frontend.css) untuk menyisakan ruang buat ikon-ikon yang akan
-    ditambahkan menyusul — ada wadah kosong .feature-card-icons di bawah
-    judul yang otomatis tersembunyi (CSS :empty) selama belum dipakai,
-    jadi aman ditambahkan sekarang tanpa mengubah tampilan dulu.
+    Fitur unggulan dari API Teleios (TeleiosApiService::getFeatures(),
+    Superadmin > Web > Fitur) sebagai Bento Grid. Ukuran kotak mengikuti
+    pola 12 kotak berulang berdasarkan urutan fitur (kotak pertama besar);
+    warna & tata letak responsif di frontend.css bagian "Fitur Unggulan --
+    Bento Grid". Background mengikuti Susunan Beranda; kalau belum diatur,
+    pakai warna lembut supaya terpisah dari section putih di sekitarnya.
 --}}
 @php
     // Bingkai dari Susunan Beranda (Teleios) -- judul, background, tombol.
     $section = ($section ?? []) + ['style' => '', 'is_dark' => false];
 @endphp
-<section id="features" class="py-5 features-section {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
+<section id="features" class="py-5 features-section {{ $section['style'] === '' ? 'features-section--tinted' : '' }} {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
     <div class="container">
         @include('frontend.partials.sections._heading', [
             'defaultTitle' => 'Fitur Unggulan',
@@ -38,52 +20,36 @@
         @if (empty($features))
             <p class="text-center text-muted mb-0">Belum ada fitur saat ini.</p>
         @else
-            <div class="features-slider-wrap">
-                <div class="features-slider" id="featuresSlider">
-                    @foreach ($features as $feature)
-                        @php
-                            // Fallback statis kalau deskripsi belum diisi
-                            // di Superadmin > Web > Fitur, supaya kartu
-                            // tidak tampil kosong/pincang di slider —
-                            // pola yang sama seperti fallback statis di
-                            // packages.blade.php.
-                            $featureDescription = trim((string) ($feature['description'] ?? ''));
-                            if ($featureDescription === '') {
-                                $featureDescription = 'Fitur ini dirancang untuk membantu bisnis Anda berjalan lebih efisien dan otomatis, tanpa ribet.';
-                            }
-                        @endphp
-                        <div class="feature-slide">
-                            <div class="feature-card">
-                                @if (! empty($feature['images_url']))
-                                    <div class="feature-card-media">
-                                        <img src="{{ $feature['images_url'] }}" alt="{{ $feature['name'] }}" loading="lazy">
-                                    </div>
-                                @endif
-                                <div class="feature-card-body">
-                                    <h5 class="feature-card-title">{{ $feature['name'] }}</h5>
-
-                                    {{-- Wadah ikon-ikon yang menyusul — kosong untuk sekarang, otomatis hilang lewat CSS :empty --}}
-                                    <div class="feature-card-icons"></div>
-
-                                    <p class="feature-card-text text-muted mb-0">{{ $featureDescription }}</p>
-                                </div>
-                            </div>
+            @php
+                $tileSizes = ['big', 'wide', 'small', 'small', 'tall', 'wide', 'small', 'tall', 'wide', 'small', 'small', 'small'];
+            @endphp
+            <div class="features-bento">
+                @foreach ($features as $feature)
+                    @php
+                        $tileSize = $tileSizes[$loop->index % count($tileSizes)];
+                        // Fallback kalau deskripsi belum diisi di Superadmin > Web > Fitur.
+                        $featureDescription = trim((string) ($feature['description'] ?? ''))
+                            ?: 'Fitur ini dirancang untuk membantu bisnis Anda berjalan lebih efisien dan otomatis, tanpa ribet.';
+                    @endphp
+                    <article class="feature-tile feature-tile--{{ $tileSize }}">
+                        <div class="feature-tile-text">
+                            <h3 class="feature-tile-title">{{ $feature['name'] }}</h3>
+                            <p class="feature-tile-desc">{{ $featureDescription }}</p>
                         </div>
-                    @endforeach
-                </div>
+                        @if (! empty($feature['images_url']))
+                            <div class="feature-tile-art">
+                                <img src="{{ $feature['images_url'] }}" alt="{{ $feature['name'] }}" loading="lazy">
+                            </div>
+                        @endif
+                        @if (in_array($tileSize, ['small', 'tall'], true))
+                            <p class="feature-tile-hover" aria-hidden="true">{{ $featureDescription }}</p>
+                        @endif
+                    </article>
+                @endforeach
             </div>
 
-            @if (count($features) > 1)
-                <div class="features-slider-controls d-none d-md-flex justify-content-end gap-2">
-                    <button type="button" class="features-slider-btn features-slider-btn--prev" aria-label="Sebelumnya">
-                        <i class="bi bi-chevron-left"></i>
-                    </button>
-                    <button type="button" class="features-slider-btn features-slider-btn--next" aria-label="Berikutnya">
-                        <i class="bi bi-chevron-right"></i>
-                    </button>
-                </div>
-
-                <div class="features-slider-dots" id="featuresSliderDots"></div>
+            @if (count($features) > 2)
+                <p class="features-swipe-hint mb-0">Geser untuk melihat fitur lainnya &rarr;</p>
             @endif
         @endif
 
