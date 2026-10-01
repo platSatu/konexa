@@ -973,7 +973,8 @@ section {
 
 /*
  * CTA (frontend/partials/sections/cta.blade.php, tipe "banner" di Teleios)
- * -- section gelap (default) dengan kotak terang di tengah, jarak atas
+ * -- section merah bizbos (default, senada logo & tombol) dengan kotak
+ * terang di tengah, jarak atas
  * bawah lega supaya tegas terpisah dari FAQ & footer. Kalau background
  * diatur di Teleios, background itu yang dipakai di section (kotak tetap
  * terang). Kata di judul yang diapit *bintang* diberi sorotan.
@@ -983,10 +984,12 @@ section {
 }
 
 .cta-section--default {
-    background-color: #2b1b17;
+    background-color: var(--bs-primary);
     background-image:
-        radial-gradient(ellipse 45% 70% at 0% 100%, rgba(219, 91, 76, .45), transparent 70%),
-        radial-gradient(ellipse 40% 60% at 100% 0%, rgba(255, 200, 87, .25), transparent 70%);
+        radial-gradient(ellipse 45% 70% at 100% 0%, rgba(255, 200, 87, .35), transparent 70%),
+        radial-gradient(ellipse 50% 70% at 0% 100%, rgba(255, 255, 255, .14), transparent 70%),
+        radial-gradient(circle, rgba(255, 255, 255, .12) 1px, transparent 1.5px);
+    background-size: auto, auto, 24px 24px;
 }
 
 .cta-card {
@@ -998,7 +1001,7 @@ section {
     text-align: center;
     background-color: #fff;
     color: #1f1a17;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, .25);
+    box-shadow: 0 30px 60px rgba(120, 35, 25, .25);
 }
 
 /* Dekorasi lingkaran besar samar di dalam kotak */
