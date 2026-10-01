@@ -29,6 +29,13 @@
     Pengelompokan & nama kolom dihitung di FrontendController::
     groupPackages() -- view ini hanya menampilkan $packageGroups.
 
+    Paket Trial tidak dibuat kartu sendiri: tampil sebagai link "Coba gratis"
+    di bawah kartu (kecuali kelompok itu hanya punya paket trial). Label
+    "Hemat X%" dari 'savings' (FrontendController::groupPackages()).
+    Animasi (muncul saat di-scroll, kartu bergiliran saat ganti tab,
+    indikator tab yang meluncur, kilau kartu TERPOPULER) ada di
+    frontend.css bagian "Animasi" & public/js/frontend.js.
+
     Kalau sebuah paket TIDAK punya baris PackageLimit sama sekali,
     daftar spesifikasi jatuh ke teks statis generik (fallback) supaya
     kartu tidak kosong.
@@ -47,7 +54,7 @@
     // Bingkai dari Susunan Beranda (Teleios) -- judul, background, tombol.
     $section = ($section ?? []) + ['style' => '', 'is_dark' => false];
 @endphp
-<section id="packages" class="py-5 {{ $section['style'] === '' ? 'bg-light' : '' }} {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
+<section id="packages" data-reveal class="py-5 packages-section {{ $section['style'] === '' ? 'packages-section--tinted' : '' }} {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
     <div class="container">
         @include('frontend.partials.sections._heading', [
             'defaultTitle' => 'Paket Layanan',
@@ -78,6 +85,11 @@
                     $waNumber = '62' . substr($waNumber, 1);
                 }
                 $contactEmail = data_get($webSetting, 'email');
+                $contactHref = fn (array $package) => match (true) {
+                    $waNumber !== '' => 'https://wa.me/' . $waNumber . '?text=' . rawurlencode('Halo, saya tertarik dengan paket ' . ($package['name'] ?? '') . '. Bisa dibantu info lebih lanjut?'),
+                    ! empty($contactEmail) => 'mailto:' . $contactEmail . '?subject=' . rawurlencode('Tanya paket ' . ($package['name'] ?? '')),
+                    default => '#',
+                };
 
                 // Satu tab per kelompok layanan supaya halaman tidak memanjang;
                 // tab awal = kelompok yang punya paket TERPOPULER.
@@ -87,7 +99,7 @@
             @endphp
 
             @if (count($packageGroups) > 1)
-                <ul class="nav nav-pills package-tabs mb-4" role="tablist">
+                <ul class="nav nav-pills package-tabs mb-4" role="tablist" data-sliding-tabs>
                     @foreach ($packageGroups as $group)
                         <li class="nav-item" role="presentation">
                             <button type="button" class="nav-link {{ $loop->index === $activeGroup ? 'active' : '' }}"
@@ -103,6 +115,13 @@
             <div class="tab-content">
 
             @foreach ($packageGroups as $group)
+                @php
+                    $trialPackages = collect($group['packages'])->filter(fn ($p) => ! empty($p['is_trial']));
+                    $paidPackages = collect($group['packages'])->reject(fn ($p) => ! empty($p['is_trial']));
+                    // Kelompok yang hanya punya paket trial tetap tampil sebagai kartu.
+                    $cardPackages = $paidPackages->isNotEmpty() ? $paidPackages : $trialPackages;
+                    $trialLink = $paidPackages->isNotEmpty() ? $trialPackages->first() : null;
+                @endphp
                 <div class="tab-pane fade {{ $loop->index === $activeGroup ? 'show active' : '' }}" id="package-group-{{ $loop->index }}" role="tabpanel">
                     <div class="text-center mb-3 mb-md-4">
                         @if (count($packageGroups) === 1)
@@ -115,12 +134,12 @@
                         </div>
                     </div>
 
-                    @if (count($group['packages']) > 1)
+                    @if ($cardPackages->count() > 1)
                         <p class="package-swipe-hint d-md-none">Geser untuk melihat paket lain <i class="bi bi-arrow-right"></i></p>
                     @endif
 
                     <div class="row g-4 justify-content-center package-row">
-                        @foreach ($group['packages'] as $package)
+                        @foreach ($cardPackages as $package)
                             @php
                                 $isFeatured = (bool) ($package['is_featured'] ?? false);
                                 $isTrial = (bool) ($package['is_trial'] ?? false);
@@ -136,22 +155,20 @@
                                         }
                                     }
                                 }
-
-                                $waHref = match (true) {
-                                    $waNumber !== '' => 'https://wa.me/' . $waNumber . '?text=' . rawurlencode('Halo, saya tertarik dengan paket ' . ($package['name'] ?? '') . '. Bisa dibantu info lebih lanjut?'),
-                                    ! empty($contactEmail) => 'mailto:' . $contactEmail . '?subject=' . rawurlencode('Tanya paket ' . ($package['name'] ?? '')),
-                                    default => '#',
-                                };
+                                $savings = (int) ($package['savings'] ?? 0);
                             @endphp
-                            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                            <div class="col-12 col-md-6 col-lg-4 d-flex package-col" style="--i: {{ $loop->index }}">
                                 <div class="package-card w-100 h-100 d-flex flex-column p-4 {{ $isFeatured ? 'package-card--featured' : '' }}">
                                     @if ($isFeatured)
                                         <span class="package-badge">TERPOPULER</span>
                                     @endif
 
-                                    <span class="badge {{ $isTrial ? 'bg-success-subtle text-success' : 'bg-primary-subtle text-primary' }} mb-2 align-self-start">
-                                        {{ $package['column_label'] ?? '-' }}
-                                    </span>
+                                    <div class="d-flex flex-wrap gap-2 mb-2">
+                                        <span class="badge package-duration-badge">{{ $package['column_label'] ?? '-' }}</span>
+                                        @if ($savings > 0)
+                                            <span class="badge package-save-badge">Hemat {{ $savings }}%</span>
+                                        @endif
+                                    </div>
 
                                     <h5 class="package-name mb-1">{{ $package['name'] ?? '-' }}</h5>
 
@@ -170,7 +187,7 @@
                                         @endif
                                     </p>
 
-                                    <a href="{{ $waHref }}" target="_blank" rel="noopener" data-track-name="{{ $package['name'] ?? 'Paket' }}"
+                                    <a href="{{ $contactHref($package) }}" target="_blank" rel="noopener" data-track-name="{{ $package['name'] ?? 'Paket' }}"
                                         class="btn {{ $isFeatured ? 'btn-package-featured' : 'btn-package-outline' }} w-100 mb-4">
                                         {{ $isTrial ? 'Coba Gratis' : 'Pilih Paket' }}
                                     </a>
@@ -220,6 +237,15 @@
                             </div>
                         @endforeach
                     </div>
+
+                    @if ($trialLink)
+                        <p class="package-trial-link text-center mt-4 mb-0">
+                            Belum yakin?
+                            <a href="{{ $contactHref($trialLink) }}" target="_blank" rel="noopener" data-track-name="{{ $trialLink['name'] ?? 'Trial' }}">
+                                Coba gratis {{ (int) ($trialLink['duration'] ?? 0) }} hari
+                            </a>
+                        </p>
+                    @endif
                 </div>
             @endforeach
             </div>

@@ -387,17 +387,21 @@ section {
 /*
  * Packages / pricing cards (frontend/partials/packages.blade.php) —
  * data paket dari App\Models\Package + App\Models\PackageLimit lewat
- * API Teleios. Kartu "unggulan" (badge TERPOPULER) ditentukan lewat
- * heuristik posisi di blade (bukan kolom database), lihat komentar di
- * file blade-nya. Tidak pakai class Bootstrap ".card" supaya style di
- * bawah (termasuk hover) tidak bentrok dengan aturan ".card"/".card:hover"
- * generik di atas.
+ * API Teleios. Kartu "unggulan" (badge TERPOPULER, packages.is_featured)
+ * tampil gelap supaya menonjol. Tidak pakai class Bootstrap ".card" supaya
+ * style di bawah (termasuk hover) tidak bentrok dengan aturan
+ * ".card"/".card:hover" generik di atas.
  */
+.packages-section--tinted {
+    background-color: #fbf6f3;
+}
+
 .package-card {
     position: relative;
     background-color: #ffffff;
+    color: #1f1a17;
     border: 1px solid rgba(0, 0, 0, .08);
-    border-radius: 16px;
+    border-radius: 24px;
     box-shadow: 0 4px 18px rgba(0, 0, 0, .04);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -408,8 +412,53 @@ section {
 }
 
 .package-card--featured {
-    border-color: var(--bs-primary);
-    box-shadow: 0 10px 30px rgba(13, 110, 253, .15);
+    background-color: #2b1b17;
+    border-color: #2b1b17;
+    color: #fff;
+    box-shadow: 0 20px 40px rgba(43, 27, 23, .25);
+}
+
+.package-card--featured .text-muted,
+.package-card--featured .package-price-currency {
+    color: rgba(255, 255, 255, .65) !important;
+}
+
+.package-card--featured .package-feature-list li {
+    color: rgba(255, 255, 255, .9);
+}
+
+.package-card--featured .package-feature-list li i {
+    color: #ffb4a8;
+}
+
+.package-duration-badge {
+    background-color: rgba(219, 91, 76, .1);
+    color: var(--bs-primary);
+}
+
+.package-card--featured .package-duration-badge {
+    background-color: rgba(255, 255, 255, .12);
+    color: #ffb4a8;
+}
+
+.package-save-badge {
+    background-color: #d8f5e4;
+    color: #1a8a53;
+}
+
+.package-trial-link {
+    font-size: .9rem;
+    color: #6c757d;
+}
+
+.package-trial-link a {
+    color: var(--bs-primary);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.package-trial-link a:hover {
+    text-decoration: underline;
 }
 
 .package-badge {
@@ -503,8 +552,11 @@ section {
     margin-top: 0.15rem;
 }
 
-/* Tab kelompok paket -- pill, bisa digeser di layar kecil. */
+/* Tab kelompok paket -- pill, bisa digeser di layar kecil. Latar tab aktif
+   berupa indikator yang meluncur (dibuat public/js/frontend.js, class
+   .has-indicator); tanpa JS tab aktif tetap berlatar biasa. */
 .package-tabs {
+    position: relative;
     justify-content: center;
     flex-wrap: nowrap;
     gap: 0.5rem;
@@ -528,10 +580,35 @@ section {
 }
 
 .package-tabs .nav-link.active {
-    background-color: var(--bs-primary);
-    border-color: var(--bs-primary);
+    background-color: #2b1b17;
+    border-color: #2b1b17;
     color: #fff;
 }
+
+.package-tabs.has-indicator .nav-link {
+    position: relative;
+    z-index: 1;
+    background-color: #fff;
+    transition: color .25s ease, border-color .25s ease;
+}
+
+/* Tab aktif di atas indikator: latarnya transparan supaya pil gelap terlihat. */
+.package-tabs.has-indicator .nav-link.active {
+    z-index: 3;
+    background-color: transparent;
+}
+
+.package-tabs-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    border-radius: 999px;
+    background-color: #2b1b17;
+    pointer-events: none;
+    transition: transform .35s cubic-bezier(.3, .7, .2, 1), width .35s cubic-bezier(.3, .7, .2, 1);
+}
+
 
 .package-swipe-hint {
     text-align: center;
@@ -772,6 +849,68 @@ section {
     .feature-tile,
     .feature-tile-art,
     .feature-tile-hover { transition: none; }
+}
+
+/*
+ * Animasi -- halus & singkat, tanpa library. Section ber-[data-reveal]
+ * diberi .is-visible oleh public/js/frontend.js saat pertama terlihat
+ * (sekali saja), lalu isinya muncul bergiliran (--i = urutan). Kartu paket
+ * ikut bergiliran lagi setiap ganti tab (pane baru jadi .active).
+ * .reveal-ready hanya dipasang kalau JS jalan & pengunjung tidak memilih
+ * "kurangi gerakan" -- tanpa itu semua konten langsung tampil.
+ */
+@keyframes rise-in {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes float-soft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+    0%, 70% { background-position: 150% 0; }
+    100% { background-position: -50% 0; }
+}
+
+.reveal-ready [data-reveal]:not(.is-visible) .feature-tile,
+.reveal-ready [data-reveal]:not(.is-visible) .package-col {
+    opacity: 0;
+}
+
+.reveal-ready [data-reveal].is-visible .feature-tile,
+.reveal-ready [data-reveal].is-visible .tab-pane.active .package-col {
+    animation: rise-in .55s cubic-bezier(.2, .7, .2, 1) backwards;
+    animation-delay: calc(min(var(--i, 0), 11) * 60ms);
+}
+
+/* Ilustrasi kotak fitur besar mengambang pelan */
+.feature-tile--big .feature-tile-art img {
+    animation: float-soft 6s ease-in-out infinite;
+}
+
+/* Kilau tipis menyapu kartu TERPOPULER */
+.package-card--featured::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, .09) 50%, transparent 60%);
+    background-size: 250% 100%;
+    animation: shimmer 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .feature-tile--big .feature-tile-art img,
+    .package-card--featured::after {
+        animation: none;
+    }
+
+    .package-tabs-indicator {
+        transition: none;
+    }
 }
 
 /*

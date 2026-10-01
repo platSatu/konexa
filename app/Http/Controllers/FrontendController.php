@@ -317,12 +317,23 @@ class FrontendController extends Controller
             ->map(function ($items) use ($maxServices) {
                 $services = $items->first()['services'];
 
+                $paid = $items->reject(fn (array $package) => ! empty($package['is_trial']) || (float) ($package['price'] ?? 0) <= 0);
+                $monthly = fn (array $package) => (float) $package['price'] / $package['months'];
+                $highestMonthly = $paid->max($monthly) ?: 0;
+
                 return [
                     'label' => count($services) > 1 && count($services) === $maxServices
                         ? 'Paket Lengkap'
                         : 'Paket '.(implode(' + ', $services) ?: 'Lainnya'),
                     'services' => $services,
+                    // 'savings' = % lebih hemat per bulan dibanding durasi termahal
+                    // (per bulan) di kelompok yang sama -- 0 untuk trial/gratis.
                     'packages' => $items
+                        ->map(fn (array $package) => $package + [
+                            'savings' => $highestMonthly > 0 && $paid->contains('id', $package['id'] ?? null)
+                                ? (int) round((1 - $monthly($package) / $highestMonthly) * 100)
+                                : 0,
+                        ])
                         ->sortBy(fn (array $package) => sprintf('%d-%06d', empty($package['is_trial']) ? 1 : 0, (int) ($package['duration'] ?? 0)))
                         ->values()
                         ->all(),

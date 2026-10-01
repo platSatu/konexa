@@ -5,12 +5,13 @@
     warna & tata letak responsif di frontend.css bagian "Fitur Unggulan --
     Bento Grid". Background mengikuti Susunan Beranda; kalau belum diatur,
     pakai warna lembut supaya terpisah dari section putih di sekitarnya.
+    Animasi muncul saat di-scroll: frontend.css bagian "Animasi".
 --}}
 @php
     // Bingkai dari Susunan Beranda (Teleios) -- judul, background, tombol.
     $section = ($section ?? []) + ['style' => '', 'is_dark' => false];
 @endphp
-<section id="features" class="py-5 features-section {{ $section['style'] === '' ? 'features-section--tinted' : '' }} {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
+<section id="features" data-reveal class="py-5 features-section {{ $section['style'] === '' ? 'features-section--tinted' : '' }} {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
     <div class="container">
         @include('frontend.partials.sections._heading', [
             'defaultTitle' => 'Fitur Unggulan',
@@ -31,7 +32,7 @@
                         $featureDescription = trim((string) ($feature['description'] ?? ''))
                             ?: 'Fitur ini dirancang untuk membantu bisnis Anda berjalan lebih efisien dan otomatis, tanpa ribet.';
                     @endphp
-                    <article class="feature-tile feature-tile--{{ $tileSize }}">
+                    <article class="feature-tile feature-tile--{{ $tileSize }}" style="--i: {{ $loop->index }}">
                         <div class="feature-tile-text">
                             <h3 class="feature-tile-title">{{ $feature['name'] }}</h3>
                             <p class="feature-tile-desc">{{ $featureDescription }}</p>
