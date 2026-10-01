@@ -973,26 +973,54 @@ section {
 
 /*
  * CTA (frontend/partials/sections/cta.blade.php, tipe "banner" di Teleios)
- * -- kartu besar di atas footer. Default gelap dengan cahaya merah bizbos
- * & kuning; kata di judul yang diapit *bintang* diberi sorotan.
+ * -- section gelap (default) dengan kotak terang di tengah, jarak atas
+ * bawah lega supaya tegas terpisah dari FAQ & footer. Kalau background
+ * diatur di Teleios, background itu yang dipakai di section (kotak tetap
+ * terang). Kata di judul yang diapit *bintang* diberi sorotan.
  */
+.cta-section {
+    padding: 6rem 0;
+}
+
+.cta-section--default {
+    background-color: #2b1b17;
+    background-image:
+        radial-gradient(ellipse 45% 70% at 0% 100%, rgba(219, 91, 76, .45), transparent 70%),
+        radial-gradient(ellipse 40% 60% at 100% 0%, rgba(255, 200, 87, .25), transparent 70%);
+}
+
 .cta-card {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    border-radius: 32px;
-    padding: 4.5rem 2rem;
+    border-radius: 28px;
+    padding: 5rem 2rem;
     text-align: center;
+    background-color: #fff;
+    color: #1f1a17;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, .25);
 }
 
-.cta-card--default {
-    color: #fff;
-    background-color: #2b1b17;
-    background-image:
-        radial-gradient(ellipse 45% 70% at 0% 100%, rgba(219, 91, 76, .55), transparent 70%),
-        radial-gradient(ellipse 40% 60% at 100% 0%, rgba(255, 200, 87, .35), transparent 70%),
-        radial-gradient(circle, rgba(255, 255, 255, .07) 1px, transparent 1.5px);
-    background-size: auto, auto, 22px 22px;
+/* Dekorasi lingkaran besar samar di dalam kotak */
+.cta-ring {
+    position: absolute;
+    z-index: 0;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    border: 60px solid rgba(219, 91, 76, .05);
+    pointer-events: none;
+}
+
+.cta-ring--left {
+    left: -140px;
+    bottom: -220px;
+}
+
+.cta-ring--right {
+    right: -120px;
+    top: -240px;
+    border-color: rgba(255, 200, 87, .12);
 }
 
 .cta-content {
@@ -1006,6 +1034,7 @@ section {
     font-size: clamp(1.9rem, 4vw, 3rem);
     font-weight: 700;
     line-height: 1.2;
+    letter-spacing: -.01em;
     margin-bottom: 1rem;
 }
 
@@ -1013,10 +1042,6 @@ section {
 .cta-highlight {
     position: relative;
     white-space: nowrap;
-    color: #ffc857;
-}
-
-.cta-card:not(.text-white) .cta-highlight {
     color: var(--bs-primary);
 }
 
@@ -1025,11 +1050,11 @@ section {
     position: absolute;
     left: -.1em;
     right: -.1em;
-    bottom: .02em;
-    height: .32em;
+    bottom: .04em;
+    height: .3em;
     z-index: -1;
     border-radius: 999px;
-    background-color: rgba(219, 91, 76, .6);
+    background-color: rgba(255, 200, 87, .55);
     transform-origin: left center;
     transition: transform .8s cubic-bezier(.2, .7, .2, 1) .3s;
 }
@@ -1041,8 +1066,8 @@ section {
 .cta-subtitle {
     font-size: 1.05rem;
     line-height: 1.7;
-    opacity: .8;
-    margin: 0 auto 2rem;
+    color: #6c757d;
+    margin: 0 auto 2.25rem;
     max-width: 560px;
 }
 
@@ -1063,7 +1088,7 @@ section {
     border-radius: 999px;
     padding-inline: 1.75rem;
     font-weight: 700;
-    box-shadow: 0 10px 24px rgba(219, 91, 76, .35);
+    box-shadow: 0 10px 24px rgba(219, 91, 76, .3);
 }
 
 .cta-btn-primary .bi {
@@ -1077,11 +1102,10 @@ section {
 }
 
 .cta-btn-secondary,
-.cta-btn-secondary:hover,
 .cta-btn-secondary:focus,
 .cta-btn-secondary:active {
-    border: 1px solid currentColor;
-    color: inherit;
+    border: 1.5px solid #1f1a17;
+    color: #1f1a17;
     background-color: transparent;
     border-radius: 999px;
     padding-inline: 1.75rem;
@@ -1089,20 +1113,26 @@ section {
 }
 
 .cta-btn-secondary:hover {
-    background-color: rgba(255, 255, 255, .1);
+    background-color: #1f1a17;
+    border-color: #1f1a17;
+    color: #fff;
 }
 
-.reveal-ready [data-reveal]:not(.is-visible) .cta-content {
+.reveal-ready [data-reveal]:not(.is-visible) .cta-card {
     opacity: 0;
 }
 
-.reveal-ready [data-reveal].is-visible .cta-content {
+.reveal-ready [data-reveal].is-visible .cta-card {
     animation: rise-in .6s cubic-bezier(.2, .7, .2, 1) backwards;
 }
 
 @media (max-width: 767.98px) {
+    .cta-section {
+        padding: 3.5rem 0;
+    }
+
     .cta-card {
-        border-radius: 24px;
+        border-radius: 22px;
         padding: 3rem 1.25rem;
     }
 

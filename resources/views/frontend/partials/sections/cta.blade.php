@@ -1,26 +1,27 @@
 {{--
     Section CTA (tipe "banner" di Teleios Superadmin > Web > Susunan Beranda),
-    biasanya paling bawah sebelum footer. Kata di judul yang diapit *bintang*
-    disorot. Tanpa background dari Teleios: kartu gelap dengan cahaya merah &
-    kuning (frontend.css bagian "CTA"); kalau background diatur di Teleios,
-    background itu yang dipakai di kartu.
+    biasanya paling bawah sebelum footer: latar section gelap (atau
+    background dari Teleios kalau diatur) dengan kotak terang di tengah.
+    Kata di judul yang diapit *bintang* disorot. Gaya: frontend.css bagian "CTA".
 --}}
 @php
     $hasCustomBackground = $section['style'] !== '';
-    $isDark = ! $hasCustomBackground || $section['is_dark'];
     // Escape dulu, baru *kata* diubah jadi sorotan -- aman dari HTML di judul.
     $ctaTitle = preg_replace('/\*([^*]+)\*/', '<span class="cta-highlight">$1</span>', e((string) ($section['title'] ?? '')));
     $videoUrl = ($section['background']['type'] ?? null) === 'video' ? ($section['background']['video_url'] ?? null) : null;
 @endphp
-<section class="cta-section py-5" data-reveal>
-    <div class="container">
-        <div class="cta-card {{ $hasCustomBackground ? '' : 'cta-card--default' }} {{ $isDark ? 'text-white' : '' }}" style="{{ $section['style'] }}">
-            @if ($videoUrl)
-                <video autoplay muted loop playsinline class="home-section-video" aria-hidden="true">
-                    <source src="{{ $videoUrl }}">
-                </video>
-                <div class="home-section-overlay" aria-hidden="true"></div>
-            @endif
+<section class="cta-section position-relative overflow-hidden {{ $hasCustomBackground ? '' : 'cta-section--default' }}" style="{{ $section['style'] }}" data-reveal>
+    @if ($videoUrl)
+        <video autoplay muted loop playsinline class="home-section-video" aria-hidden="true">
+            <source src="{{ $videoUrl }}">
+        </video>
+        <div class="home-section-overlay" aria-hidden="true"></div>
+    @endif
+
+    <div class="container position-relative">
+        <div class="cta-card">
+            <span class="cta-ring cta-ring--left" aria-hidden="true"></span>
+            <span class="cta-ring cta-ring--right" aria-hidden="true"></span>
 
             <div class="cta-content">
                 @if ($ctaTitle !== '')
