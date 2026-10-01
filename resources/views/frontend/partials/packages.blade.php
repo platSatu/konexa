@@ -29,9 +29,8 @@
     Pengelompokan & nama kolom dihitung di FrontendController::
     groupPackages() -- view ini hanya menampilkan $packageGroups.
 
-    Paket Trial tidak dibuat kartu sendiri: tampil sebagai link "Coba gratis"
-    di bawah kartu (kecuali kelompok itu hanya punya paket trial). Label
-    "Hemat X%" dari 'savings' (FrontendController::groupPackages()).
+    Label "Hemat X%" dari 'savings', tabel "Bandingkan semua fitur" dari
+    'comparison' (keduanya FrontendController::groupPackages()).
     Animasi (muncul saat di-scroll, kartu bergiliran saat ganti tab,
     indikator tab yang meluncur, kilau kartu TERPOPULER) ada di
     frontend.css bagian "Animasi" & public/js/frontend.js.
@@ -115,13 +114,6 @@
             <div class="tab-content">
 
             @foreach ($packageGroups as $group)
-                @php
-                    $trialPackages = collect($group['packages'])->filter(fn ($p) => ! empty($p['is_trial']));
-                    $paidPackages = collect($group['packages'])->reject(fn ($p) => ! empty($p['is_trial']));
-                    // Kelompok yang hanya punya paket trial tetap tampil sebagai kartu.
-                    $cardPackages = $paidPackages->isNotEmpty() ? $paidPackages : $trialPackages;
-                    $trialLink = $paidPackages->isNotEmpty() ? $trialPackages->first() : null;
-                @endphp
                 <div class="tab-pane fade {{ $loop->index === $activeGroup ? 'show active' : '' }}" id="package-group-{{ $loop->index }}" role="tabpanel">
                     <div class="text-center mb-3 mb-md-4">
                         @if (count($packageGroups) === 1)
@@ -134,12 +126,12 @@
                         </div>
                     </div>
 
-                    @if ($cardPackages->count() > 1)
+                    @if (count($group['packages']) > 1)
                         <p class="package-swipe-hint d-md-none">Geser untuk melihat paket lain <i class="bi bi-arrow-right"></i></p>
                     @endif
 
                     <div class="row g-4 justify-content-center package-row">
-                        @foreach ($cardPackages as $package)
+                        @foreach ($group['packages'] as $package)
                             @php
                                 $isFeatured = (bool) ($package['is_featured'] ?? false);
                                 $isTrial = (bool) ($package['is_trial'] ?? false);
@@ -238,13 +230,40 @@
                         @endforeach
                     </div>
 
-                    @if ($trialLink)
-                        <p class="package-trial-link text-center mt-4 mb-0">
-                            Belum yakin?
-                            <a href="{{ $contactHref($trialLink) }}" target="_blank" rel="noopener" data-track-name="{{ $trialLink['name'] ?? 'Trial' }}">
-                                Coba gratis {{ (int) ($trialLink['duration'] ?? 0) }} hari
-                            </a>
-                        </p>
+                    @if (count($group['packages']) > 1 && count($group['comparison']) > 0)
+                        <details class="package-compare mt-4">
+                            <summary>Bandingkan semua fitur <i class="bi bi-chevron-down"></i></summary>
+                            <div class="table-responsive">
+                                <table class="table mb-0 package-compare-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Fitur</th>
+                                            @foreach ($group['packages'] as $package)
+                                                <th scope="col" class="{{ ! empty($package['is_featured']) ? 'is-featured' : '' }}">{{ $package['column_label'] ?? '-' }}</th>
+                                            @endforeach
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($group['comparison'] as $row)
+                                            <tr>
+                                                <th scope="row">{{ $row['label'] }}</th>
+                                                @foreach ($row['values'] as $value)
+                                                    <td>
+                                                        @if ($value === true)
+                                                            <i class="bi bi-check-lg package-compare-yes" aria-label="Termasuk"></i>
+                                                        @elseif ($value === null)
+                                                            <span class="package-compare-no" aria-label="Tidak termasuk">&mdash;</span>
+                                                        @else
+                                                            {{ $value }}
+                                                        @endif
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </details>
                     @endif
                 </div>
             @endforeach

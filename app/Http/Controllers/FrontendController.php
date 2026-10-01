@@ -321,25 +321,62 @@ class FrontendController extends Controller
                 $monthly = fn (array $package) => (float) $package['price'] / $package['months'];
                 $highestMonthly = $paid->max($monthly) ?: 0;
 
+                // 'savings' = % lebih hemat per bulan dibanding durasi termahal
+                // (per bulan) di kelompok yang sama -- 0 untuk trial/gratis.
+                $sorted = $items
+                    ->map(fn (array $package) => $package + [
+                        'savings' => $highestMonthly > 0 && $paid->contains('id', $package['id'] ?? null)
+                            ? (int) round((1 - $monthly($package) / $highestMonthly) * 100)
+                            : 0,
+                    ])
+                    ->sortBy(fn (array $package) => sprintf('%d-%06d', empty($package['is_trial']) ? 1 : 0, (int) ($package['duration'] ?? 0)))
+                    ->values();
+
                 return [
                     'label' => count($services) > 1 && count($services) === $maxServices
                         ? 'Paket Lengkap'
                         : 'Paket '.(implode(' + ', $services) ?: 'Lainnya'),
                     'services' => $services,
-                    // 'savings' = % lebih hemat per bulan dibanding durasi termahal
-                    // (per bulan) di kelompok yang sama -- 0 untuk trial/gratis.
-                    'packages' => $items
-                        ->map(fn (array $package) => $package + [
-                            'savings' => $highestMonthly > 0 && $paid->contains('id', $package['id'] ?? null)
-                                ? (int) round((1 - $monthly($package) / $highestMonthly) * 100)
-                                : 0,
-                        ])
-                        ->sortBy(fn (array $package) => sprintf('%d-%06d', empty($package['is_trial']) ? 1 : 0, (int) ($package['duration'] ?? 0)))
-                        ->values()
-                        ->all(),
+                    'packages' => $sorted->all(),
+                    'comparison' => $this->comparisonRows($sorted),
                 ];
             })
             ->sortByDesc(fn (array $group) => count($group['services']))
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Baris tabel "Bandingkan semua fitur": semua limit (nilai + satuan) dan
+     * baris deskripsi (centang) dari paket satu kelompok. 'values' urut sama
+     * dengan $packages (= urutan kartu); null = tidak termasuk paket itu.
+     *
+     * @param  Collection<int, array<string, mixed>>  $packages
+     * @return array<int, array{label: string, values: array<int, string|bool|null>}>
+     */
+    private function comparisonRows(Collection $packages): array
+    {
+        $rows = [];
+
+        foreach ($packages as $index => $package) {
+            foreach ($package['limits'] ?? [] as $limit) {
+                $metric = $limit['limit_metric'] ?? [];
+                $perMonth = ($metric['metric_type'] ?? '') === 'consumable' && empty($package['is_trial']);
+                $rows[$metric['name'] ?? 'Limit'][$index] = number_format((float) ($limit['max_value'] ?? 0), 0, ',', '.')
+                    .(empty($metric['unit']) ? '' : ' '.$metric['unit'])
+                    .($perMonth ? '/bulan' : '');
+            }
+
+            foreach ($package['feature_lines'] as $line) {
+                $rows[$line][$index] = true;
+            }
+        }
+
+        return collect($rows)
+            ->map(fn (array $values, int|string $label) => [
+                'label' => (string) $label,
+                'values' => $packages->keys()->map(fn (int $index) => $values[$index] ?? null)->all(),
+            ])
             ->values()
             ->all();
     }

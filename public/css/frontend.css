@@ -446,19 +446,71 @@ section {
     color: #1a8a53;
 }
 
-.package-trial-link {
-    font-size: .9rem;
-    color: #6c757d;
+/* Tabel "Bandingkan semua fitur" -- tertutup default (<details>). */
+.package-compare {
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, .08);
+    border-radius: 20px;
+    overflow: hidden;
 }
 
-.package-trial-link a {
-    color: var(--bs-primary);
+.package-compare summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 1rem 1.25rem;
     font-weight: 700;
-    text-decoration: none;
+    font-size: .9rem;
+    text-align: center;
 }
 
-.package-trial-link a:hover {
-    text-decoration: underline;
+.package-compare summary::-webkit-details-marker {
+    display: none;
+}
+
+.package-compare summary .bi {
+    display: inline-block;
+    margin-left: .25rem;
+    transition: transform .2s ease;
+}
+
+.package-compare[open] summary .bi {
+    transform: rotate(180deg);
+}
+
+.package-compare-table {
+    min-width: 520px;
+    font-size: .875rem;
+}
+
+.package-compare-table th,
+.package-compare-table td {
+    padding: .8rem 1rem;
+    text-align: center;
+    vertical-align: middle;
+    border-color: rgba(0, 0, 0, .06);
+}
+
+.package-compare-table th:first-child {
+    text-align: left;
+    font-weight: 600;
+}
+
+.package-compare-table thead th {
+    background-color: #fdfaf8;
+    font-weight: 700;
+}
+
+.package-compare-table thead th.is-featured {
+    color: var(--bs-primary);
+}
+
+.package-compare-yes {
+    color: #1a8a53;
+    font-size: 1.1rem;
+}
+
+.package-compare-no {
+    color: rgba(0, 0, 0, .25);
 }
 
 .package-badge {
