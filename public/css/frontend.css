@@ -1651,13 +1651,57 @@ a.contact-channel:hover {
 /* ------------------------------------------------------------------
  * Halaman dinamis /page/{slug} (resources/views/frontend/page.blade.php)
  * ------------------------------------------------------------------ */
+/* Header halaman (Dokumen, S&K, Landing) -- latar merah bizbos seperti
+   section CTA, atau gambar hero kalau diatur di Teleios. */
 .page-hero {
-    background-color: #f4f3f1;
+    padding: 6rem 0 4.5rem;
 }
 
-.page-hero--image {
-    padding-top: 5rem !important;
-    padding-bottom: 5rem !important;
+.page-hero--brand {
+    background-color: var(--bs-primary);
+    background-image:
+        radial-gradient(ellipse 45% 80% at 100% 0%, rgba(255, 200, 87, .35), transparent 70%),
+        radial-gradient(ellipse 50% 80% at 0% 100%, rgba(255, 255, 255, .14), transparent 70%),
+        radial-gradient(circle, rgba(255, 255, 255, .12) 1px, transparent 1.5px);
+    background-size: auto, auto, 24px 24px;
+}
+
+.page-hero-title {
+    font-size: clamp(2rem, 4.5vw, 3.25rem);
+    font-weight: 700;
+    letter-spacing: -.01em;
+}
+
+.page-hero-subtitle {
+    max-width: 720px;
+    opacity: .85;
+}
+
+.page-hero-meta {
+    margin-top: 1rem;
+    opacity: .75;
+}
+
+.page-hero-breadcrumb {
+    --bs-breadcrumb-divider-color: rgba(255, 255, 255, .6);
+    --bs-breadcrumb-item-active-color: rgba(255, 255, 255, .85);
+    font-size: .875rem;
+}
+
+.page-hero-breadcrumb a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.page-hero-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 767.98px) {
+    .page-hero {
+        padding: 4rem 0 3rem;
+    }
 }
 
 .doc-toc {

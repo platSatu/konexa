@@ -8,11 +8,21 @@
 @section('content')
     @include('frontend.partials.topbar')
 
-    <header class="page-hero py-5 {{ $heroStyle['is_dark'] ? 'text-white page-hero--image' : '' }}" style="{{ $heroStyle['style'] }}">
-        <div class="container py-lg-4 text-center">
-            <h1 class="fw-bold mb-2">{{ $page['title'] }}</h1>
+    {{-- Tanpa gambar hero: latar merah bizbos (sama dengan section CTA). --}}
+    <header class="page-hero text-white {{ $heroStyle['is_dark'] ? 'page-hero--image' : 'page-hero--brand' }}" style="{{ $heroStyle['style'] }}">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb page-hero-breadcrumb mb-3">
+                    <li class="breadcrumb-item"><a href="{{ route('frontend.index') }}">Beranda</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ $page['title'] }}</li>
+                </ol>
+            </nav>
+            <h1 class="page-hero-title mb-2">{{ $page['title'] }}</h1>
             @if (! empty($page['subtitle']))
-                <p class="lead mb-0 mx-auto {{ $heroStyle['is_dark'] ? 'text-white-50' : 'text-muted' }}" style="max-width: 720px;">{{ $page['subtitle'] }}</p>
+                <p class="lead page-hero-subtitle mb-0">{{ $page['subtitle'] }}</p>
+            @endif
+            @if (($page['type'] ?? null) !== 'landing' && ! empty($page['updated_at']))
+                <p class="page-hero-meta small mb-0">Terakhir diperbarui {{ \Carbon\Carbon::parse($page['updated_at'])->translatedFormat('d F Y') }}</p>
             @endif
         </div>
     </header>
@@ -46,11 +56,6 @@
                             {!! $document['html'] !!}
                         </article>
 
-                        @if (! empty($page['updated_at']))
-                            <p class="text-muted small border-top pt-3 mt-5 mb-0">
-                                Terakhir diperbarui {{ \Carbon\Carbon::parse($page['updated_at'])->translatedFormat('d F Y') }}
-                            </p>
-                        @endif
                     </div>
                 </div>
             </div>
