@@ -972,6 +972,153 @@ section {
 }
 
 /*
+ * CTA (frontend/partials/sections/cta.blade.php, tipe "banner" di Teleios)
+ * -- kartu besar di atas footer. Default gelap dengan cahaya merah bizbos
+ * & kuning; kata di judul yang diapit *bintang* diberi sorotan.
+ */
+.cta-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: 32px;
+    padding: 4.5rem 2rem;
+    text-align: center;
+}
+
+.cta-card--default {
+    color: #fff;
+    background-color: #2b1b17;
+    background-image:
+        radial-gradient(ellipse 45% 70% at 0% 100%, rgba(219, 91, 76, .55), transparent 70%),
+        radial-gradient(ellipse 40% 60% at 100% 0%, rgba(255, 200, 87, .35), transparent 70%),
+        radial-gradient(circle, rgba(255, 255, 255, .07) 1px, transparent 1.5px);
+    background-size: auto, auto, 22px 22px;
+}
+
+.cta-content {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.cta-title {
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+/* Sorotan: sapuan warna di belakang kata, digambar saat section muncul */
+.cta-highlight {
+    position: relative;
+    white-space: nowrap;
+    color: #ffc857;
+}
+
+.cta-card:not(.text-white) .cta-highlight {
+    color: var(--bs-primary);
+}
+
+.cta-highlight::after {
+    content: '';
+    position: absolute;
+    left: -.1em;
+    right: -.1em;
+    bottom: .02em;
+    height: .32em;
+    z-index: -1;
+    border-radius: 999px;
+    background-color: rgba(219, 91, 76, .6);
+    transform-origin: left center;
+    transition: transform .8s cubic-bezier(.2, .7, .2, 1) .3s;
+}
+
+.reveal-ready [data-reveal]:not(.is-visible) .cta-highlight::after {
+    transform: scaleX(0);
+}
+
+.cta-subtitle {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    opacity: .8;
+    margin: 0 auto 2rem;
+    max-width: 560px;
+}
+
+.cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .75rem;
+}
+
+.cta-btn-primary,
+.cta-btn-primary:hover,
+.cta-btn-primary:focus,
+.cta-btn-primary:active {
+    background-color: var(--bs-primary);
+    border: 1px solid var(--bs-primary);
+    color: #fff;
+    border-radius: 999px;
+    padding-inline: 1.75rem;
+    font-weight: 700;
+    box-shadow: 0 10px 24px rgba(219, 91, 76, .35);
+}
+
+.cta-btn-primary .bi {
+    display: inline-block;
+    margin-left: .35rem;
+    transition: transform .2s ease;
+}
+
+.cta-btn-primary:hover .bi {
+    transform: translateX(4px);
+}
+
+.cta-btn-secondary,
+.cta-btn-secondary:hover,
+.cta-btn-secondary:focus,
+.cta-btn-secondary:active {
+    border: 1px solid currentColor;
+    color: inherit;
+    background-color: transparent;
+    border-radius: 999px;
+    padding-inline: 1.75rem;
+    font-weight: 700;
+}
+
+.cta-btn-secondary:hover {
+    background-color: rgba(255, 255, 255, .1);
+}
+
+.reveal-ready [data-reveal]:not(.is-visible) .cta-content {
+    opacity: 0;
+}
+
+.reveal-ready [data-reveal].is-visible .cta-content {
+    animation: rise-in .6s cubic-bezier(.2, .7, .2, 1) backwards;
+}
+
+@media (max-width: 767.98px) {
+    .cta-card {
+        border-radius: 24px;
+        padding: 3rem 1.25rem;
+    }
+
+    .cta-buttons .btn {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cta-highlight::after,
+    .cta-btn-primary .bi {
+        transition: none;
+    }
+}
+
+/*
  * Running text / marquee (frontend/partials/running-text.blade.php) —
  * teks WebSetting::running_text diulang & di-scroll otomatis tanpa
  * henti pakai animasi CSS murni. Wrapper-nya pakai trik "100vw

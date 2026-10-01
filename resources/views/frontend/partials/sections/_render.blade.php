@@ -16,6 +16,9 @@
         @case('faq')
             @include('frontend.partials.faq', ['section' => $section])
             @break
+        @case('banner')
+            @include('frontend.partials.sections.cta', ['section' => $section])
+            @break
         @default
             @include('frontend.partials.sections.frame', ['section' => $section])
     @endswitch
