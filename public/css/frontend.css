@@ -1935,3 +1935,79 @@ a.contact-channel:hover {
     padding: .75rem 1rem;
     margin: 1.25rem 0;
 }
+
+/* =====================================================================
+ * Perbaikan responsif HP (2 Oktober 2026)
+ * 1. Hero: topbar homepage position:fixed, jadi konten hero diberi
+ *    jarak atas setinggi topbar + ruang napas -- logo tidak menempel /
+ *    menimpa judul. Topbar di HP juga sedikit lebih tinggi.
+ * 2. Fitur Unggulan di HP: 1 baris kartu yang digeser (bukan 2 baris
+ *    padat). Tiap kartu tinggi sama, teks di atas & gambar di bawah
+ *    (gambar tidak lagi absolute di belakang teks), jadi tidak menumpuk.
+ * ===================================================================== */
+.hero-slide .container.py-5 {
+    padding-top: 7rem !important;
+}
+
+@media (max-width: 991.98px) {
+    .site-topbar {
+        padding-top: .75rem;
+        padding-bottom: .75rem;
+    }
+
+    .hero-slide .container.py-5 {
+        padding-top: 7.5rem !important;
+        padding-bottom: 3rem !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .features-bento {
+        grid-template-rows: none;
+        grid-auto-flow: column;
+        grid-auto-columns: 80vw;
+        grid-auto-rows: auto;
+        gap: 12px;
+    }
+
+    .feature-tile,
+    .feature-tile--big,
+    .feature-tile--wide,
+    .feature-tile--tall {
+        grid-row: auto;
+        grid-column: auto;
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .feature-tile .feature-tile-text {
+        max-width: 100%;
+        padding: 18px 18px 8px;
+    }
+
+    .feature-tile .feature-tile-title,
+    .feature-tile--big .feature-tile-title {
+        font-size: 1.1rem;
+    }
+
+    .feature-tile .feature-tile-desc {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .feature-tile .feature-tile-art {
+        position: static;
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+        height: auto;
+        padding: 4px 16px 16px;
+    }
+
+    .feature-tile .feature-tile-art img {
+        object-position: center bottom;
+    }
+}
