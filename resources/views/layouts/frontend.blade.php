@@ -121,7 +121,6 @@
     <link rel="stylesheet" href="{{ asset('css/chat-widget.css') }}?v={{ filemtime(public_path('css/chat-widget.css')) }}">
 
     @stack('styles')
-    <script src="https://app.konexa.id/widget.js" data-key="wgt_pPFFGJc5CXd0R28HnQDgs089pbI9CxfFbNx9qVVO" data-color="#2563eb" data-position="right" async></script>
 </head>
 <body>
 
