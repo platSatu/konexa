@@ -44,6 +44,9 @@ class AppServiceProvider extends ServiceProvider
                 // Running text/marquee butuh WebSetting::running_text —
                 // lihat frontend.partials.running-text.
                 'frontend.partials.running-text',
+                // Tombol & panel Live Chat (on/off, sapaan, pertanyaan cepat).
+                'frontend.partials.menu',
+                'frontend.partials.chat-widget',
             ],
             WebSettingComposer::class
         );

@@ -30,7 +30,7 @@
                 href="{{ route('frontend.contact') }}">Contact</a>
         </li>
         {{-- Live chat: membuka panel chat (frontend/partials/chat-widget.blade.php), bisa dimatikan dari Settings > Live Chat. --}}
-        @if (data_get($webSetting, 'chat_enabled') !== false)
+        @if (data_get($webSetting ?? null, 'chat_enabled') !== false)
             <li class="nav-item">
                 <button type="button" class="nav-link btn btn-link d-inline-flex align-items-center gap-1" data-chat-open>
                     <i class="bi bi-chat-dots"></i> Live Chat

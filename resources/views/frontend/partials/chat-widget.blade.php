@@ -5,14 +5,14 @@
 --}}
 @php
     // Diatur di app.bizbos: Superadmin > Settings > Live Chat.
-    $chatWhatsapp = preg_replace('/\D/', '', (string) data_get($webSetting, 'handphone'));
-    $chatQuestions = array_filter(array_map('trim', preg_split('/\R/', (string) data_get($webSetting, 'chat_questions'))))
+    $chatWhatsapp = preg_replace('/\D/', '', (string) data_get($webSetting ?? null, 'handphone'));
+    $chatQuestions = array_filter(array_map('trim', preg_split('/\R/', (string) data_get($webSetting ?? null, 'chat_questions'))))
         ?: ['Apa itu bizbos?', 'Berapa harga paketnya?', 'Bisa coba gratis?', 'Bagaimana cara daftar?'];
 @endphp
-@if (data_get($webSetting, 'chat_enabled') !== false)
+@if (data_get($webSetting ?? null, 'chat_enabled') !== false)
 <div class="bz-chat" id="bzChat" hidden
     data-url="{{ route('frontend.chat') }}" data-token="{{ csrf_token() }}"
-    data-greeting="{{ data_get($webSetting, 'chat_greeting') ?: 'Halo! 👋 Saya asisten bizbos. Mau tanya soal fitur, harga paket, atau cara mulai? Silakan tulis pertanyaannya.' }}"
+    data-greeting="{{ data_get($webSetting ?? null, 'chat_greeting') ?: 'Halo! 👋 Saya asisten bizbos. Mau tanya soal fitur, harga paket, atau cara mulai? Silakan tulis pertanyaannya.' }}"
     data-whatsapp="{{ $chatWhatsapp ? 'https://wa.me/'.$chatWhatsapp : '' }}"
     role="dialog" aria-modal="false" aria-labelledby="bzChatTitle">
     <div class="bz-chat__head">
