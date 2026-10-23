@@ -235,6 +235,31 @@ class TeleiosApiService
     }
 
     /**
+     * Live chat (POST /api/frontend/chat di app.bizbos). Response apa adanya (200 / 422 / 429),
+     * atau null kalau backend tidak bisa dihubungi.
+     */
+    public function chat(array $payload): ?Response
+    {
+        $baseUrl = config('services.teleios.url');
+        $key = config('services.teleios.key');
+
+        if (! $baseUrl || ! $key) {
+            return null;
+        }
+
+        try {
+            return Http::withHeaders(['X-API-KEY' => $key])
+                ->acceptJson()
+                ->timeout(40)
+                ->post(rtrim($baseUrl, '/').'/api/frontend/chat', $payload);
+        } catch (Throwable $e) {
+            Log::warning('TeleiosApiService: chat request threw an exception.', ['message' => $e->getMessage()]);
+
+            return null;
+        }
+    }
+
+    /**
      * Shared GET + auth-header + error-handling for every endpoint
      * above. Returns null (rather than throwing or returning an empty
      * Response) on any failure — missing config, non-2xx status, or a

@@ -118,8 +118,10 @@
         (Ctrl+Shift+R), padahal filenya di server sudah benar.
     -->
     <link rel="stylesheet" href="{{ asset('css/frontend.css') }}?v={{ filemtime(public_path('css/frontend.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/chat-widget.css') }}?v={{ filemtime(public_path('css/chat-widget.css')) }}">
 
     @stack('styles')
+    <script src="https://app.konexa.id/widget.js" data-key="wgt_pPFFGJc5CXd0R28HnQDgs089pbI9CxfFbNx9qVVO" data-color="#2563eb" data-position="right" async></script>
 </head>
 <body>
 
@@ -131,11 +133,14 @@
 
     @yield('content')
 
+    @include('frontend.partials.chat-widget')
+
     <!-- Bootstrap 5 JS Bundle (CDN) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 
     <!-- JS custom, sama seperti CSS di atas: edit file lalu reload, tanpa build -->
     <script src="{{ asset('js/frontend.js') }}?v={{ filemtime(public_path('js/frontend.js')) }}" defer></script>
+    <script src="{{ asset('js/chat-widget.js') }}?v={{ filemtime(public_path('js/chat-widget.js')) }}" defer></script>
 
     @stack('scripts')
 </body>

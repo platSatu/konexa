@@ -24,5 +24,10 @@ Route::post('/kontak', [FrontendController::class, 'sendContact'])
     ->middleware('throttle:5,10')
     ->name('frontend.contact.send');
 
+// Live chat di header (tombol "Live Chat"): diteruskan ke app.bizbos lewat server, API key tidak sampai ke browser.
+Route::post('/chat', App\Http\Controllers\ChatController::class)
+    ->middleware('throttle:20,1')
+    ->name('frontend.chat');
+
 // Sitemap untuk Google Search Console (di luar log.visitor: yang datang crawler).
 Route::get('/sitemap.xml', SitemapController::class)->name('frontend.sitemap');

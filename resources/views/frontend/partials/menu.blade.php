@@ -29,6 +29,14 @@
                 aria-current="{{ request()->routeIs('frontend.contact') ? 'page' : 'false' }}"
                 href="{{ route('frontend.contact') }}">Contact</a>
         </li>
+        {{-- Live chat: membuka panel chat (frontend/partials/chat-widget.blade.php), bisa dimatikan dari Settings > Live Chat. --}}
+        @if (data_get($webSetting, 'chat_enabled') !== false)
+            <li class="nav-item">
+                <button type="button" class="nav-link btn btn-link d-inline-flex align-items-center gap-1" data-chat-open>
+                    <i class="bi bi-chat-dots"></i> Live Chat
+                </button>
+            </li>
+        @endif
         <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
             <a class="btn btn-primary fw-semibold px-4" href="https://app.bizbos.id/auth/login">Login</a>
         </li>
