@@ -77,10 +77,32 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    var launcher = document.querySelector('[data-chat-toggle]');
+
+    function syncLauncher() {
+        if (!launcher) return;
+        var isOpen = !box.hidden;
+        launcher.classList.toggle('is-open', isOpen);
+        launcher.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        launcher.setAttribute('aria-label', isOpen ? 'Tutup live chat' : 'Buka live chat');
+        document.body.classList.toggle('bz-chat-open', isOpen);
+    }
+
     function open() {
         box.hidden = false;
         if (!list.childElementCount) render();
+        syncLauncher();
         input.focus();
+    }
+
+    function close() {
+        box.hidden = true;
+        syncLauncher();
+        if (launcher) launcher.focus();
+    }
+
+    if (launcher) {
+        launcher.addEventListener('click', function () { box.hidden ? open() : close(); });
     }
 
     document.querySelectorAll('[data-chat-open]').forEach(function (btn) {
@@ -91,8 +113,8 @@ document.addEventListener('DOMContentLoaded', function () {
             open();
         });
     });
-    box.querySelector('[data-chat-close]').addEventListener('click', function () { box.hidden = true; });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !box.hidden) box.hidden = true; });
+    box.querySelector('[data-chat-close]').addEventListener('click', close);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !box.hidden) close(); });
     box.querySelectorAll('[data-chat-ask]').forEach(function (chip) { chip.addEventListener('click', function () { ask(chip.textContent); }); });
     form.addEventListener('submit', function (e) { e.preventDefault(); var text = input.value; input.value = ''; ask(text); });
 });

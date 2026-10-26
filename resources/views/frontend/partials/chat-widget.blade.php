@@ -1,5 +1,7 @@
 {{--
-    Live chat bizbos: dibuka dari tombol "Live Chat" di menu (data-chat-open).
+    Live chat bizbos: dibuka dari tombol bulat melayang di kanan bawah
+    (.bz-chat-launcher, ukuran & gaya sama dengan tombol WhatsApp melayang).
+    Elemen lain dengan atribut data-chat-open juga tetap bisa membukanya.
     Pesan dikirim ke route frontend.chat (server ini) lalu diteruskan ke app.bizbos.
     Logika di public/js/chat-widget.js, tampilan di public/css/chat-widget.css.
 --}}
@@ -43,4 +45,10 @@
         </a>
     @endif
 </div>
+
+<button type="button" class="bz-chat-launcher" data-chat-toggle aria-controls="bzChat" aria-expanded="false"
+    aria-label="Buka live chat" title="Live Chat">
+    <i class="bi bi-chat-dots-fill bz-chat-launcher__icon-open" aria-hidden="true"></i>
+    <i class="bi bi-x-lg bz-chat-launcher__icon-close" aria-hidden="true"></i>
+</button>
 @endif

@@ -1,7 +1,8 @@
 /* Live chat bizbos (frontend/partials/chat-widget.blade.php). Warna mengikuti --bs-primary situs. */
+/* Panel terbuka tepat di atas tombol bulat (24px + 56px + jarak 12px = 92px dari bawah). */
 .bz-chat {
-    position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 1080;
-    width: min(380px, calc(100vw - 2rem)); height: min(580px, calc(100vh - 2.5rem));
+    position: fixed; right: 24px; bottom: 92px; z-index: 1080;
+    width: min(380px, calc(100vw - 2rem)); height: min(580px, calc(100vh - 112px));
     display: flex; flex-direction: column; background: #fff; border-radius: 1.25rem; overflow: hidden;
     box-shadow: 0 24px 60px -12px rgba(16, 24, 40, .35); font-size: .925rem;
     animation: bzChatIn .22s ease-out;
@@ -39,7 +40,39 @@
 .bz-chat__wa { display: block; text-align: center; padding: .55rem 1rem .8rem; font-size: .8rem; color: #16a34a; background: #fff; text-decoration: none; }
 .bz-chat__wa:hover { text-decoration: underline; color: #15803d; }
 
-/* HP: layar penuh supaya nyaman mengetik. */
+/* Tombol bulat melayang di kanan bawah -- ukuran, bayangan & efek hover sama
+   persis dengan .whatsapp-float-btn (public/css/frontend.css), warna utama situs. */
+.bz-chat-launcher {
+    position: fixed; right: 24px; bottom: 24px; z-index: 1081;
+    width: 56px; height: 56px; padding: 0; border: 0; border-radius: 50%;
+    background-color: var(--bs-primary); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 26px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.bz-chat-launcher:hover,
+.bz-chat-launcher:focus-visible {
+    color: #fff; background-color: #c95345;
+    transform: scale(1.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+.bz-chat-launcher:focus-visible { outline: 3px solid rgba(var(--bs-primary-rgb), .35); outline-offset: 2px; }
+.bz-chat-launcher i { line-height: 1; transition: transform 0.2s ease, opacity 0.2s ease; }
+.bz-chat-launcher__icon-close { position: absolute; font-size: 22px; opacity: 0; transform: rotate(-90deg); }
+.bz-chat-launcher.is-open .bz-chat-launcher__icon-open { opacity: 0; transform: rotate(90deg); }
+.bz-chat-launcher.is-open .bz-chat-launcher__icon-close { opacity: 1; transform: none; }
+
+/* Tombol WhatsApp melayang naik ke atas tombol chat supaya tidak bertumpuk,
+   dan disembunyikan selama panel chat terbuka (link WA ada di dalam panel). */
+body:has(.bz-chat-launcher) .whatsapp-float-btn { bottom: 92px; }
+body.bz-chat-open .whatsapp-float-btn { opacity: 0; visibility: hidden; pointer-events: none; }
+
+/* HP: layar penuh supaya nyaman mengetik; ukuran tombol mengikuti tombol WhatsApp versi HP. */
 @media (max-width: 575.98px) {
     .bz-chat { right: 0; bottom: 0; width: 100vw; height: 100dvh; border-radius: 0; }
+    .bz-chat-launcher { right: 16px; bottom: 16px; width: 48px; height: 48px; font-size: 22px; }
+    .bz-chat-launcher__icon-close { font-size: 18px; }
+    body:has(.bz-chat-launcher) .whatsapp-float-btn { bottom: 76px; }
+    /* Panel penuh layar sudah punya tombol tutup sendiri. */
+    body.bz-chat-open .bz-chat-launcher { display: none; }
 }
