@@ -21,6 +21,8 @@
 @php
     // Bingkai dari Susunan Beranda (Teleios) -- judul, background, tombol.
     $section = ($section ?? []) + ['style' => '', 'is_dark' => false];
+    // Beranda cukup 10 FAQ teratas (urutan dari superadmin); FAQ lainnya tetap dipakai live chat.
+    $faqs = array_slice($faqs ?? [], 0, 10);
 @endphp
 <section id="faq" class="py-5 faq-section {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
     {{--
@@ -38,7 +40,7 @@
                 <span class="faq-heading-line d-none d-lg-block" aria-hidden="true"></span>
             </div>
             <p class="faq-header-desc {{ $section['is_dark'] ? 'text-white-50' : 'text-muted' }} mb-0">
-                {{ ($section['subtitle'] ?? null) ?: 'Temukan jawaban atas pertanyaan umum seputar chatbot AI, broadcast WhatsApp, CRM, dan paket harga '.config('app.name').'.' }}
+                {{ ($section['subtitle'] ?? null) ?: 'Jawaban singkat untuk hal yang paling sering ditanyakan. Belum ketemu? Tanyakan saja lewat live chat, kami siap bantu.' }}
             </p>
         </div>
 
