@@ -51,19 +51,8 @@
                 </div>
             @endif
 
-            {{--
-                Newsletter — TAMPILAN SAJA. Belum terhubung ke penyimpanan/
-                endpoint apapun (belum ada tabel subscriber di backend),
-                jadi submit form ini saat ini tidak melakukan apa-apa.
-                Kasih tahu kalau mau ini benar-benar berfungsi.
-            --}}
+            {{-- Kontak & peta (form newsletter dihapus 2026-10-26: tidak terpakai, tidak pernah tersambung ke backend). --}}
             <div class="col-12 col-lg-4 ms-lg-auto footer-newsletter">
-                <p class="mb-2">Explore with us! Sign up to receive exclusive access to product drops, company news, and more.</p>
-                <form class="d-flex gap-2 flex-wrap" onsubmit="return false;">
-                    <input type="email" class="form-control footer-newsletter-input" placeholder="Email" style="max-width: 280px;">
-                    <button type="submit" class="btn btn-dark rounded-pill px-4">Submit</button>
-                </form>
-
                 {{--
                     $webSetting datang dari App\View\Composers\WebSettingComposer.
                     Nomor HP SENGAJA tidak ditampilkan lagi sebagai teks di sini
@@ -72,7 +61,7 @@
                     yang tampil di semua halaman, jadi tidak perlu dobel.
                 --}}
                 @if (data_get($webSetting, 'address') || data_get($webSetting, 'email'))
-                    <div class="small mt-3 footer-contact">
+                    <div class="small footer-contact">
                         @if (data_get($webSetting, 'address'))
                             <p class="mb-1">{{ $webSetting['address'] }}</p>
                         @endif
