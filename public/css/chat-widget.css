@@ -8,6 +8,8 @@
     animation: bzChatIn .22s ease-out;
 }
 .bz-chat[hidden] { display: none; }
+/* Ukuran kolom termasuk padding & border, tidak bergantung pada CSS halaman. */
+.bz-chat, .bz-chat *, .bz-chat *::before, .bz-chat *::after { box-sizing: border-box; }
 @keyframes bzChatIn { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
 
 .bz-chat__head { display: flex; align-items: center; gap: .75rem; padding: 1rem 1.1rem; color: #fff; background: linear-gradient(135deg, var(--bs-primary), #b74c3f); }
@@ -16,6 +18,25 @@
 .bz-chat__dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #4ade80; margin-right: .2rem; }
 .bz-chat__close { border: 0; background: transparent; color: #fff; font-size: 1.1rem; padding: .25rem; opacity: .85; }
 .bz-chat__close:hover { opacity: 1; }
+
+/* Langkah 1: form kenalan (nama, email, WhatsApp) sebelum chat. */
+.bz-chat__start { flex: 1; overflow-y: auto; padding: 1rem 1.1rem 1.25rem; background: #f8f6f5; display: flex; flex-direction: column; gap: .75rem; }
+.bz-chat__start-intro { background: #fff; border: 1px solid #eee; border-radius: 1rem; padding: .8rem .95rem; line-height: 1.45; }
+.bz-chat__field { display: flex; flex-direction: column; gap: .3rem; margin: 0; }
+.bz-chat__field > span { font-size: .8rem; font-weight: 600; color: #4b3b36; }
+.bz-chat__field input { width: 100%; border: 1px solid #e5e2e0; border-radius: .75rem; padding: .6rem .85rem; outline: none; background: #fff; min-width: 0; }
+.bz-chat__field input:focus { border-color: var(--bs-primary); box-shadow: 0 0 0 .2rem rgba(var(--bs-primary-rgb), .15); }
+.bz-chat__field input.is-invalid { border-color: #dc3545; }
+.bz-chat__field small { color: #dc3545; font-size: .75rem; min-height: 0; }
+.bz-chat__field small:empty { display: none; }
+.bz-chat__phone { display: flex; align-items: stretch; }
+.bz-chat__phone > span { display: flex; align-items: center; padding: 0 .75rem; border: 1px solid #e5e2e0; border-right: 0; border-radius: .75rem 0 0 .75rem; background: #f1eeec; font-size: .875rem; color: #4b3b36; }
+.bz-chat__phone input { border-radius: 0 .75rem .75rem 0; }
+.bz-chat__start-btn { border: 0; border-radius: 999px; padding: .7rem 1rem; background: var(--bs-primary); color: #fff; font-weight: 600; margin-top: .25rem; }
+.bz-chat__start-btn:disabled { opacity: .6; }
+.bz-chat__privacy { font-size: .72rem; color: #8a7f7b; margin: 0; text-align: center; line-height: 1.4; }
+.bz-chat__privacy a { color: inherit; text-decoration: underline; }
+.bz-chat__start[hidden], .bz-chat__body[hidden], .bz-chat__form[hidden] { display: none; }
 
 .bz-chat__body { flex: 1; overflow-y: auto; padding: 1rem; background: #f8f6f5; display: flex; flex-direction: column; gap: .5rem; }
 .bz-chat__msg { max-width: 85%; padding: .6rem .85rem; border-radius: 1rem; line-height: 1.45; white-space: pre-wrap; word-wrap: break-word; }
@@ -70,6 +91,8 @@ body.bz-chat-open .whatsapp-float-btn { opacity: 0; visibility: hidden; pointer-
 /* HP: layar penuh supaya nyaman mengetik; ukuran tombol mengikuti tombol WhatsApp versi HP. */
 @media (max-width: 575.98px) {
     .bz-chat { right: 0; bottom: 0; width: 100vw; height: 100dvh; border-radius: 0; }
+    /* Font isian minimal 16px supaya iPhone tidak memperbesar halaman saat mengetik. */
+    .bz-chat input { font-size: 16px; }
     .bz-chat-launcher { right: 16px; bottom: 16px; width: 48px; height: 48px; font-size: 22px; }
     .bz-chat-launcher__icon-close { font-size: 18px; }
     body:has(.bz-chat-launcher) .whatsapp-float-btn { bottom: 76px; }

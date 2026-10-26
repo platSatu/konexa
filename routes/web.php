@@ -24,7 +24,11 @@ Route::post('/kontak', [FrontendController::class, 'sendContact'])
     ->middleware('throttle:5,10')
     ->name('frontend.contact.send');
 
-// Live chat di header (tombol "Live Chat"): diteruskan ke app.bizbos lewat server, API key tidak sampai ke browser.
+// Live chat (tombol bulat kanan bawah): diteruskan ke app.bizbos lewat server, API key tidak sampai ke browser.
+// /chat/start: pengunjung mengisi nama, email, WhatsApp dulu (jadi Customer "Website" di app.bizbos).
+Route::post('/chat/start', [App\Http\Controllers\ChatController::class, 'start'])
+    ->middleware('throttle:10,1')
+    ->name('frontend.chat.start');
 Route::post('/chat', App\Http\Controllers\ChatController::class)
     ->middleware('throttle:20,1')
     ->name('frontend.chat');
