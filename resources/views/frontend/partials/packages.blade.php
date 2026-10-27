@@ -208,12 +208,19 @@
                                                 </span>
                                             </li>
                                         @endforeach
-                                        @foreach ($package['feature_lines'] ?? [] as $feature)
+                                        {{-- 5 baris pertama = ringkasan per layanan; rincian lengkap ada di tabel "Bandingkan semua fitur". --}}
+                                        @foreach (array_slice($package['feature_lines'] ?? [], 0, 5) as $feature)
                                             <li>
                                                 <i class="bi bi-check-circle-fill"></i>
                                                 <span>{{ $feature }}</span>
                                             </li>
                                         @endforeach
+                                        @if (count($package['feature_lines'] ?? []) > 5)
+                                            <li class="text-muted small">
+                                                <i class="bi bi-plus-circle"></i>
+                                                <span>{{ count($package['feature_lines']) - 5 }} fitur lainnya, lihat "Bandingkan semua fitur" di bawah</span>
+                                            </li>
+                                        @endif
                                         @if (empty($limits) && empty($package['feature_lines']))
                                             <li>
                                                 <i class="bi bi-check-circle-fill"></i>
