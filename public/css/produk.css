@@ -35,19 +35,6 @@
     color: var(--pd-ink);
 }
 
-.pd-burst {
-    position: absolute;
-    width: 220px;
-    height: 220px;
-    background: var(--bs-primary);
-    clip-path: polygon(50% 0, 61% 32%, 95% 22%, 70% 48%, 100% 70%, 64% 68%, 58% 100%, 44% 70%, 10% 88%, 30% 58%, 0 36%, 36% 34%);
-    opacity: .9;
-    pointer-events: none;
-}
-
-.pd-burst--left { left: -130px; top: 30%; transform: rotate(-12deg); }
-.pd-burst--right { right: -60px; bottom: -40px; width: 180px; height: 180px; background: var(--pd-sun); transform: rotate(18deg); }
-
 .pd-eyebrow {
     display: inline-flex;
     align-items: center;
@@ -337,7 +324,6 @@
 
 @media (max-width: 991.98px) {
     .pd-hero { padding: 3rem 0 3.5rem; }
-    .pd-burst--left { display: none; }
     .pd-shot--front { left: 0; width: 80%; }
     .pd-float--sold { right: 0; top: -1rem; }
     .pd-section { padding: 3.5rem 0; }

@@ -52,8 +52,6 @@
 
     {{-- ATTENTION --}}
     <header class="pd-hero">
-        <span class="pd-burst pd-burst--left" aria-hidden="true"></span>
-        <span class="pd-burst pd-burst--right" aria-hidden="true"></span>
         <div class="container position-relative">
             <div class="row align-items-center g-5">
                 <div class="col-lg-6">

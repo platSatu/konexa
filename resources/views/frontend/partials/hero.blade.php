@@ -1,8 +1,7 @@
 {{--
     Hero/header homepage (tema terang, senada dengan halaman produk /tiket, /kursus, dst).
     Judul, deskripsi & tombol per slide dari Superadmin > Web > Headers (TeleiosApiService::getHeaders());
-    kalau belum ada slide aktif dipakai teks bawaan di bawah. Latar dibuat dengan CSS (krem + pola titik
-    + bintang), jadi gambar/video & warna teks slide dari superadmin tidak dipakai di tema ini.
+    kalau belum ada slide aktif dipakai teks bawaan di bawah. Latar dibuat dengan CSS (krem + pola titik), jadi gambar/video & warna teks slide dari superadmin tidak dipakai di tema ini.
     Sisi kanan: ilustrasi alur (hero-flow.blade.php), kartunya bisa diklik ke halaman produk.
     Gaya: public/css/frontend.css bagian "Hero terang".
 --}}
@@ -18,8 +17,6 @@
 @endphp
 
 <section id="heroCarousel" class="hero-light {{ $multi ? 'carousel slide hero-carousel' : '' }}" @if ($multi) data-bs-ride="carousel" data-bs-interval="7000" @endif>
-    <span class="hero-burst hero-burst--left" aria-hidden="true"></span>
-    <span class="hero-burst hero-burst--right" aria-hidden="true"></span>
 
     @if ($multi)
         <div class="carousel-indicators">

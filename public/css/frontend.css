@@ -2116,8 +2116,7 @@ a.contact-channel:hover {
 
 /* =====================================================================
  * Hero terang (frontend/partials/hero.blade.php), senada dengan halaman
- * produk (/tiket, /kursus, /invoice, /whatsapp): latar krem + pola titik
- * + bintang merah/kuning, teks gelap, ilustrasi alur dengan "arus" kuning.
+ * produk (/tiket, /kursus, /invoice, /whatsapp): latar krem + pola titik, teks gelap, ilustrasi alur dengan "arus" kuning.
  * Topbar di atasnya tetap transparan tapi teks menunya gelap
  * (.site-topbar--on-light, lihat topbar.blade.php & frontend.js).
  * ===================================================================== */
@@ -2133,23 +2132,6 @@ a.contact-channel:hover {
         radial-gradient(circle, rgba(219, 91, 76, .1) 1px, transparent 1.5px);
     background-size: auto, auto, 22px 22px;
 }
-
-.hero-burst {
-    position: absolute;
-    z-index: -1;
-    width: 240px;
-    height: 240px;
-    background: var(--bs-primary);
-    clip-path: polygon(50% 0, 61% 32%, 95% 22%, 70% 48%, 100% 70%, 64% 68%, 58% 100%, 44% 70%, 10% 88%, 30% 58%, 0 36%, 36% 34%);
-    opacity: .9;
-    pointer-events: none;
-    animation: hero-burst-spin 40s linear infinite;
-}
-
-.hero-burst--left { left: -150px; top: 32%; }
-.hero-burst--right { right: -70px; bottom: -60px; width: 200px; height: 200px; background: #ffc857; animation-direction: reverse; }
-
-@keyframes hero-burst-spin { to { transform: rotate(360deg); } }
 
 .hero-eyebrow {
     display: inline-flex;
@@ -2211,13 +2193,7 @@ a.contact-channel:hover {
 .site-topbar--on-light:not(.topbar-scrolled) .navbar-toggler { border-color: rgba(0, 0, 0, .15); }
 .site-topbar--on-light .navbar-toggler-icon { filter: none; }
 
-@media (max-width: 991.98px) {
-    .hero-burst--left { display: none; }
-}
 
-@media (prefers-reduced-motion: reduce) {
-    .hero-burst { animation: none; }
-}
 
 /* =====================================================================
  * Kontak modern (kontak.blade.php): latar terang dari .hero-light, panel

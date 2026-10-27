@@ -20,8 +20,6 @@
 
     {{-- Tema terang seperti beranda & halaman produk (frontend.css bagian "Hero terang" + "Kontak modern"). --}}
     <section class="hero-light contact-page">
-        <span class="hero-burst hero-burst--left" aria-hidden="true"></span>
-        <span class="hero-burst hero-burst--right" aria-hidden="true"></span>
         <div class="container">
             <div class="text-center mb-5">
                 <span class="hero-eyebrow"><i class="bi bi-chat-heart"></i> Kontak</span>
