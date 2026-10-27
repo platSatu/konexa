@@ -2011,3 +2011,105 @@ a.contact-channel:hover {
         object-position: center bottom;
     }
 }
+
+/* ===================== Menu Layanan (dropdown navbar) ===================== */
+.nav-services .dropdown-toggle::after {
+    border: 0;
+    content: "\F282"; /* bi-chevron-down */
+    font-family: "bootstrap-icons";
+    font-size: .7em;
+    vertical-align: .05em;
+    margin-left: .35rem;
+    transition: transform .2s ease;
+}
+
+.nav-services .dropdown-toggle.show::after { transform: rotate(180deg); }
+
+.services-menu {
+    min-width: 21rem;
+    padding: .75rem;
+    margin-top: .5rem !important;
+    border: 0;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 18px 50px rgba(40, 20, 15, .16);
+}
+
+.services-menu-label {
+    padding: .25rem .6rem .5rem;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #a39a96;
+}
+
+.service-item {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    padding: .7rem .75rem;
+    border-radius: 14px;
+    color: #1f1a17;
+    text-decoration: none;
+    transition: background-color .2s ease;
+}
+
+.service-item:hover,
+.service-item:focus-visible,
+.service-item.is-active { background: #fff4ef; color: #1f1a17; }
+
+.service-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 1.25rem;
+    transition: transform .2s ease;
+}
+
+.service-icon--peach { background: #ffe3da; color: var(--bs-primary); }
+.service-icon--sun { background: #fff0c7; color: #b7791f; }
+.service-icon--mint { background: #dcf3e6; color: #23885a; }
+.service-icon--sky { background: #e1edfb; color: #2f6fba; }
+
+.service-item:hover .service-icon { transform: scale(1.06) rotate(-4deg); }
+
+.service-text { flex: 1; min-width: 0; line-height: 1.35; }
+.service-text strong { display: block; font-size: .95rem; }
+.service-text small { display: block; color: #7a716d; white-space: normal; }
+
+.service-arrow {
+    color: var(--bs-primary);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.service-item:hover .service-arrow,
+.service-item.is-active .service-arrow { opacity: 1; transform: none; }
+
+/* Desktop: panel muncul halus dan ikut terbuka saat kursor diarahkan. */
+@media (min-width: 992px) {
+    .services-menu {
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        left: 50%;
+        transform: translate(-50%, 8px);
+        transition: opacity .2s ease, transform .2s ease, visibility .2s;
+    }
+
+    .services-menu.show,
+    .nav-services:hover .services-menu { visibility: visible; opacity: 1; transform: translate(-50%, 0); }
+    .nav-services:hover .dropdown-toggle::after { transform: rotate(180deg); }
+    .nav-services::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: .75rem; } /* jembatan supaya hover tidak putus */
+}
+
+/* HP: menyatu di dalam menu hamburger. */
+@media (max-width: 991.98px) {
+    .services-menu { min-width: 0; box-shadow: none; background: #fff8f5; margin-top: .25rem !important; }
+}
