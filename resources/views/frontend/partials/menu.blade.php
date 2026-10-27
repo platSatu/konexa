@@ -16,10 +16,27 @@
                 aria-current="{{ request()->routeIs('frontend.index') ? 'page' : 'false' }}"
                 href="{{ route('frontend.index') }}">Home</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('frontend.ticket') ? 'active' : '' }}"
-                aria-current="{{ request()->routeIs('frontend.ticket') ? 'page' : 'false' }}"
-                href="{{ route('frontend.ticket') }}">Tiket</a>
+        {{-- Dropdown Layanan: tambah halaman produk baru cukup di daftar $services ini. --}}
+        @php
+            $services = [
+                ['frontend.ticket', 'ticket-perforated', 'Tiket Event', 'Jual tiket online & scan QR peserta'],
+            ];
+            $serviceActive = collect($services)->contains(fn (array $service) => request()->routeIs($service[0]));
+        @endphp
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {{ $serviceActive ? 'active' : '' }}" href="#" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">Layanan</a>
+            <ul class="dropdown-menu dropdown-menu-lg-end border-0 shadow p-2" style="min-width: 17rem; --bs-dropdown-link-active-bg: var(--bs-primary-bg-subtle); --bs-dropdown-link-active-color: var(--bs-body-color); --bs-dropdown-link-hover-bg: #fff7f2;">
+                @foreach ($services as [$routeName, $icon, $label, $hint])
+                    <li>
+                        <a class="dropdown-item d-flex gap-3 align-items-start rounded-3 py-2 {{ request()->routeIs($routeName) ? 'active' : '' }}"
+                            aria-current="{{ request()->routeIs($routeName) ? 'page' : 'false' }}" href="{{ route($routeName) }}">
+                            <i class="bi bi-{{ $icon }} fs-5 text-primary"></i>
+                            <span><span class="d-block fw-semibold">{{ $label }}</span><small class="text-muted text-wrap">{{ $hint }}</small></span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
         </li>
         {{-- Halaman dinamis ber-flag "Menu atas" (App\View\Composers\PageLinksComposer). --}}
         @foreach ($navPages as $navPage)
