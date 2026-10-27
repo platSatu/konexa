@@ -18,6 +18,7 @@ Route::middleware('log.visitor')->group(function () {
     Route::get('/tiket', [FrontendController::class, 'ticket'])->name('frontend.ticket');
     Route::view('/kursus', 'frontend.produk.kursus')->name('frontend.course');
     Route::view('/invoice', 'frontend.produk.invoice')->name('frontend.invoice');
+    Route::view('/whatsapp', 'frontend.produk.whatsapp')->name('frontend.whatsapp');
     Route::get('/page/{slug}', [FrontendController::class, 'page'])->where('slug', '[a-z0-9-]+')->name('frontend.page');
 });
 

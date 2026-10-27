@@ -22,6 +22,7 @@
                 ['frontend.ticket', 'ticket-perforated', 'Management Event', 'Jual tiket online, e-ticket & scan QR peserta', 'peach'],
                 ['frontend.course', 'mortarboard', 'Management Kursus', 'Pendaftaran murid, jadwal, absensi & tagihan', 'sun'],
                 ['frontend.invoice', 'receipt', 'Management Invoice', 'Tagihan dengan link bayar & pengingat otomatis', 'sky'],
+                ['frontend.whatsapp', 'whatsapp', 'Management WhatsApp', 'Inbox tim, chatbot, AI & broadcast terjadwal', 'mint'],
             ];
             $serviceActive = collect($services)->contains(fn (array $service) => request()->routeIs($service[0]));
         @endphp

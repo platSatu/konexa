@@ -24,6 +24,7 @@ class SitemapController extends Controller
                 ['loc' => route('frontend.ticket'), 'priority' => '0.9'],
                 ['loc' => route('frontend.course'), 'priority' => '0.9'],
                 ['loc' => route('frontend.invoice'), 'priority' => '0.9'],
+                ['loc' => route('frontend.whatsapp'), 'priority' => '0.9'],
                 ['loc' => route('frontend.contact'), 'priority' => '0.6'],
                 ['loc' => route('frontend.terms'), 'priority' => '0.3'],
             ]);

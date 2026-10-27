@@ -32,22 +32,28 @@
         terjadi sebelum itu diantre lalu dikirim begitu pixel siap.
     --}}
     <script>
-        window.bizbosLoadPixels = function () {
-            if (window.bizbosPixelsLoaded) return;
-            window.bizbosPixelsLoaded = true;
-            var gtagIds = {{ \Illuminate\Support\Js::from($gtagIds) }};
-            var metaPixelId = {{ \Illuminate\Support\Js::from((string) $metaPixelId) }};
-            var tiktokPixelId = {{ \Illuminate\Support\Js::from((string) $tiktokPixelId) }};
+        // kind: 'analytics' (GA4) atau 'marketing' (Google Ads, Meta, TikTok), sesuai izin di cookie-consent.blade.php.
+        window.bizbosLoadPixels = function (kind) {
+            var loaded = window.bizbosPixelsLoaded = window.bizbosPixelsLoaded || {};
+            if (loaded[kind]) return;
+            loaded[kind] = true;
+            var googleIds = kind === 'analytics'
+                ? {{ \Illuminate\Support\Js::from(array_values(array_filter([$ga4Id]))) }}
+                : {{ \Illuminate\Support\Js::from(array_values(array_filter([$adsId]))) }};
+            var metaPixelId = kind === 'marketing' ? {{ \Illuminate\Support\Js::from((string) $metaPixelId) }} : '';
+            var tiktokPixelId = kind === 'marketing' ? {{ \Illuminate\Support\Js::from((string) $tiktokPixelId) }} : '';
 
-            if (gtagIds.length) {
-                window.dataLayer = window.dataLayer || [];
-                window.gtag = function () { dataLayer.push(arguments); };
-                gtag('js', new Date());
-                gtagIds.forEach(function (id) { gtag('config', id); });
-                var g = document.createElement('script');
-                g.async = true;
-                g.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(gtagIds[0]);
-                document.head.appendChild(g);
+            if (googleIds.length) {
+                if (!window.gtag) {
+                    window.dataLayer = window.dataLayer || [];
+                    window.gtag = function () { dataLayer.push(arguments); };
+                    gtag('js', new Date());
+                    var g = document.createElement('script');
+                    g.async = true;
+                    g.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(googleIds[0]);
+                    document.head.appendChild(g);
+                }
+                googleIds.forEach(function (id) { gtag('config', id); });
             }
 
             if (metaPixelId) {
@@ -69,10 +75,13 @@
 
         (function () {
             var events = ['scroll', 'pointerdown', 'touchstart', 'keydown'];
-            // Pixel hanya dimuat kalau pengunjung sudah memilih "Terima Semua" (lihat cookie-consent.blade.php).
+            // Pixel hanya dimuat sesuai izin pengunjung (lihat cookie-consent.blade.php).
             var start = function () {
                 events.forEach(function (e) { window.removeEventListener(e, start, { passive: true }); });
-                window.bizbosConsent ? window.bizbosConsent.onGrant(window.bizbosLoadPixels) : window.bizbosLoadPixels();
+                ['analytics', 'marketing'].forEach(function (kind) {
+                    var load = function () { window.bizbosLoadPixels(kind); };
+                    window.bizbosConsent ? window.bizbosConsent.onGrant(kind, load) : load();
+                });
             };
             events.forEach(function (e) { window.addEventListener(e, start, { passive: true, once: true }); });
             window.addEventListener('load', function () { setTimeout(start, 6000); });
