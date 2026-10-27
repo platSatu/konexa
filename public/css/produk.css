@@ -350,3 +350,155 @@
     .pd-calc-inputs { grid-template-columns: 1fr; }
     .pd-float--scan { display: none; }
 }
+
+/* ---------- Alur (halaman Kursus) ---------- */
+.pd-flow {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.25rem;
+    margin: 0;
+}
+
+.pd-flow::before {
+    content: "";
+    position: absolute;
+    top: 32px;
+    left: 10%;
+    right: 10%;
+    border-top: 3px dashed rgba(219, 91, 76, .3);
+}
+
+.pd-flow-item { position: relative; text-align: center; }
+
+.pd-flow-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+    border-radius: 20px;
+    color: var(--pd-accent);
+    font-size: 1.6rem;
+    box-shadow: 0 0 0 6px #fffaf7;
+}
+
+.pd-flow-num {
+    position: absolute;
+    top: -6px;
+    left: calc(50% + 18px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--bs-primary);
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.pd-flow-item h3 { font-size: 1.1rem; font-weight: 700; }
+.pd-flow-item p { color: var(--pd-muted); font-size: .92rem; line-height: 1.6; margin: 0; }
+
+/* Tiga peran */
+.pd-role {
+    display: flex;
+    flex: 1;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.75rem;
+    border-radius: 26px;
+}
+
+.pd-role h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: .5rem; }
+.pd-role p { color: var(--pd-muted); line-height: 1.7; margin: 0; }
+.pd-role > div { flex: 1; }
+
+.pd-role-tag {
+    display: inline-block;
+    margin-bottom: .6rem;
+    padding: .2rem .7rem;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--pd-accent, var(--bs-primary));
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+.pd-mock {
+    flex: 0 0 42%;
+    margin: 0;
+    padding: .75rem;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 12px 30px rgba(60, 30, 20, .1);
+    font-size: .8rem;
+}
+
+.pd-mock li { display: grid; grid-template-columns: auto 1fr; gap: 0 .5rem; padding: .5rem; border-bottom: 1px solid #f3ece9; }
+.pd-mock li:last-child { border-bottom: 0; }
+.pd-mock span { grid-column: 1 / -1; color: var(--pd-muted); font-size: .72rem; }
+.pd-mock b { font-weight: 700; }
+.pd-mock em { font-style: normal; font-weight: 700; color: #8a817d; justify-self: end; }
+.pd-mock em.is-ok { color: #23885a; }
+.pd-mock em.is-warn { color: #b7791f; }
+
+/* Sorotan kuis, pembayaran, tarik saldo */
+.pd-highlight { height: 100%; padding: 2rem; border-radius: 26px; transition: transform .2s ease; }
+.pd-highlight:hover { transform: translateY(-4px); }
+.pd-highlight h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: .6rem; }
+.pd-highlight p { color: var(--pd-muted); line-height: 1.7; margin: 0; }
+
+.pd-highlight-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1.25rem;
+    border-radius: 18px;
+    background: #fff;
+    color: var(--pd-accent);
+    font-size: 1.75rem;
+    box-shadow: 0 10px 24px rgba(60, 30, 20, .08);
+}
+
+/* Notifikasi WhatsApp */
+.pd-notify { padding: 2rem; border-radius: 26px; background: #fff; border: 1px solid #f3e6e1; }
+.pd-notify-head { display: flex; gap: 1rem; align-items: center; }
+.pd-notify-head h3 { font-size: 1.3rem; font-weight: 700; }
+.pd-notify-head p { color: var(--pd-muted); }
+.pd-notify-badge { margin: 0; background: #e5f6ec; color: #23885a; flex-shrink: 0; }
+
+.pd-notify-item {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    height: 100%;
+    padding: 1.1rem;
+    border-radius: 16px;
+    background: #fffaf7;
+}
+
+.pd-notify-item i { color: var(--bs-primary); font-size: 1.3rem; }
+.pd-notify-item small { color: var(--pd-muted); line-height: 1.5; }
+
+.pd-calc-inputs--4 { grid-template-columns: repeat(2, 1fr); }
+.pd-calc-inputs--4 input { font-size: 1.3rem; }
+
+@media (max-width: 991.98px) {
+    .pd-flow { grid-template-columns: 1fr; gap: 1.5rem; }
+    .pd-flow::before { top: 0; bottom: 0; left: 31px; right: auto; border-top: 0; border-left: 3px dashed rgba(219, 91, 76, .3); }
+    .pd-flow-item { display: grid; grid-template-columns: 64px 1fr; column-gap: 1rem; text-align: left; }
+    .pd-flow-icon { grid-row: span 2; margin: 0; }
+    .pd-flow-num { left: 46px; }
+    .pd-role { flex-direction: column; align-items: stretch; }
+}
+
+@media (max-width: 575.98px) {
+    .pd-calc-inputs--4 { grid-template-columns: 1fr; }
+}

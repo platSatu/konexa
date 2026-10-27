@@ -204,41 +204,9 @@
         </div>
     </section>
 
-    {{-- ACTION: langkah --}}
-    <section class="pd-section" data-reveal>
-        <div class="container">
-            <h2 class="pd-title text-center">Mulai jual tiket dalam 4 langkah</h2>
-            <ol class="pd-steps list-unstyled row g-4 mt-2">
-                @foreach ($steps as [$title, $text])
-                    <li class="col-md-6 col-lg-3">
-                        <div class="pd-step">
-                            <span class="pd-step-num">{{ $loop->iteration }}</span>
-                            <h3>{{ $title }}</h3>
-                            <p>{{ $text }}</p>
-                        </div>
-                    </li>
-                @endforeach
-            </ol>
-        </div>
-    </section>
-
-    {{-- ACTION: ajakan (gaya CTA yang sama dengan beranda) --}}
-    <section class="cta-section cta-section--default position-relative overflow-hidden" data-reveal>
-        <div class="container position-relative">
-            <div class="cta-card">
-                <span class="cta-ring cta-ring--left" aria-hidden="true"></span>
-                <span class="cta-ring cta-ring--right" aria-hidden="true"></span>
-                <div class="cta-content">
-                    <h2 class="cta-title">Siap jual tiket <span class="cta-highlight">event</span> Anda?</h2>
-                    <p class="cta-subtitle">Daftar gratis, buat page tiket, dan bagikan link-nya hari ini juga.</p>
-                    <div class="cta-buttons">
-                        <a href="{{ $registerUrl }}" class="btn btn-lg cta-btn-primary">Buat Event Sekarang <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
-                        <a href="{{ route('frontend.contact') }}" class="btn btn-lg cta-btn-secondary">Tanya Tim Kami</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {{-- ACTION --}}
+    @include('frontend.produk._steps', ['title' => 'Mulai jual tiket dalam 4 langkah', 'steps' => $steps])
+    @include('frontend.produk._cta', ['before' => 'Siap jual tiket', 'highlight' => 'event', 'after' => ' Anda?', 'subtitle' => 'Daftar gratis, buat page tiket, dan bagikan link-nya hari ini juga.', 'button' => 'Buat Event Sekarang'])
 
     @include('frontend.partials.footer')
 @endsection
