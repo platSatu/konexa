@@ -1,134 +1,88 @@
 {{--
-    Hero/header homepage — diambil dari API backend Teleios (lihat
-    App\Services\TeleiosApiService::getHeaders(), sumber:
-    App\Models\WebHeader / menu Superadmin > Web > Headers di teleios).
-    Tiap slide bisa background gambar atau video (background_type),
-    dengan headline (text) + deskripsi (descriptions) + tombol CTA
-    opsional (button_action = 'active').
-
-    Kalau belum ada slide aktif yang diatur di teleios, $headers kosong
-    dan tampilan jatuh ke hero statis di bawah supaya homepage tidak
-    terlihat kosong.
-
-    Layout konten (headline + deskripsi + tombol) SENGAJA rata kiri
-    (bukan center) — dibungkus .col-lg-6 supaya di layar besar cuma
-    mengisi setengah lebar, background tetap fullsize di belakangnya.
-    Deskripsi pakai class .hero-description (text-align: justify, lihat
-    public/css/frontend.css) sesuai permintaan.
-
-    Tipe Gambar juga punya "turunan" sendiri sekarang, sama seperti
-    Video: thumbnail_background_images_url dirender sebagai placeholder
-    blur-up (blur + scale via CSS) yang tampil di belakang gambar penuh
-    selagi background_images_url dimuat — video pakai thumbnail_images_url
-    sebagai poster, gambar pakai thumbnail_background_images_url sebagai
-    blur-up, sama-sama "turunan" dari media utamanya.
-
-    Sisi kanan (.hero-visual) berisi ilustrasi alur statis
-    (frontend/partials/hero-flow.blade.php); di bawah lg pindah ke bawah teks.
-
-    color_headline / color_description (hex, di-set per slide di
-    Superadmin > Web > Headers) dipakai sebagai warna teks headline &
-    deskripsi kalau diisi — kalau kosong, warna teks ikut default class
-    text-white bawaan section ini.
+    Hero/header homepage (tema terang, senada dengan halaman produk /tiket, /kursus, dst).
+    Judul, deskripsi & tombol per slide dari Superadmin > Web > Headers (TeleiosApiService::getHeaders());
+    kalau belum ada slide aktif dipakai teks bawaan di bawah. Latar dibuat dengan CSS (krem + pola titik
+    + bintang), jadi gambar/video & warna teks slide dari superadmin tidak dipakai di tema ini.
+    Sisi kanan: ilustrasi alur (hero-flow.blade.php), kartunya bisa diklik ke halaman produk.
+    Gaya: public/css/frontend.css bagian "Hero terang".
 --}}
-@if (empty($headers))
-    <section class="position-relative overflow-hidden text-white d-flex align-items-center hero-slide">
-        <video autoplay muted loop playsinline class="position-absolute top-0 start-0 w-100 h-100"
-            style="object-fit: cover; z-index: -2;">
-            <source src="{{ asset('videos/hero.mp4') }}" type="video/mp4">
-        </video>
-        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark" style="opacity: 0.55; z-index: -1;"></div>
+@php
+    $slides = array_values($headers ?? []) ?: [[
+        'text' => 'Satu Aplikasi. Semua Beres.',
+        'descriptions' => 'Registrasi, notifikasi WhatsApp, jadwal, absensi, sampai pembayaran, cukup diurus dalam satu aplikasi.',
+        'button_action' => 'active',
+        'button_text' => 'Coba Sekarang, Gratis!',
+        'button_link' => 'https://app.bizbos.id/auth/register',
+    ]];
+    $multi = count($slides) > 1;
+@endphp
 
-        <div class="container py-5">
-            <div class="row align-items-center g-5">
-                <div class="col-12 col-lg-6 hero-content">
-                    <h1 class="display-4 fw-bold">Selamat Datang di {{ config('app.name') }}</h1>
-                    <p class="lead hero-description">Deskripsi singkat layanan atau produk Anda di sini.</p>
-                    <a href="#about" class="btn btn-primary btn-lg mt-3">Selengkapnya</a>
-                </div>
-                <div class="col-12 col-lg-6 hero-visual">
-                    @include('frontend.partials.hero-flow', ['uid' => 'hero-flow'])
-                </div>
-            </div>
+<section id="heroCarousel" class="hero-light {{ $multi ? 'carousel slide hero-carousel' : '' }}" @if ($multi) data-bs-ride="carousel" data-bs-interval="7000" @endif>
+    <span class="hero-burst hero-burst--left" aria-hidden="true"></span>
+    <span class="hero-burst hero-burst--right" aria-hidden="true"></span>
+
+    @if ($multi)
+        <div class="carousel-indicators">
+            @foreach ($slides as $index => $slide)
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}"
+                    @if ($index === 0) aria-current="true" @endif aria-label="Slide {{ $index + 1 }}"></button>
+            @endforeach
         </div>
-    </section>
-@else
-    <section id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
-        @if (count($headers) > 1)
-            <div class="carousel-indicators">
-                @foreach ($headers as $index => $header)
-                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $index }}"
-                        class="{{ $index === 0 ? 'active' : '' }}"
-                        @if ($index === 0) aria-current="true" @endif
-                        aria-label="Slide {{ $index + 1 }}"></button>
-                @endforeach
-            </div>
-        @endif
+    @endif
 
-        {{-- Performa (LCP): gambar slide pertama langsung diunduh sejak <head>, tidak menunggu CSS. --}}
-        @php $firstHeader = collect($headers)->first() ?? []; @endphp
-        @if (($firstHeader['background_type'] ?? 'image') !== 'video' && ! empty($firstHeader['background_images_url']))
-            @push('styles')
-                <link rel="preload" as="image" href="{{ $firstHeader['background_images_url'] }}" fetchpriority="high">
-            @endpush
-        @endif
-
-        <div class="carousel-inner">
-            @foreach ($headers as $index => $header)
-                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                    <div class="position-relative overflow-hidden text-white d-flex align-items-center hero-slide">
-                        @if (($header['background_type'] ?? 'image') === 'video' && ! empty($header['videos_url']))
-                            <video autoplay muted loop playsinline
-                                @if (! empty($header['thumbnail_images_url'])) poster="{{ $header['thumbnail_images_url'] }}" @endif
-                                class="position-absolute top-0 start-0 w-100 h-100" style="object-fit: cover; z-index: -2;">
-                                <source src="{{ $header['videos_url'] }}" type="video/mp4">
-                            </video>
-                        @elseif (! empty($header['background_images_url']))
-                            @if (! empty($header['thumbnail_background_images_url']))
-                                <img src="{{ $header['thumbnail_background_images_url'] }}" alt="" aria-hidden="true" decoding="async" @if ($index > 0) loading="lazy" @endif
-                                    class="position-absolute top-0 start-0 w-100 h-100"
-                                    style="object-fit: cover; z-index: -3; filter: blur(20px); transform: scale(1.1);">
-                            @endif
-                            <img src="{{ $header['background_images_url'] }}" alt="{{ $header['text'] ?? '' }}" decoding="async"
-                                @if ($index === 0) fetchpriority="high" @else loading="lazy" @endif
-                                class="position-absolute top-0 start-0 w-100 h-100" style="object-fit: cover; z-index: -2;">
-                        @endif
-                        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark" style="opacity: 0.55; z-index: -1;"></div>
-
-                        <div class="container py-5">
-                            <div class="row align-items-center g-5">
-                                <div class="col-12 col-lg-6 hero-content">
-                                    @if (! empty($header['text']))
-                                        <h1 class="display-4 fw-bold"
-                                            @if (! empty($header['color_headline'])) style="color: {{ $header['color_headline'] }};" @endif>{{ $header['text'] }}</h1>
+    <div class="{{ $multi ? 'carousel-inner' : '' }}">
+        @foreach ($slides as $index => $slide)
+            <div class="{{ $multi ? 'carousel-item'.($index === 0 ? ' active' : '') : '' }}">
+                <div class="position-relative d-flex align-items-center hero-slide">
+                    <div class="container py-5">
+                        <div class="row align-items-center g-4 g-lg-5">
+                            <div class="col-12 col-lg-6 hero-content">
+                                <span class="hero-eyebrow"><i class="bi bi-stars"></i> Untuk <span class="pd-rotate" data-words="event|kursus|tagihan|WhatsApp|toko online">event</span></span>
+                                @if (! empty($slide['text']))
+                                    <h1 class="display-4 fw-bold">{{ $slide['text'] }}</h1>
+                                @endif
+                                @if (! empty($slide['descriptions']))
+                                    <p class="lead hero-description">{{ $slide['descriptions'] }}</p>
+                                @endif
+                                <div class="d-flex flex-wrap gap-2 mt-4">
+                                    @if (($slide['button_action'] ?? 'inactive') === 'active' && ! empty($slide['button_text']) && ! empty($slide['button_link']))
+                                        <a href="{{ $slide['button_link'] }}" class="btn btn-primary btn-lg hero-btn">{{ $slide['button_text'] }} <i class="bi bi-arrow-right"></i></a>
                                     @endif
-                                    @if (! empty($header['descriptions']))
-                                        <p class="lead hero-description"
-                                            @if (! empty($header['color_description'])) style="color: {{ $header['color_description'] }};" @endif>{{ $header['descriptions'] }}</p>
-                                    @endif
-                                    @if (($header['button_action'] ?? 'inactive') === 'active' && ! empty($header['button_text']) && ! empty($header['button_link']))
-                                        <a href="{{ $header['button_link'] }}" class="btn btn-primary btn-lg mt-3">{{ $header['button_text'] }}</a>
-                                    @endif
+                                    <a href="#packages" class="btn btn-lg hero-btn hero-btn-ghost"><i class="bi bi-tags"></i> Lihat Harga</a>
                                 </div>
-                                <div class="col-12 col-lg-6 hero-visual">
+                                <ul class="hero-chips list-unstyled mb-0">
+                                    <li><i class="bi bi-check-circle-fill"></i> Daftar gratis</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Trial 7 hari</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Tanpa coding</li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-6 hero-visual">
+                                <div class="hero-parallax" data-hero-parallax>
                                     @include('frontend.partials.hero-flow', ['uid' => 'hero-flow-'.$index])
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            @endforeach
-        </div>
+            </div>
+        @endforeach
+    </div>
+</section>
 
-        @if (count($headers) > 1)
-            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Sebelumnya</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Berikutnya</span>
-            </button>
-        @endif
-    </section>
-@endif
+@push('scripts')
+    <script src="{{ asset('js/produk.js') }}?v={{ filemtime(public_path('js/produk.js')) }}" defer></script>
+    <script>
+        // Ilustrasi bergeser sedikit mengikuti mouse (desktop saja, dimatikan bila "kurangi gerakan").
+        (function () {
+            var hero = document.getElementById('heroCarousel');
+            if (!hero || !window.matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) return;
+            hero.addEventListener('mousemove', function (e) {
+                var r = hero.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+                hero.querySelectorAll('[data-hero-parallax]').forEach(function (el) { el.style.transform = 'translate(' + (x * -18) + 'px,' + (y * -12) + 'px)'; });
+            });
+            hero.addEventListener('mouseleave', function () {
+                hero.querySelectorAll('[data-hero-parallax]').forEach(function (el) { el.style.transform = ''; });
+            });
+        })();
+    </script>
+@endpush

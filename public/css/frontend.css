@@ -2113,3 +2113,108 @@ a.contact-channel:hover {
 @media (max-width: 991.98px) {
     .services-menu { min-width: 0; box-shadow: none; background: #fff8f5; margin-top: .25rem !important; }
 }
+
+/* =====================================================================
+ * Hero terang (frontend/partials/hero.blade.php), senada dengan halaman
+ * produk (/tiket, /kursus, /invoice, /whatsapp): latar krem + pola titik
+ * + bintang merah/kuning, teks gelap, ilustrasi alur dengan "arus" kuning.
+ * Topbar di atasnya tetap transparan tapi teks menunya gelap
+ * (.site-topbar--on-light, lihat topbar.blade.php & frontend.js).
+ * ===================================================================== */
+.hero-light {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    color: #1f1a17;
+    background-color: #fff7f2;
+    background-image:
+        radial-gradient(ellipse 50% 60% at 100% 0%, rgba(255, 200, 87, .38), transparent 70%),
+        radial-gradient(ellipse 45% 60% at 0% 100%, rgba(219, 91, 76, .16), transparent 70%),
+        radial-gradient(circle, rgba(219, 91, 76, .1) 1px, transparent 1.5px);
+    background-size: auto, auto, 22px 22px;
+}
+
+.hero-burst {
+    position: absolute;
+    z-index: -1;
+    width: 240px;
+    height: 240px;
+    background: var(--bs-primary);
+    clip-path: polygon(50% 0, 61% 32%, 95% 22%, 70% 48%, 100% 70%, 64% 68%, 58% 100%, 44% 70%, 10% 88%, 30% 58%, 0 36%, 36% 34%);
+    opacity: .9;
+    pointer-events: none;
+    animation: hero-burst-spin 40s linear infinite;
+}
+
+.hero-burst--left { left: -150px; top: 32%; }
+.hero-burst--right { right: -70px; bottom: -60px; width: 200px; height: 200px; background: #ffc857; animation-direction: reverse; }
+
+@keyframes hero-burst-spin { to { transform: rotate(360deg); } }
+
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    margin-bottom: 1.25rem;
+    padding: .4rem 1rem;
+    border-radius: 999px;
+    background: #fff;
+    color: #6b6461;
+    font-weight: 700;
+    box-shadow: 0 6px 18px rgba(219, 91, 76, .12);
+}
+
+.hero-eyebrow .bi { color: var(--bs-primary); }
+
+.hero-light .pd-rotate {
+    display: inline-block;
+    color: var(--bs-primary);
+    transition: opacity .25s ease, transform .25s ease;
+}
+
+.hero-light .pd-rotate.is-out { opacity: 0; transform: translateY(6px); }
+
+.hero-light .hero-content h1 {
+    -webkit-text-stroke: 0;
+    line-height: 1.1;
+}
+
+.hero-light .hero-description {
+    color: #6b6461;
+    font-weight: 500;
+    line-height: 1.8;
+    text-align: left;
+}
+
+.hero-btn { font-weight: 700; border-radius: 14px; padding: .8rem 1.5rem; }
+.hero-btn-ghost { background: #fff; border: 1px solid rgba(219, 91, 76, .3); color: var(--bs-primary); }
+.hero-btn-ghost:hover { background: #ffece6; color: var(--bs-primary); }
+
+.hero-chips { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; margin-top: 1.5rem; color: #6b6461; }
+.hero-chips .bi { color: #23885a; margin-right: .25rem; }
+
+/* Ilustrasi alur di latar terang + efek mengikuti mouse. */
+.hero-parallax { transition: transform .3s ease-out; }
+.hero-light .hero-flow-rail { stroke: rgba(219, 91, 76, .12); }
+.hero-light .hero-flow-line { stroke: #f0a093; }
+.hero-light .hero-flow-dot { fill: #f59e0b; filter: drop-shadow(0 0 6px rgba(245, 158, 11, .9)); }
+.hero-light .hero-flow-card { filter: drop-shadow(0 10px 24px rgba(60, 30, 20, .13)); }
+.hero-flow-link { cursor: pointer; text-decoration: none; }
+.hero-flow-link .hero-flow-card { transition: stroke .2s ease; }
+.hero-flow-link:hover .hero-flow-card,
+.hero-flow-link:focus-visible .hero-flow-card { stroke: var(--bs-primary); stroke-width: 2.5; }
+
+.hero-light .carousel-indicators [data-bs-target] { background-color: var(--bs-primary); }
+
+/* Topbar transparan di atas hero terang: teks menu gelap, tanpa bayangan teks. */
+.site-topbar--on-light:not(.topbar-scrolled) .navbar-nav .nav-link { text-shadow: none; }
+.site-topbar--on-light:not(.topbar-scrolled) .navbar-toggler { border-color: rgba(0, 0, 0, .15); }
+.site-topbar--on-light .navbar-toggler-icon { filter: none; }
+
+@media (max-width: 991.98px) {
+    .hero-burst--left { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-burst { animation: none; }
+}

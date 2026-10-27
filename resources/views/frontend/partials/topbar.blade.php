@@ -30,7 +30,7 @@
     $isHomepage = request()->routeIs('frontend.index');
 @endphp
 <nav id="siteTopbar"
-    class="navbar navbar-expand-lg site-topbar {{ $isHomepage ? 'site-topbar--overlay navbar-dark' : 'sticky-top navbar-light shadow-sm' }}">
+    class="navbar navbar-expand-lg site-topbar {{ $isHomepage ? 'site-topbar--overlay site-topbar--on-light navbar-light' : 'sticky-top navbar-light shadow-sm' }}">
     <div class="container d-flex align-items-center justify-content-between flex-wrap">
         @include('frontend.partials.header')
         @include('frontend.partials.menu')

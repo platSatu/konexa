@@ -1,5 +1,5 @@
 {{--
-    Ilustrasi alur di sisi kanan hero (frontend/partials/hero.blade.php):
+    Ilustrasi alur di sisi kanan hero (frontend/partials/hero.blade.php), kartu modul bisa diklik ke halaman produk:
     dashboard -> modul (lapis 1), lalu Jadwal -> pengguna (lapis 2).
     Murni SVG + CSS (frontend.css bagian "Ilustrasi alur hero"), titik
     bergerak pakai <animateMotion>. Teks di sini statis, bukan dari Teleios.
@@ -17,12 +17,12 @@
         'teacher' => 'M3 4h18v11H11M7 9a3 3 0 1 0 0-.01M2 21c0-3 2.2-5 5-5s5 2 5 5M14 8h4M14 11h2',
         'admin' => 'M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6zM8.5 12l2.5 2.5 4.5-5',
     ];
-    // [judul, keterangan, ikon, posisi tengah (y), warna latar ikon, warna ikon]
+    // [judul, keterangan, ikon, posisi tengah (y), warna latar ikon, warna ikon, halaman produk]
     $modules = [
-        ['Registrasi', 'Form online', 'form', 70, '#fdecea', '#db5b4c'],
-        ['WhatsApp', 'Notifikasi otomatis', 'wa', 190, '#e6f6ec', '#25a35a'],
-        ['Jadwal', 'Kelas & absensi', 'cal', 310, '#fff4d9', '#c98a00'],
-        ['Pembayaran', 'Tagihan & bayar', 'pay', 430, '#eaf0fb', '#3b6fd1'],
+        ['Registrasi', 'Form & tiket online', 'form', 70, '#fdecea', '#db5b4c', route('frontend.ticket')],
+        ['WhatsApp', 'Notifikasi otomatis', 'wa', 190, '#e6f6ec', '#25a35a', route('frontend.whatsapp')],
+        ['Jadwal', 'Kelas & absensi', 'cal', 310, '#fff4d9', '#c98a00', route('frontend.course')],
+        ['Pembayaran', 'Tagihan & bayar', 'pay', 430, '#eaf0fb', '#3b6fd1', route('frontend.invoice')],
     ];
     $users = [
         ['Murid', 'Jadwal kelas', 'student', 220, '#fff4d9', '#c98a00'],
@@ -90,7 +90,9 @@
     @foreach ($cards as $card)
         @php
             [[$title, $sub, $icon, $cy, $iconBg, $iconColor], $x, $w, $h, $isHub, $delay] = $card;
+            $link = $card[0][6] ?? null;
         @endphp
+        @if ($link)<a href="{{ $link }}" class="hero-flow-link" aria-label="{{ $title }}: {{ $sub }}">@endif
         <g class="hero-flow-node" style="animation-delay: -{{ $delay }}s">
             <rect x="{{ $x }}" y="{{ $cy - $h / 2 }}" width="{{ $w }}" height="{{ $h }}" rx="16"
                 class="hero-flow-card {{ $isHub ? 'hero-flow-card--hub' : '' }}"/>
@@ -99,5 +101,6 @@
             <text x="{{ $x + 64 }}" y="{{ $cy - 3 }}" class="hero-flow-title">{{ $title }}</text>
             <text x="{{ $x + 64 }}" y="{{ $cy + 16 }}" class="hero-flow-sub">{{ $sub }}</text>
         </g>
+        @if ($link)</a>@endif
     @endforeach
 </svg>

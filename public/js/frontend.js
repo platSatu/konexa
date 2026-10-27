@@ -19,9 +19,11 @@ document.addEventListener('DOMContentLoaded', function () {
         var updateTopbarOnScroll = function () {
             var isScrolled = window.scrollY > SCROLL_THRESHOLD;
 
+            var onLight = topbar.classList.contains('site-topbar--on-light'); // hero terang: teks menu selalu gelap
+
             topbar.classList.toggle('topbar-scrolled', isScrolled);
-            topbar.classList.toggle('navbar-light', isScrolled);
-            topbar.classList.toggle('navbar-dark', !isScrolled);
+            topbar.classList.toggle('navbar-light', isScrolled || onLight);
+            topbar.classList.toggle('navbar-dark', !isScrolled && !onLight);
         };
 
         updateTopbarOnScroll();
