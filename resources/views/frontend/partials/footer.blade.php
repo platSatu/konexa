@@ -91,6 +91,7 @@
                 {{-- Nama brand dari APP_NAME (.env). --}}
                 {{-- Nama PT dari Superadmin > Web > Pengaturan (company_name, nullable) -- kosong = APP_NAME. --}}
                 <span class="small footer-copyright">&copy; {{ date('Y') }} {{ rtrim((string) (data_get($webSetting, 'company_name') ?: config('app.name')), '.') }}. All rights reserved.</span>
+                <a href="#" class="small footer-copyright" onclick="window.bizbosCookieSettings && window.bizbosCookieSettings(); return false;">Pengaturan Cookie</a>
             </div>
 
             {{--

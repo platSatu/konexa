@@ -69,9 +69,10 @@
 
         (function () {
             var events = ['scroll', 'pointerdown', 'touchstart', 'keydown'];
+            // Pixel hanya dimuat kalau pengunjung sudah memilih "Terima Semua" (lihat cookie-consent.blade.php).
             var start = function () {
                 events.forEach(function (e) { window.removeEventListener(e, start, { passive: true }); });
-                window.bizbosLoadPixels();
+                window.bizbosConsent ? window.bizbosConsent.onGrant(window.bizbosLoadPixels) : window.bizbosLoadPixels();
             };
             events.forEach(function (e) { window.addEventListener(e, start, { passive: true, once: true }); });
             window.addEventListener('load', function () { setTimeout(start, 6000); });

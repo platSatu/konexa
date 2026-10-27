@@ -75,9 +75,12 @@
         <meta name="twitter:image" content="{{ $shareImage }}">
     @endif
 
-    {{-- Google Tag Manager --}}
+    {{-- Persetujuan cookie: analitik & iklan baru dimuat setelah pengunjung memilih "Terima Semua". --}}
+    @include('frontend.partials.cookie-consent', ['part' => 'head'])
+
+    {{-- Google Tag Manager (setelah persetujuan cookie) --}}
     @if (data_get($webSetting, 'google_tag'))
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',{{ \Illuminate\Support\Js::from((string) $webSetting['google_tag']) }});</script>
+        <script>bizbosConsent.onGrant(function () { (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',{{ \Illuminate\Support\Js::from((string) $webSetting['google_tag']) }}); });</script>
     @endif
 
     {{-- GA4, Google Ads, Meta Pixel, TikTok Pixel + event retargeting --}}
@@ -124,15 +127,12 @@
 </head>
 <body>
 
-    {{-- Google Tag Manager (noscript, wajib persis setelah <body>) --}}
-    @if (data_get($webSetting, 'google_tag'))
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ urlencode($webSetting['google_tag']) }}"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    @endif
+    {{-- GTM versi <noscript> sengaja tidak dipasang: tanpa JavaScript, persetujuan cookie tidak bisa diminta. --}}
 
     @yield('content')
 
     @include('frontend.partials.chat-widget')
+    @include('frontend.partials.cookie-consent', ['part' => 'body'])
 
     <!-- Bootstrap 5 JS Bundle (CDN) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
