@@ -18,55 +18,89 @@
         $contactAddress = data_get($webSetting, 'address');
     @endphp
 
-    <section class="py-5 contact-hero">
+    {{-- Tema terang seperti beranda & halaman produk (frontend.css bagian "Hero terang" + "Kontak modern"). --}}
+    <section class="hero-light contact-page">
+        <span class="hero-burst hero-burst--left" aria-hidden="true"></span>
+        <span class="hero-burst hero-burst--right" aria-hidden="true"></span>
         <div class="container">
             <div class="text-center mb-5">
-                <p class="text-muted small mb-2">{{ config('app.name') }} &bull; Kontak</p>
-                <h1 class="contact-title mb-3">Hubungi Kami</h1>
+                <span class="hero-eyebrow"><i class="bi bi-chat-heart"></i> Kontak</span>
+                <h1 class="contact-title mb-3">Ada yang bisa kami <span class="contact-highlight">bantu?</span></h1>
                 <p class="text-muted mx-auto contact-subtitle mb-0">
-                    Ada pertanyaan soal chatbot AI, broadcast WhatsApp, CRM, atau paket harga? Tim kami siap membantu menjawab semuanya.
+                    Tanya soal paket, fitur, atau cara memakai {{ config('app.name') }}. Tim kami siap membantu, tanpa jawaban robot yang berbelit.
                 </p>
             </div>
 
-            <div class="row g-4 justify-content-center">
-                {{-- Kanal kontak langsung --}}
-                <div class="col-12 col-lg-4">
-                    <div class="d-flex flex-column gap-3 h-100">
-                        @if ($waNumber !== '')
-                            <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener" class="contact-channel">
-                                <span class="contact-channel-icon contact-channel-icon--wa"><i class="bi bi-whatsapp"></i></span>
-                                <span>
-                                    <span class="d-block fw-bold">WhatsApp</span>
-                                    <span class="d-block text-muted small">Balasan paling cepat</span>
-                                </span>
-                            </a>
-                        @endif
+            <div class="row g-4 justify-content-center align-items-stretch">
+                {{-- Kanal kontak: selalu ada live chat; WhatsApp/Email/Alamat tampil kalau diisi di Pengaturan Web. --}}
+                <div class="col-12 col-lg-5 col-xl-4">
+                    <aside class="contact-panel h-100">
+                        <h2 class="h4 fw-bold mb-2">Ngobrol langsung</h2>
+                        <p class="contact-panel-lead">Pilih cara yang paling nyaman. Pesan dari form di samping juga langsung masuk ke tim kami.</p>
 
-                        @if ($contactEmail)
-                            <a href="mailto:{{ $contactEmail }}" class="contact-channel">
-                                <span class="contact-channel-icon"><i class="bi bi-envelope"></i></span>
-                                <span class="text-break">
-                                    <span class="d-block fw-bold">Email</span>
-                                    <span class="d-block text-muted small">{{ $contactEmail }}</span>
+                        <div class="d-flex flex-column gap-2">
+                            <button type="button" class="contact-channel" data-chat-open>
+                                <span class="contact-channel-icon contact-channel-icon--chat"><i class="bi bi-chat-dots"></i></span>
+                                <span class="text-start">
+                                    <span class="d-block fw-bold">Live chat</span>
+                                    <span class="d-block small contact-channel-hint">Langsung dijawab di halaman ini</span>
                                 </span>
-                            </a>
-                        @endif
+                                <i class="bi bi-arrow-right ms-auto"></i>
+                            </button>
 
-                        @if ($contactAddress)
-                            <div class="contact-channel">
-                                <span class="contact-channel-icon"><i class="bi bi-geo-alt"></i></span>
-                                <span>
-                                    <span class="d-block fw-bold">Alamat</span>
-                                    <span class="d-block text-muted small">{{ $contactAddress }}</span>
-                                </span>
-                            </div>
-                        @endif
-                    </div>
+                            @if ($waNumber !== '')
+                                <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener" class="contact-channel">
+                                    <span class="contact-channel-icon contact-channel-icon--wa"><i class="bi bi-whatsapp"></i></span>
+                                    <span>
+                                        <span class="d-block fw-bold">WhatsApp</span>
+                                        <span class="d-block small contact-channel-hint">Balasan paling cepat</span>
+                                    </span>
+                                    <i class="bi bi-arrow-right ms-auto"></i>
+                                </a>
+                            @endif
+
+                            @if ($contactEmail)
+                                <a href="mailto:{{ $contactEmail }}" class="contact-channel">
+                                    <span class="contact-channel-icon"><i class="bi bi-envelope"></i></span>
+                                    <span class="text-break">
+                                        <span class="d-block fw-bold">Email</span>
+                                        <span class="d-block small contact-channel-hint">{{ $contactEmail }}</span>
+                                    </span>
+                                </a>
+                            @endif
+
+                            @if ($contactAddress)
+                                <div class="contact-channel">
+                                    <span class="contact-channel-icon"><i class="bi bi-geo-alt"></i></span>
+                                    <span>
+                                        <span class="d-block fw-bold">Alamat</span>
+                                        <span class="d-block small contact-channel-hint">{{ $contactAddress }}</span>
+                                    </span>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="contact-links">
+                            <span class="small fw-bold d-block mb-2">Mungkin yang Anda cari</span>
+                            <a href="{{ route('frontend.index') }}#packages"><i class="bi bi-tags"></i> Paket & harga</a>
+                            <a href="{{ route('frontend.index') }}#faq"><i class="bi bi-question-circle"></i> Pertanyaan umum (FAQ)</a>
+                            <a href="{{ route('frontend.terms') }}"><i class="bi bi-file-earmark-text"></i> Syarat & Ketentuan</a>
+                        </div>
+
+                        {{-- Ilustrasi percakapan (hiasan, bukan data asli). --}}
+                        <div class="contact-art" aria-hidden="true">
+                            <p class="contact-bubble">Halo, mau tanya paket yang cocok untuk kursus 👋</p>
+                            <p class="contact-bubble contact-bubble--out">Boleh! Kami bantu pilihkan ya 😊</p>
+                        </div>
+                    </aside>
                 </div>
 
                 {{-- Form: dikirim ke Teleios (Superadmin > Web > Pesan Masuk + email Pengaturan Web) --}}
                 <div class="col-12 col-lg-7">
-                    <div class="contact-form-card">
+                    <div class="contact-form-card h-100">
+                        <h2 class="h4 fw-bold mb-1">Kirim pesan</h2>
+                        <p class="text-muted small mb-4">Kami balas ke email atau WhatsApp Anda secepatnya di jam kerja.</p>
+
                         @if (session('contact_success'))
                             <div class="alert alert-success d-flex gap-2 align-items-start" role="alert">
                                 <i class="bi bi-check-circle-fill"></i>
@@ -89,39 +123,36 @@
                             </div>
 
                             <div class="row g-3">
-                                <div class="col-12 col-md-6">
-                                    <label for="name" class="form-label small fw-semibold">Nama</label>
-                                    <input type="text" name="name" id="name" maxlength="100" value="{{ old('name') }}"
-                                        class="form-control contact-input @error('name') is-invalid @enderror" placeholder="Nama Anda" required>
-                                    @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="email" class="form-label small fw-semibold">Email</label>
-                                    <input type="email" name="email" id="email" maxlength="150" value="{{ old('email') }}"
-                                        class="form-control contact-input @error('email') is-invalid @enderror" placeholder="nama@email.com" required>
-                                    @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="phone" class="form-label small fw-semibold">No. HP / WhatsApp</label>
-                                    <input type="tel" name="phone" id="phone" maxlength="20" value="{{ old('phone') }}"
-                                        class="form-control contact-input @error('phone') is-invalid @enderror" placeholder="0812 3456 7890" required>
-                                    @error('phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="topic" class="form-label small fw-semibold">Topik</label>
-                                    <select name="topic" id="topic" class="form-select contact-input @error('topic') is-invalid @enderror" required>
-                                        <option value="" disabled @selected(! old('topic'))>Pilih topik</option>
+                                <div class="col-12">
+                                    <span class="form-label small fw-semibold d-block">Topik</span>
+                                    <div class="contact-topics @error('topic') is-invalid @enderror" role="radiogroup" aria-label="Topik">
                                         @foreach ($topics as $topic)
-                                            <option value="{{ $topic }}" @selected(old('topic') === $topic)>{{ $topic }}</option>
+                                            <input type="radio" class="btn-check" name="topic" id="topic-{{ $loop->index }}" value="{{ $topic }}" @checked(old('topic') === $topic) required>
+                                            <label class="contact-topic" for="topic-{{ $loop->index }}">{{ $topic }}</label>
                                         @endforeach
-                                    </select>
-                                    @error('topic')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    </div>
+                                    @error('topic')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                 </div>
+                                @foreach ([
+                                    ['name', 'Nama', 'text', 'person', 'Nama Anda', 100, 'name'],
+                                    ['email', 'Email', 'email', 'envelope', 'nama@email.com', 150, 'email'],
+                                    ['phone', 'No. HP / WhatsApp', 'tel', 'phone', '0812 3456 7890', 20, 'tel'],
+                                ] as [$field, $label, $type, $icon, $placeholder, $max, $autocomplete])
+                                    <div class="col-12 {{ $field === 'phone' ? '' : 'col-md-6' }}">
+                                        <label for="{{ $field }}" class="form-label small fw-semibold">{{ $label }}</label>
+                                        <div class="contact-field">
+                                            <i class="bi bi-{{ $icon }}" aria-hidden="true"></i>
+                                            <input type="{{ $type }}" name="{{ $field }}" id="{{ $field }}" maxlength="{{ $max }}" value="{{ old($field) }}" autocomplete="{{ $autocomplete }}"
+                                                class="form-control contact-input @error($field) is-invalid @enderror" placeholder="{{ $placeholder }}" required>
+                                        </div>
+                                        @error($field)<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                    </div>
+                                @endforeach
                                 <div class="col-12">
                                     <label for="message" class="form-label small fw-semibold">Pesan</label>
                                     <textarea name="message" id="message" rows="5" maxlength="3000"
                                         class="form-control contact-input contact-textarea @error('message') is-invalid @enderror"
-                                        placeholder="Ada yang bisa kami bantu?" required>{{ old('message') }}</textarea>
+                                        placeholder="Ceritakan kebutuhan atau kendala Anda..." required>{{ old('message') }}</textarea>
                                     @error('message')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
                                 <div class="col-12 d-flex flex-wrap align-items-center justify-content-between gap-3">

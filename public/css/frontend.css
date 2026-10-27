@@ -2218,3 +2218,78 @@ a.contact-channel:hover {
 @media (prefers-reduced-motion: reduce) {
     .hero-burst { animation: none; }
 }
+
+/* =====================================================================
+ * Kontak modern (kontak.blade.php): latar terang dari .hero-light, panel
+ * merah berisi kanal kontak (live chat selalu ada, WA/email/alamat bila
+ * diisi di Pengaturan Web), form dengan topik berupa pilihan pil.
+ * ===================================================================== */
+.contact-page { padding: 4.5rem 0 5rem; }
+.contact-title { font-size: clamp(2.2rem, 4.5vw, 3.2rem); }
+.contact-highlight { color: var(--bs-primary); }
+
+.contact-panel {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border-radius: 24px;
+    color: #fff;
+    background-color: var(--bs-primary);
+    background-image:
+        radial-gradient(ellipse 60% 50% at 100% 0%, rgba(255, 200, 87, .45), transparent 70%),
+        radial-gradient(circle, rgba(255, 255, 255, .14) 1px, transparent 1.5px);
+    background-size: auto, 20px 20px;
+    box-shadow: 0 24px 50px rgba(219, 91, 76, .28);
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-art { display: flex; flex-direction: column; gap: .5rem; margin-top: auto; padding-top: 2rem; }
+.contact-bubble { align-self: flex-start; max-width: 85%; margin: 0; padding: .6rem .9rem; border-radius: 4px 16px 16px 16px; background: rgba(255, 255, 255, .2); font-size: .9rem; animation: float-soft 6s ease-in-out infinite; }
+.contact-bubble--out { align-self: flex-end; border-radius: 16px 4px 16px 16px; background: #fff; color: #1f1a17; animation-delay: -3s; }
+
+.contact-panel-lead { color: rgba(255, 255, 255, .85); margin-bottom: 1.5rem; }
+
+.contact-panel .contact-channel {
+    width: 100%;
+    border: 0;
+    background: rgba(255, 255, 255, .96);
+    color: #1f1a17;
+    cursor: pointer;
+}
+
+.contact-panel div.contact-channel { cursor: default; }
+.contact-panel .contact-channel .bi-arrow-right { color: var(--bs-primary); transition: transform .2s ease; }
+.contact-panel .contact-channel:hover .bi-arrow-right { transform: translateX(4px); }
+.contact-channel-hint { color: #7a716d; }
+.contact-channel-icon--chat { background: #fff4d6; color: #b7791f; }
+
+.contact-links { margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px dashed rgba(255, 255, 255, .4); }
+.contact-links a { display: flex; align-items: center; gap: .5rem; padding: .3rem 0; color: #fff; text-decoration: none; font-weight: 600; }
+.contact-links a:hover { text-decoration: underline; }
+
+.contact-page .contact-form-card { border: 0; border-radius: 24px; box-shadow: 0 24px 50px rgba(60, 30, 20, .1); }
+
+.contact-topics { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+.contact-topic {
+    padding: .5rem 1rem;
+    border: 1px solid rgba(219, 91, 76, .25);
+    border-radius: 999px;
+    background: #fff;
+    color: #6b6461;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease;
+}
+
+.contact-topic:hover { background: #fff4ef; }
+.btn-check:checked + .contact-topic { background: var(--bs-primary); border-color: var(--bs-primary); color: #fff; }
+.btn-check:focus-visible + .contact-topic { box-shadow: 0 0 0 .2rem rgba(219, 91, 76, .25); }
+
+.contact-field { position: relative; }
+.contact-field > .bi { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #a39a96; pointer-events: none; }
+.contact-field .contact-input { padding-left: 2.6rem; }
+.contact-page .contact-input { background: #faf7f5; border-color: transparent; }
+.contact-page .contact-input:focus { background: #fff; border-color: var(--bs-primary); box-shadow: 0 0 0 .2rem rgba(219, 91, 76, .15); }
