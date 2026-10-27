@@ -21,6 +21,7 @@ class SitemapController extends Controller
                 ['loc' => route('frontend.index'), 'priority' => '1.0'],
                 ['loc' => route('frontend.articles'), 'priority' => '0.8'],
                 ['loc' => route('frontend.videos'), 'priority' => '0.6'],
+                ['loc' => route('frontend.ticket'), 'priority' => '0.9'],
                 ['loc' => route('frontend.contact'), 'priority' => '0.6'],
                 ['loc' => route('frontend.terms'), 'priority' => '0.3'],
             ]);

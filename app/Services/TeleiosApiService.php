@@ -113,6 +113,16 @@ class TeleiosApiService
     }
 
     /**
+     * Biaya layanan tiket dari superadmin: ['fee_percent' => float, 'free_allowance' => int], atau null.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getTicketFee(): ?array
+    {
+        return $this->data('/api/frontend/ticket-fee', null);
+    }
+
+    /**
      * Susunan section beranda (Teleios: Superadmin > Web > Susunan
      * Beranda, App\Models\WebHomeSection). Kosong kalau Teleios tidak
      * bisa dihubungi -- FrontendController lalu memakai susunan default.

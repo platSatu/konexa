@@ -102,6 +102,15 @@ class FrontendController extends Controller
     }
 
     /**
+     * Halaman produk Tiket (/tiket). Persen biaya & kuota event gratis diambil dari app.bizbos
+     * (diatur superadmin); kalau tidak bisa dihubungi, kalkulator disembunyikan.
+     */
+    public function ticket(): View
+    {
+        return view('frontend.produk.tiket', ['ticketFee' => $this->teleiosApi->getTicketFee()]);
+    }
+
+    /**
      * Detail artikel (/artikel/{slug}).
      */
     public function article(string $slug): View

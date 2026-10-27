@@ -15,6 +15,7 @@ Route::middleware('log.visitor')->group(function () {
     Route::get('/syarat-dan-ketentuan', [FrontendController::class, 'terms'])->name('frontend.terms');
     Route::get('/video', [FrontendController::class, 'videos'])->name('frontend.videos');
     Route::get('/kontak', [FrontendController::class, 'contact'])->name('frontend.contact');
+    Route::get('/tiket', [FrontendController::class, 'ticket'])->name('frontend.ticket');
     Route::get('/page/{slug}', [FrontendController::class, 'page'])->where('slug', '[a-z0-9-]+')->name('frontend.page');
 });
 

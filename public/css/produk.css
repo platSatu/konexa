@@ -1,0 +1,352 @@
+/*
+ * Halaman produk (bizbos.id/tiket, nanti juga Invoice, WhatsApp, Jadwal).
+ * Warna cerah pastel dipadukan merah bizbos (--bs-primary dari frontend.css).
+ * Dimuat hanya di halaman produk lewat @push('styles').
+ */
+:root {
+    --pd-ink: #1f1a17;
+    --pd-muted: #6b6461;
+    --pd-cream: #fff7f2;
+    --pd-sun: #ffc857;
+    --pd-tone-peach: #ffece6;
+    --pd-tone-sun: #fff4d6;
+    --pd-tone-mint: #e5f6ec;
+    --pd-tone-sky: #e6f0fc;
+    --pd-tone-lilac: #efeafb;
+}
+
+.pd-tone--peach { background-color: var(--pd-tone-peach); --pd-accent: #d9533f; }
+.pd-tone--sun { background-color: var(--pd-tone-sun); --pd-accent: #b7791f; }
+.pd-tone--mint { background-color: var(--pd-tone-mint); --pd-accent: #23885a; }
+.pd-tone--sky { background-color: var(--pd-tone-sky); --pd-accent: #2f6fba; }
+.pd-tone--lilac { background-color: var(--pd-tone-lilac); --pd-accent: #6a4fc1; }
+
+/* ---------- Hero (Attention) ---------- */
+.pd-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 4.5rem 0 5rem;
+    background-color: var(--pd-cream);
+    background-image:
+        radial-gradient(ellipse 50% 60% at 100% 0%, rgba(255, 200, 87, .35), transparent 70%),
+        radial-gradient(ellipse 45% 60% at 0% 100%, rgba(219, 91, 76, .14), transparent 70%),
+        radial-gradient(circle, rgba(219, 91, 76, .1) 1px, transparent 1.5px);
+    background-size: auto, auto, 22px 22px;
+    color: var(--pd-ink);
+}
+
+.pd-burst {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    background: var(--bs-primary);
+    clip-path: polygon(50% 0, 61% 32%, 95% 22%, 70% 48%, 100% 70%, 64% 68%, 58% 100%, 44% 70%, 10% 88%, 30% 58%, 0 36%, 36% 34%);
+    opacity: .9;
+    pointer-events: none;
+}
+
+.pd-burst--left { left: -130px; top: 30%; transform: rotate(-12deg); }
+.pd-burst--right { right: -60px; bottom: -40px; width: 180px; height: 180px; background: var(--pd-sun); transform: rotate(18deg); }
+
+.pd-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .35rem .9rem;
+    margin-bottom: 1.25rem;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--bs-primary);
+    font-weight: 700;
+    font-size: .9rem;
+    box-shadow: 0 6px 18px rgba(219, 91, 76, .12);
+}
+
+.pd-hero-title {
+    font-size: clamp(2.3rem, 5vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: .5rem;
+}
+
+.pd-script {
+    color: var(--bs-primary);
+    font-style: italic;
+}
+
+.pd-hero-ask {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.pd-rotate {
+    display: inline-block;
+    padding: 0 .35rem;
+    border-radius: 8px;
+    background: linear-gradient(transparent 55%, rgba(255, 200, 87, .7) 55%);
+    color: var(--bs-primary);
+    transition: opacity .25s ease, transform .25s ease;
+}
+
+.pd-rotate.is-out { opacity: 0; transform: translateY(6px); }
+
+.pd-hero-lead {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--pd-muted);
+    max-width: 34rem;
+    margin-bottom: 1.75rem;
+}
+
+.pd-btn { font-weight: 700; border-radius: 14px; padding: .8rem 1.5rem; }
+
+.pd-btn-ghost {
+    background: #fff;
+    border: 1px solid rgba(219, 91, 76, .3);
+    color: var(--bs-primary);
+}
+
+.pd-btn-ghost:hover { background: var(--pd-tone-peach); color: var(--bs-primary); }
+
+.pd-chips { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; font-size: .95rem; color: var(--pd-muted); }
+.pd-chips i { color: #23885a; margin-right: .25rem; }
+
+.pd-hero-visual { position: relative; padding: 1rem 0 3rem; }
+
+.pd-shot {
+    margin: 0;
+    overflow: hidden;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 24px 60px rgba(60, 30, 20, .16);
+}
+
+.pd-shot img { display: block; width: 100%; height: auto; }
+.pd-shot--back { transform: rotate(2deg); border: 6px solid #fff; }
+.pd-shot--front { position: absolute; left: -6%; bottom: 0; width: 72%; transform: rotate(-4deg); border-radius: 16px; }
+.pd-shot--flat { border: 6px solid #fff; }
+
+.pd-float {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .65rem .95rem;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 12px 30px rgba(60, 30, 20, .15);
+    font-size: .85rem;
+    line-height: 1.2;
+    animation: pd-bob 4s ease-in-out infinite;
+}
+
+.pd-float i { font-size: 1.4rem; }
+.pd-float small { display: block; color: var(--pd-muted); }
+.pd-float--sold { right: -2%; top: -4%; }
+.pd-float--sold i { color: #23885a; }
+.pd-float--scan { right: 4%; bottom: 8%; animation-delay: -2s; }
+.pd-float--scan i { color: var(--bs-primary); }
+
+@keyframes pd-bob { 50% { transform: translateY(-8px); } }
+
+/* ---------- Section umum ---------- */
+.pd-section { padding: 5rem 0; color: var(--pd-ink); }
+.pd-section--soft { background: #fffaf7; }
+
+.pd-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.pd-lead { font-size: 1.05rem; line-height: 1.8; color: var(--pd-muted); }
+
+.pd-checks li { position: relative; padding-left: 1.9rem; margin-bottom: .7rem; line-height: 1.6; }
+
+.pd-checks li::before {
+    content: "\F26B"; /* bi-check-circle-fill */
+    font-family: "bootstrap-icons";
+    position: absolute;
+    left: 0;
+    top: .05rem;
+    color: var(--bs-primary);
+}
+
+/* Jenis event (Interest) */
+.pd-type {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    height: 100%;
+    padding: 1.1rem 1.25rem;
+    border-radius: 18px;
+    font-weight: 700;
+    transition: transform .2s ease;
+}
+
+.pd-type i { font-size: 1.5rem; color: var(--pd-accent); }
+.pd-type:hover { transform: translateY(-3px); }
+
+/* Fitur bento (Interest) */
+.pd-bento {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 360px;
+    overflow: hidden;
+    border-radius: 26px;
+    padding: 2.25rem 2.25rem 0;
+}
+
+.pd-bento-text { max-width: 30rem; }
+.pd-bento h3, .pd-card h3 { font-size: 1.35rem; font-weight: 700; margin-bottom: .6rem; }
+.pd-bento p, .pd-card p { color: var(--pd-muted); line-height: 1.7; margin-bottom: 0; }
+
+.pd-bento-img {
+    display: block;
+    width: 88%;
+    height: auto;
+    margin: 1.75rem 0 -1.5rem auto;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 16px 40px rgba(60, 30, 20, .14);
+    transform: rotate(-2deg);
+}
+
+.pd-bento-img--edge { width: 130%; max-width: none; margin-right: -45%; transform: none; }
+
+.pd-card { height: 100%; padding: 1.75rem; border-radius: 22px; transition: transform .2s ease; }
+.pd-card:hover { transform: translateY(-4px); }
+
+.pd-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+    border-radius: 14px;
+    background: #fff;
+    color: var(--pd-accent);
+    font-size: 1.4rem;
+}
+
+/* Kalkulator (Desire) */
+.pd-calc {
+    padding: 2rem;
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 20px 50px rgba(60, 30, 20, .1);
+    border: 1px solid #f3e6e1;
+}
+
+.pd-calc-head { font-weight: 700; font-size: 1.15rem; margin-bottom: 1rem; }
+.pd-calc-head i { color: var(--bs-primary); }
+
+.pd-calc-modes { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
+
+.pd-calc-modes label {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .45rem .9rem;
+    border-radius: 999px;
+    background: var(--pd-tone-peach);
+    font-weight: 600;
+    font-size: .9rem;
+    cursor: pointer;
+}
+
+.pd-calc-modes input { accent-color: var(--bs-primary); }
+
+.pd-calc-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-radius: 18px;
+    background: #f7f5f4;
+}
+
+.pd-calc-inputs label { font-size: .85rem; color: var(--pd-muted); }
+
+.pd-calc-inputs input {
+    display: block;
+    width: 100%;
+    margin-top: .25rem;
+    border: 0;
+    border-bottom: 2px solid #e4dcd8;
+    background: transparent;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--pd-ink);
+    outline: 0;
+}
+
+.pd-calc-inputs input:focus { border-color: var(--bs-primary); }
+
+.pd-calc-rows { margin: 1.25rem 0 1rem; }
+.pd-calc-rows > div { display: flex; justify-content: space-between; gap: 1rem; padding: .55rem 0; border-bottom: 1px dashed #eee3df; }
+.pd-calc-rows dt { font-weight: 400; color: var(--pd-muted); }
+.pd-calc-rows dd { margin: 0; font-weight: 700; white-space: nowrap; }
+
+.pd-calc-net {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-radius: 16px;
+    background: var(--pd-tone-mint);
+    color: #1d6f49;
+    font-weight: 700;
+}
+
+.pd-calc-net strong { font-size: 1.5rem; }
+.pd-calc-note { margin: .75rem 0 0; font-size: .8rem; color: var(--pd-muted); }
+
+/* Langkah (Action) */
+.pd-step { position: relative; height: 100%; padding: 1.75rem; border-radius: 22px; background: #fff; border: 1px solid #f3e6e1; }
+
+.pd-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    background: var(--bs-primary);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.2rem;
+    box-shadow: 0 0 0 6px var(--pd-tone-peach);
+}
+
+.pd-step h3 { font-size: 1.15rem; font-weight: 700; }
+.pd-step p { color: var(--pd-muted); margin: 0; line-height: 1.6; }
+
+/* Animasi muncul (memakai [data-reveal] dari frontend.js) */
+.reveal-ready .pd-section[data-reveal]:not(.is-visible) .container { opacity: 0; transform: translateY(18px); }
+.reveal-ready .pd-section[data-reveal] .container { transition: opacity .6s ease, transform .6s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+    .pd-float { animation: none; }
+}
+
+@media (max-width: 991.98px) {
+    .pd-hero { padding: 3rem 0 3.5rem; }
+    .pd-burst--left { display: none; }
+    .pd-shot--front { left: 0; width: 80%; }
+    .pd-float--sold { right: 0; top: -1rem; }
+    .pd-section { padding: 3.5rem 0; }
+    .pd-bento { min-height: 0; padding: 1.75rem 1.5rem 0; }
+    .pd-bento-img--edge { width: 100%; margin-right: 0; }
+}
+
+@media (max-width: 575.98px) {
+    .pd-calc { padding: 1.25rem; }
+    .pd-calc-inputs { grid-template-columns: 1fr; }
+    .pd-float--scan { display: none; }
+}
