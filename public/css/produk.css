@@ -443,7 +443,7 @@
 .pd-mock li:last-child { border-bottom: 0; }
 .pd-mock span { grid-column: 1 / -1; color: var(--pd-muted); font-size: .72rem; }
 .pd-mock b { font-weight: 700; }
-.pd-mock em { font-style: normal; font-weight: 700; color: #8a817d; justify-self: end; }
+.pd-mock em { font-style: normal; font-weight: 700; color: #8a817d; justify-self: end; white-space: nowrap; }
 .pd-mock em.is-ok { color: #23885a; }
 .pd-mock em.is-warn { color: #b7791f; }
 
@@ -487,8 +487,6 @@
 .pd-notify-item i { color: var(--bs-primary); font-size: 1.3rem; }
 .pd-notify-item small { color: var(--pd-muted); line-height: 1.5; }
 
-.pd-calc-inputs--4 { grid-template-columns: repeat(2, 1fr); }
-.pd-calc-inputs--4 input { font-size: 1.3rem; }
 
 @media (max-width: 991.98px) {
     .pd-flow { grid-template-columns: 1fr; gap: 1.5rem; }
@@ -497,8 +495,4 @@
     .pd-flow-icon { grid-row: span 2; margin: 0; }
     .pd-flow-num { left: 46px; }
     .pd-role { flex-direction: column; align-items: stretch; }
-}
-
-@media (max-width: 575.98px) {
-    .pd-calc-inputs--4 { grid-template-columns: 1fr; }
 }

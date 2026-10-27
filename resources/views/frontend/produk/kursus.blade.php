@@ -40,6 +40,12 @@
         ['robot', 'Auto reply', 'Pertanyaan calon murid tetap terjawab di luar jam kerja.'],
     ];
 
+    $benefits = [
+        ['folder-check', 'Data tidak lagi tercecer', 'Murid, jadwal, absensi, dan tagihan tersimpan di satu tempat, mudah dicari kapan saja.', 'sky'],
+        ['person-workspace', 'Honor pengajar lebih tertib', 'Bagian untuk pengajar tercatat otomatis dari setiap absensi, sehingga pembagian hasil lebih rapi dan transparan.', 'mint'],
+        ['emoji-smile', 'Orang tua lebih tenang', 'Orang tua dapat memantau jadwal dan kehadiran anak, serta menerima kabar penting tepat waktu.', 'peach'],
+    ];
+
     $steps = [
         ['Buat kelas', 'Isi mata pelajaran, paket harga per bulan, dan jumlah pertemuan.'],
         ['Bagikan link daftar', 'Kirim link pendaftaran murid dan pengajar, lalu setujui pendaftarnya.'],
@@ -157,7 +163,7 @@
                         <div>
                             <span class="pd-role-tag">Pengajar</span>
                             <h3>Absen dari HP, honor dihitung sendiri</h3>
-                            <p>Pengajar melihat jadwal mengajarnya dan mengisi absensi selepas kelas. Honor mengikuti absensi itu.</p>
+                            <p>Pengajar melihat jadwal mengajarnya dan mengisi absensi selepas kelas. Bagian honornya ikut tercatat dari absensi tersebut.</p>
                         </div>
                         <ul class="pd-mock list-unstyled" aria-hidden="true">
                             <li><span>16.00</span><b>Matematika SD</b><em class="is-ok">3 hadir</em></li>
@@ -206,37 +212,20 @@
         </div>
     </section>
 
-    {{-- DESIRE: kalkulator honor (rumus sama dengan ScheduleGrade di app.bizbos) --}}
-    <section class="pd-section" id="honor" data-reveal>
+    {{-- DESIRE: kenapa pemilik kursus memilih bizbos --}}
+    <section class="pd-section" data-reveal>
         <div class="container">
-            <div class="row g-4 g-lg-5 align-items-center">
-                <div class="col-lg-5">
-                    <h2 class="pd-title">Honor pengajar terhitung otomatis</h2>
-                    <p class="pd-lead">Tentukan harga paket per bulan, jumlah pertemuan, dan persen untuk pengajar. Setiap kali absensi diisi, bagian pengajar dan bagian kursus langsung terhitung.</p>
-                    <ul class="pd-checks list-unstyled">
-                        <li>Hadir dan alpa tetap dihitung honor.</li>
-                        <li>Izin tidak dihitung, dan bisa dibuatkan sesi pengganti.</li>
-                        <li>Pembulatan rapi, tidak ada rupiah yang hilang.</li>
-                    </ul>
-                </div>
-                <div class="col-lg-7">
-                    <div class="pd-calc" id="pd-honor">
-                        <div class="pd-calc-head"><i class="bi bi-calculator"></i> Coba hitung sendiri</div>
-                        <div class="pd-calc-inputs pd-calc-inputs--4">
-                            <label>Harga paket / bulan (Rp)<input type="number" min="0" step="10000" value="500000" data-calc="price" inputmode="numeric"></label>
-                            <label>Pertemuan / bulan<input type="number" min="1" step="1" value="4" data-calc="meetings" inputmode="numeric"></label>
-                            <label>Persen pengajar (%)<input type="number" min="0" max="100" step="1" value="40" data-calc="percent" inputmode="numeric"></label>
-                            <label>Jumlah murid<input type="number" min="0" step="1" value="10" data-calc="students" inputmode="numeric"></label>
-                        </div>
-                        <dl class="pd-calc-rows">
-                            <div><dt>Harga per pertemuan</dt><dd data-out="ppm">Rp 0</dd></div>
-                            <div><dt>Honor pengajar per murid per pertemuan</dt><dd data-out="teacher">Rp 0</dd></div>
-                            <div><dt>Total honor pengajar per bulan</dt><dd data-out="teacherMonth">Rp 0</dd></div>
-                        </dl>
-                        <div class="pd-calc-net"><span>Bagian kursus per bulan</span><strong data-out="owner">Rp 0</strong></div>
-                        <p class="pd-calc-note">Contoh bila semua murid hadir di setiap pertemuan.</p>
+            <h2 class="pd-title text-center">Kursus lebih tertib, semua pihak lebih tenang</h2>
+            <div class="row g-4 mt-2">
+                @foreach ($benefits as [$icon, $title, $text, $tone])
+                    <div class="col-md-4">
+                        <article class="pd-card pd-tone--{{ $tone }}">
+                            <span class="pd-card-icon"><i class="bi bi-{{ $icon }}"></i></span>
+                            <h3>{{ $title }}</h3>
+                            <p>{{ $text }}</p>
+                        </article>
                     </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -249,35 +238,5 @@
 @endsection
 
 @push('scripts')
-    <script>
-        (function () {
-            var rotate = document.querySelector('.pd-rotate');
-            if (rotate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                var words = rotate.dataset.words.split('|'), i = 0;
-                setInterval(function () {
-                    rotate.classList.add('is-out');
-                    setTimeout(function () { i = (i + 1) % words.length; rotate.textContent = words[i]; rotate.classList.remove('is-out'); }, 250);
-                }, 2400);
-            }
-
-            // Sama dengan ScheduleGrade: per pertemuan = round(harga / pertemuan), pengajar = round(x * persen / 100), sisanya kursus.
-            var calc = document.getElementById('pd-honor');
-            var money = function (n) { return 'Rp ' + n.toLocaleString('id-ID'); };
-            var num = function (key) { return Math.max(0, Number(calc.querySelector('[data-calc=' + key + ']').value) || 0); };
-            var out = function (key, value) { calc.querySelector('[data-out=' + key + ']').textContent = money(value); };
-
-            function update() {
-                var meetings = Math.floor(num('meetings')), students = Math.floor(num('students'));
-                var ppm = meetings > 0 ? Math.round(num('price') / meetings) : 0;
-                var teacher = Math.round(ppm * Math.min(100, num('percent')) / 100);
-                out('ppm', ppm);
-                out('teacher', teacher);
-                out('teacherMonth', teacher * meetings * students);
-                out('owner', (ppm - teacher) * meetings * students);
-            }
-
-            calc.addEventListener('input', update);
-            update();
-        })();
-    </script>
+    <script src="{{ asset('js/produk.js') }}?v={{ filemtime(public_path('js/produk.js')) }}" defer></script>
 @endpush

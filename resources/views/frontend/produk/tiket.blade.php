@@ -212,22 +212,9 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('js/produk.js') }}?v={{ filemtime(public_path('js/produk.js')) }}" defer></script>
     <script>
         (function () {
-            // Kata bergantian di hero ("Mau bikin seminar? workshop? ...").
-            var rotate = document.querySelector('.pd-rotate');
-            if (rotate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                var words = rotate.dataset.words.split('|'), i = 0;
-                setInterval(function () {
-                    rotate.classList.add('is-out');
-                    setTimeout(function () {
-                        i = (i + 1) % words.length;
-                        rotate.textContent = words[i];
-                        rotate.classList.remove('is-out');
-                    }, 250);
-                }, 2400);
-            }
-
             // Kalkulator: rumus sama dengan app.bizbos (TicketSetting::feeFor, basis poin, bulat ke atas).
             var calc = document.getElementById('pd-calc');
             if (!calc) return;
