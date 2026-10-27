@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -28,6 +29,9 @@ use Throwable;
  */
 class TeleiosApiService
 {
+    /** Lama cache isi website dari app.bizbos (detik). */
+    private const CACHE_TTL = 300;
+
     /**
      * @var array<string, mixed>|null
      */
@@ -45,7 +49,7 @@ class TeleiosApiService
      */
     public function getCategoryApplications(): array
     {
-        return $this->request('/api/frontend/category-applications')?->json('data', []) ?? [];
+        return $this->data('/api/frontend/category-applications');
     }
 
     /**
@@ -53,7 +57,7 @@ class TeleiosApiService
      */
     public function getPackages(): array
     {
-        return $this->request('/api/frontend/packages')?->json('data', []) ?? [];
+        return $this->data('/api/frontend/packages');
     }
 
     /**
@@ -61,7 +65,7 @@ class TeleiosApiService
      */
     public function getArticles(): array
     {
-        return $this->request('/api/frontend/articles')?->json('data', []) ?? [];
+        return $this->data('/api/frontend/articles');
     }
 
     /**
@@ -69,7 +73,7 @@ class TeleiosApiService
      */
     public function getFaqs(): array
     {
-        return $this->request('/api/frontend/faqs')?->json('data', []) ?? [];
+        return $this->data('/api/frontend/faqs');
     }
 
     /**
@@ -81,7 +85,7 @@ class TeleiosApiService
      */
     public function getTermCondition(): ?array
     {
-        return $this->request('/api/frontend/term-condition')?->json('data');
+        return $this->data('/api/frontend/term-condition', null);
     }
 
     /**
@@ -89,7 +93,7 @@ class TeleiosApiService
      */
     public function getCategoryVideos(): array
     {
-        return $this->request('/api/frontend/category-videos')?->json('data', []) ?? [];
+        return $this->data('/api/frontend/category-videos');
     }
 
     /**
@@ -97,7 +101,7 @@ class TeleiosApiService
      */
     public function getVideos(): array
     {
-        return $this->request('/api/frontend/videos')?->json('data', []) ?? [];
+        return $this->data('/api/frontend/videos');
     }
 
     /**
@@ -105,7 +109,7 @@ class TeleiosApiService
      */
     public function getFeatures(): array
     {
-        return $this->request('/api/frontend/features')?->json('data', []) ?? [];
+        return $this->data('/api/frontend/features');
     }
 
     /**
@@ -117,7 +121,7 @@ class TeleiosApiService
      */
     public function getHomeSections(): array
     {
-        return $this->request('/api/frontend/home-sections')?->json('data', []) ?? [];
+        return $this->data('/api/frontend/home-sections');
     }
 
     /**
@@ -129,7 +133,7 @@ class TeleiosApiService
      */
     public function getPages(): array
     {
-        return $this->pages ??= ($this->request('/api/frontend/pages')?->json('data', []) ?? []);
+        return $this->pages ??= $this->data('/api/frontend/pages');
     }
 
     /**
@@ -139,7 +143,7 @@ class TeleiosApiService
      */
     public function getPage(string $slug): ?array
     {
-        return $this->request('/api/frontend/pages/'.rawurlencode($slug))?->json('data');
+        return $this->data('/api/frontend/pages/'.rawurlencode($slug), null);
     }
 
     /**
@@ -149,7 +153,7 @@ class TeleiosApiService
      */
     public function getArticle(string $slug): ?array
     {
-        return $this->request('/api/frontend/articles/'.rawurlencode($slug))?->json('data');
+        return $this->data('/api/frontend/articles/'.rawurlencode($slug), null);
     }
 
     /**
@@ -164,7 +168,7 @@ class TeleiosApiService
      */
     public function getHeaders(): array
     {
-        return $this->request('/api/frontend/headers')?->json('data', []) ?? [];
+        return $this->data('/api/frontend/headers');
     }
 
     /**
@@ -178,7 +182,7 @@ class TeleiosApiService
      */
     public function getFooters(): array
     {
-        return $this->request('/api/frontend/footers')?->json('data', []) ?? [];
+        return $this->data('/api/frontend/footers');
     }
 
     /**
@@ -198,7 +202,7 @@ class TeleiosApiService
     public function getWebSetting(): ?array
     {
         if (! $this->webSettingFetched) {
-            $this->webSetting = $this->request('/api/frontend/web-setting')?->json('data');
+            $this->webSetting = $this->data('/api/frontend/web-setting', null);
             $this->webSettingFetched = true;
         }
 
@@ -257,6 +261,34 @@ class TeleiosApiService
 
             return null;
         }
+    }
+
+    /**
+     * Isi `data` dari endpoint GET, disimpan di cache supaya halaman tidak menunggu app.bizbos
+     * di setiap kunjungan. Perubahan dari superadmin tampil paling lambat CACHE_TTL detik
+     * (atau langsung setelah `php artisan cache:clear`). Kalau app.bizbos sedang tidak bisa
+     * dihubungi, dipakai salinan terakhir yang berhasil supaya website tetap tampil lengkap.
+     * Respons gagal (404, error) tidak disimpan.
+     */
+    private function data(string $path, mixed $default = []): mixed
+    {
+        $key = 'teleios:'.$path;
+
+        if (is_array($cached = Cache::get($key))) {
+            return $cached['data'] ?? $default;
+        }
+
+        $response = $this->request($path);
+
+        if (! $response) {
+            return Cache::get($key.':last')['data'] ?? $default;
+        }
+
+        $payload = ['data' => $response->json('data')];
+        Cache::put($key, $payload, self::CACHE_TTL);
+        Cache::put($key.':last', $payload, now()->addDays(7));
+
+        return $payload['data'] ?? $default;
     }
 
     /**
