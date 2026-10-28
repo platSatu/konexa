@@ -81,3 +81,8 @@
     <i class="bi bi-x-lg bz-chat-launcher__icon-close" aria-hidden="true"></i>
 </button>
 @endif
+
+{{-- Kembali ke atas: di bawah tombol chat, muncul setelah halaman di-scroll (public/js/frontend.js). --}}
+<button type="button" class="bz-scroll-top" data-scroll-top aria-label="Kembali ke atas" title="Kembali ke atas">
+    <i class="bi bi-arrow-up" aria-hidden="true"></i>
+</button>

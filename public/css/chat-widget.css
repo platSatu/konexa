@@ -1,7 +1,19 @@
 /* Live chat bizbos (frontend/partials/chat-widget.blade.php). Warna mengikuti --bs-primary situs. */
-/* Panel terbuka tepat di atas tombol bulat (24px + 56px + jarak 12px = 92px dari bawah). */
+/*
+ * Tumpukan tombol melayang di kanan bawah (dari bawah ke atas):
+ *   [kembali ke atas] -> [chat] -> [WhatsApp]; panel chat terbuka di atas tombol chat.
+ * Semua posisi dihitung dari 3 variabel supaya tidak bertumpuk:
+ *   --bz-float-gap : jarak dari tepi bawah layar
+ *   --bz-lift      : ruang untuk tombol "kembali ke atas" (hanya saat sudah di-scroll, body.bz-scrolled)
+ *   --cookie-h     : tinggi banner cookie yang sedang tampil (diisi partials/cookie-consent)
+ */
+/* Di body (bukan :root) supaya --bz-float-base ikut dihitung ulang saat class body berubah. */
+body { --bz-float-gap: 24px; --bz-lift: 0px; --bz-float-base: calc(var(--cookie-h, 0px) + var(--bz-lift) + var(--bz-float-gap)); }
+body.bz-scrolled { --bz-lift: 56px; } /* tombol 44px + jarak 12px */
+
+/* Panel terbuka tepat di atas tombol bulat (tombol 56px + jarak 12px). */
 .bz-chat {
-    position: fixed; right: 24px; bottom: 92px; z-index: 1080;
+    position: fixed; right: 24px; bottom: calc(var(--bz-float-base) + 68px); z-index: 1080;
     width: min(380px, calc(100vw - 2rem)); height: min(580px, calc(100vh - 112px));
     display: flex; flex-direction: column; background: #fff; border-radius: 1.25rem; overflow: hidden;
     box-shadow: 0 24px 60px -12px rgba(16, 24, 40, .35); font-size: .925rem;
@@ -64,12 +76,34 @@
 /* Tombol bulat melayang di kanan bawah -- ukuran, bayangan & efek hover sama
    persis dengan .whatsapp-float-btn (public/css/frontend.css), warna utama situs. */
 .bz-chat-launcher {
-    position: fixed; right: 24px; bottom: 24px; z-index: 1081;
+    position: fixed; right: 24px; bottom: var(--bz-float-base); z-index: 1081;
     width: 56px; height: 56px; padding: 0; border: 0; border-radius: 50%;
     background-color: var(--bs-primary); color: #fff;
     display: flex; align-items: center; justify-content: center; font-size: 26px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    transition: bottom .35s cubic-bezier(.22, 1, .36, 1), transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    /* Goyang sebentar tiap ~6 detik supaya terlihat; berhenti saat disentuh/dibuka. */
+    animation: bzChatWiggle 6s ease-in-out 4s infinite;
+}
+/* Gelombang tipis keluar dari tombol, berbarengan dengan goyangannya. */
+.bz-chat-launcher::after {
+    content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+    animation: bzChatRing 6s ease-out 4s infinite;
+}
+.bz-chat-launcher:hover, .bz-chat-launcher:focus-visible, .bz-chat-launcher.is-open,
+.bz-chat-launcher:hover::after, .bz-chat-launcher.is-open::after { animation: none; }
+@keyframes bzChatWiggle {
+    0%, 82%, 100% { transform: none; }
+    85% { transform: rotate(-14deg) scale(1.08); }
+    88% { transform: rotate(12deg) scale(1.08); }
+    91% { transform: rotate(-8deg) scale(1.04); }
+    94% { transform: rotate(5deg); }
+    97% { transform: rotate(-2deg); }
+}
+@keyframes bzChatRing {
+    0%, 82% { box-shadow: 0 0 0 0 rgba(var(--bs-primary-rgb), 0); }
+    84% { box-shadow: 0 0 0 0 rgba(var(--bs-primary-rgb), .45); }
+    100% { box-shadow: 0 0 0 18px rgba(var(--bs-primary-rgb), 0); }
 }
 .bz-chat-launcher:hover,
 .bz-chat-launcher:focus-visible {
@@ -85,17 +119,40 @@
 
 /* Tombol WhatsApp melayang naik ke atas tombol chat supaya tidak bertumpuk,
    dan disembunyikan selama panel chat terbuka (link WA ada di dalam panel). */
-body:has(.bz-chat-launcher) .whatsapp-float-btn { bottom: 92px; }
+.whatsapp-float-btn { bottom: var(--bz-float-base); transition: bottom .35s cubic-bezier(.22, 1, .36, 1), transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; }
+body:has(.bz-chat-launcher) .whatsapp-float-btn { bottom: calc(var(--bz-float-base) + 68px); }
 body.bz-chat-open .whatsapp-float-btn { opacity: 0; visibility: hidden; pointer-events: none; }
+
+/* Tombol "kembali ke atas": paling bawah, sejajar tengah dengan tombol chat; muncul setelah halaman di-scroll. */
+.bz-scroll-top {
+    position: fixed; right: 30px; bottom: calc(var(--cookie-h, 0px) + var(--bz-float-gap)); z-index: 1081;
+    width: 44px; height: 44px; padding: 0; border: 1px solid rgba(var(--bs-primary-rgb), .2); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+    background: #fff; color: var(--bs-primary); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    opacity: 0; visibility: hidden; transform: translateY(14px) scale(.8);
+    transition: opacity .3s ease, visibility .3s, transform .35s cubic-bezier(.22, 1, .36, 1), bottom .35s cubic-bezier(.22, 1, .36, 1), background-color .2s ease, color .2s ease;
+}
+body.bz-scrolled .bz-scroll-top { opacity: 1; visibility: visible; transform: none; }
+.bz-scroll-top:hover, .bz-scroll-top:focus-visible { background: var(--bs-primary); color: #fff; }
+.bz-scroll-top:hover i { animation: bzScrollTopHop .6s ease; }
+@keyframes bzScrollTopHop { 40% { transform: translateY(-4px); } }
+body.bz-chat-open .bz-scroll-top { opacity: 0; visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+    .bz-chat-launcher, .bz-chat-launcher::after, .bz-scroll-top:hover i { animation: none; }
+}
 
 /* HP: layar penuh supaya nyaman mengetik; ukuran tombol mengikuti tombol WhatsApp versi HP. */
 @media (max-width: 575.98px) {
     .bz-chat { right: 0; bottom: 0; width: 100vw; height: 100dvh; border-radius: 0; }
     /* Font isian minimal 16px supaya iPhone tidak memperbesar halaman saat mengetik. */
     .bz-chat input { font-size: 16px; }
-    .bz-chat-launcher { right: 16px; bottom: 16px; width: 48px; height: 48px; font-size: 22px; }
+    body { --bz-float-gap: 16px; }
+    body.bz-scrolled { --bz-lift: 50px; } /* tombol 40px + jarak 10px */
+    .bz-chat-launcher { right: 16px; width: 48px; height: 48px; font-size: 22px; }
     .bz-chat-launcher__icon-close { font-size: 18px; }
-    body:has(.bz-chat-launcher) .whatsapp-float-btn { bottom: 76px; }
+    body:has(.bz-chat-launcher) .whatsapp-float-btn { bottom: calc(var(--bz-float-base) + 60px); }
+    .bz-scroll-top { right: 20px; width: 40px; height: 40px; font-size: 18px; }
     /* Panel penuh layar sudah punya tombol tutup sendiri. */
     body.bz-chat-open .bz-chat-launcher { display: none; }
 }

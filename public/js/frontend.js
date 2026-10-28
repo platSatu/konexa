@@ -4,6 +4,25 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Tempat menaruh script custom frontend.
 
+    // Tombol "kembali ke atas" (partials/chat-widget.blade.php): muncul setelah
+    // scroll 400px; body.bz-scrolled juga menaikkan tombol chat & WhatsApp
+    // (lihat public/css/chat-widget.css) supaya tidak bertumpuk.
+    var scrollTopButton = document.querySelector('[data-scroll-top]');
+
+    if (scrollTopButton) {
+        var toggleScrollTop = function () {
+            document.body.classList.toggle('bz-scrolled', window.scrollY > 400);
+        };
+
+        window.addEventListener('scroll', toggleScrollTop, { passive: true });
+        toggleScrollTop();
+
+        scrollTopButton.addEventListener('click', function () {
+            var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+        });
+    }
+
     // Topbar homepage (frontend/partials/topbar.blade.php, class
     // .site-topbar--overlay): transparan + teks putih (navbar-dark)
     // selama di paling atas, jadi SOLID putih + teks gelap

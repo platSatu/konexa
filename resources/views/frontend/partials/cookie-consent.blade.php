@@ -92,10 +92,7 @@
         .cookie-option.form-switch { padding: .8rem 1rem; }
         .cookie-option .form-check-input { flex-shrink: 0; width: 2.4em; height: 1.3em; margin: 0; float: none; }
         .cookie-option .form-check-input:checked { background-color: var(--bs-primary); border-color: var(--bs-primary); }
-        /* Saat banner tampil, tombol chat/WhatsApp naik di atas banner (tinggi banner diisi JS ke --cookie-h). */
-        body.cookie-open .bz-chat-launcher { bottom: calc(var(--cookie-h, 0px) + 16px); }
-        body.cookie-open .bz-chat { bottom: calc(var(--cookie-h, 0px) + 84px); }
-        body.cookie-open .whatsapp-float-btn { bottom: calc(var(--cookie-h, 0px) + 84px) !important; }
+        /* Saat banner tampil, tombol melayang (chat, WhatsApp, kembali ke atas) naik di atasnya lewat --cookie-h (public/css/chat-widget.css). */
         @keyframes cookie-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
         @keyframes cookie-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
         @keyframes cookie-wobble { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-14deg); } 40% { transform: rotate(10deg); } 60% { transform: rotate(-6deg); } 80% { transform: rotate(3deg); } }
@@ -127,7 +124,7 @@
             // Tinggi banner -> --cookie-h, supaya tombol chat/WhatsApp tidak tertutup.
             var fit = function () { document.documentElement.style.setProperty('--cookie-h', banner.offsetHeight + 'px'); };
             var show = function () { banner.hidden = false; document.body.classList.add('cookie-open'); fit(); };
-            var hide = function () { banner.hidden = true; document.body.classList.remove('cookie-open'); };
+            var hide = function () { banner.hidden = true; document.body.classList.remove('cookie-open'); document.documentElement.style.setProperty('--cookie-h', '0px'); };
             if (window.ResizeObserver) new ResizeObserver(fit).observe(banner);
 
             // Tampilkan pilihan per kategori, dicentang sesuai pilihan sekarang.
