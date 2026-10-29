@@ -743,7 +743,8 @@ section {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: rgba(43, 27, 23, .25) transparent;
-    padding-bottom: 0.5rem;
+    /* Jarak tab ke scrollbar di bawahnya. */
+    padding-bottom: 10px;
 }
 
 .package-tabs > .nav-item:first-child {
@@ -756,9 +757,16 @@ section {
     position: relative;
 }
 
+/* Saat tab tidak muat: beri ruang untuk tombol panah di kiri & kanan supaya
+   panah tidak menutupi teks tab (tab dimulai tepat setelah panah). */
+.package-tabs-wrap.is-overflowing {
+    padding-inline: 2.75rem;
+}
+
 .package-tabs-arrow {
     position: absolute;
-    top: calc(50% - 0.25rem);
+    /* Tengah tinggi tab (tanpa ruang scrollbar di bawahnya). */
+    top: calc(50% - 5px);
     transform: translateY(-50%);
     z-index: 5;
     width: 2.25rem;
@@ -779,11 +787,11 @@ section {
 }
 
 .package-tabs-arrow--prev {
-    left: -0.5rem;
+    left: 0;
 }
 
 .package-tabs-arrow--next {
-    right: -0.5rem;
+    right: 0;
 }
 
 /* Tab terakhir (indikator meluncur ditambahkan JS sebagai elemen paling akhir). */
@@ -854,6 +862,10 @@ section {
        tombol panah); tab aktif digeser ke tengah otomatis oleh public/js/frontend.js. */
     .package-tabs-arrow {
         display: none;
+    }
+
+    .package-tabs-wrap.is-overflowing {
+        padding-inline: 0;
     }
 
     .package-tabs {

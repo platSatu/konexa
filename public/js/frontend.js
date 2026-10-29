@@ -129,14 +129,25 @@ document.addEventListener('DOMContentLoaded', function () {
         var next = arrow(1);
 
         var updateArrows = function () {
+            // Cek muat/tidak tanpa ruang panah dulu, supaya tidak bolak-balik saat ukuran pas-pasan.
+            wrap.classList.remove('is-overflowing');
+            var overflowing = tabs.scrollWidth - tabs.clientWidth > 1;
+            wrap.classList.toggle('is-overflowing', overflowing);
+
             var max = tabs.scrollWidth - tabs.clientWidth;
-            prev.hidden = max <= 1 || tabs.scrollLeft <= 1;
-            next.hidden = max <= 1 || tabs.scrollLeft >= max - 1;
+            prev.hidden = ! overflowing || tabs.scrollLeft <= 1;
+            next.hidden = ! overflowing || tabs.scrollLeft >= max - 1;
+        };
+        var onScroll = function () {
+            var max = tabs.scrollWidth - tabs.clientWidth;
+            prev.hidden = ! wrap.classList.contains('is-overflowing') || tabs.scrollLeft <= 1;
+            next.hidden = ! wrap.classList.contains('is-overflowing') || tabs.scrollLeft >= max - 1;
         };
 
-        tabs.addEventListener('scroll', updateArrows, { passive: true });
-        window.addEventListener('resize', updateArrows);
-        window.addEventListener('load', updateArrows);
+        tabs.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', function () { updateArrows(); moveIndicator(); });
+        window.addEventListener('load', function () { updateArrows(); moveIndicator(); });
         updateArrows();
+        moveIndicator();
     });
 });
