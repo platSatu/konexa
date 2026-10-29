@@ -91,6 +91,15 @@ document.addEventListener('DOMContentLoaded', function () {
             indicator.style.width = active.offsetWidth + 'px';
             indicator.style.height = active.offsetHeight + 'px';
             indicator.style.transform = 'translate(' + active.offsetLeft + 'px, ' + active.offsetTop + 'px)';
+
+            // Di HP tab bisa digeser: tab aktif digeser ke tengah supaya selalu terlihat
+            // (hanya menggeser deretan tab, halaman tidak ikut bergulir).
+            if (tabs.scrollWidth > tabs.clientWidth) {
+                tabs.scrollTo({
+                    left: active.offsetLeft - (tabs.clientWidth - active.offsetWidth) / 2,
+                    behavior: 'smooth'
+                });
+            }
         };
 
         tabs.addEventListener('shown.bs.tab', moveIndicator);
