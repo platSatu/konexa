@@ -728,20 +728,77 @@ section {
 /* Tab kelompok paket -- pill. Latar tab aktif berupa indikator yang meluncur
    (dibuat public/js/frontend.js, class .has-indicator); tanpa JS tab aktif
    tetap berlatar biasa.
-   29 Okt 2026: di desktop/tablet tab turun ke baris berikutnya kalau tidak muat
-   (sebelumnya satu baris rata tengah + overflow, sehingga tab paling kiri &
-   kanan terpotong dan tidak bisa digeser). Di HP tetap satu baris yang digeser,
-   lihat media query di bawah. */
+   29 Okt 2026: selalu SATU BARIS ke samping. Kalau muat, rata tengah (margin
+   auto di tab pertama & terakhir); kalau tidak muat, bisa digeser dari tab
+   paling kiri sampai paling kanan (dulu justify-content:center + overflow
+   membuat tab di ujung terpotong dan tidak bisa digeser). Scrollbar tipis
+   ditampilkan sebagai tanda bisa digeser. */
 .package-tabs {
     position: relative;
-    justify-content: center;
-    flex-wrap: wrap;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
     gap: 0.5rem;
-    padding-bottom: 0.25rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(43, 27, 23, .25) transparent;
+    padding-bottom: 0.5rem;
+}
+
+.package-tabs > .nav-item:first-child {
+    margin-left: auto;
+}
+
+/* Pembungkus + tombol panah (dibuat public/js/frontend.js), tampil hanya kalau
+   deretan tab tidak muat. */
+.package-tabs-wrap {
+    position: relative;
+}
+
+.package-tabs-arrow {
+    position: absolute;
+    top: calc(50% - 0.25rem);
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, .12);
+    background-color: #fff;
+    color: #2b1b17;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.package-tabs-arrow[hidden] {
+    display: none;
+}
+
+.package-tabs-arrow--prev {
+    left: -0.5rem;
+}
+
+.package-tabs-arrow--next {
+    right: -0.5rem;
+}
+
+/* Tab terakhir (indikator meluncur ditambahkan JS sebagai elemen paling akhir). */
+.package-tabs:not(.has-indicator) > .nav-item:last-child,
+.package-tabs.has-indicator > .nav-item:nth-last-child(2) {
+    margin-right: auto;
 }
 
 .package-tabs::-webkit-scrollbar {
-    display: none;
+    height: 6px;
+}
+
+.package-tabs::-webkit-scrollbar-thumb {
+    background-color: rgba(43, 27, 23, .25);
+    border-radius: 999px;
 }
 
 .package-tabs .nav-link {
@@ -793,14 +850,13 @@ section {
 }
 
 @media (max-width: 767.98px) {
-    /* HP: satu baris yang bisa digeser, mulai dari kiri (tab aktif digeser ke
-       tengah otomatis oleh public/js/frontend.js). */
+    /* HP: deretan tab memakai lebar penuh layar dan digeser dengan jari (tanpa
+       tombol panah); tab aktif digeser ke tengah otomatis oleh public/js/frontend.js. */
+    .package-tabs-arrow {
+        display: none;
+    }
+
     .package-tabs {
-        justify-content: flex-start;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        scrollbar-width: none;
-        -webkit-overflow-scrolling: touch;
         margin-inline: calc(var(--bs-gutter-x, 1.5rem) * -0.5);
         padding-inline: calc(var(--bs-gutter-x, 1.5rem) * 0.5);
     }

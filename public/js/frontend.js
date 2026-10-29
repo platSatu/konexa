@@ -106,5 +106,37 @@ document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('resize', moveIndicator);
         window.addEventListener('load', moveIndicator);
         moveIndicator();
+
+        // Tombol panah kiri/kanan: hanya tampil kalau deretan tab tidak muat (bisa digeser).
+        var wrap = document.createElement('div');
+        wrap.className = 'package-tabs-wrap';
+        tabs.parentNode.insertBefore(wrap, tabs);
+        wrap.appendChild(tabs);
+
+        var arrow = function (dir) {
+            var button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'package-tabs-arrow package-tabs-arrow--' + (dir < 0 ? 'prev' : 'next');
+            button.setAttribute('aria-label', dir < 0 ? 'Geser ke kiri' : 'Geser ke kanan');
+            button.innerHTML = '<i class="bi bi-chevron-' + (dir < 0 ? 'left' : 'right') + '"></i>';
+            button.addEventListener('click', function () {
+                tabs.scrollBy({ left: dir * tabs.clientWidth * 0.7, behavior: 'smooth' });
+            });
+            wrap.appendChild(button);
+            return button;
+        };
+        var prev = arrow(-1);
+        var next = arrow(1);
+
+        var updateArrows = function () {
+            var max = tabs.scrollWidth - tabs.clientWidth;
+            prev.hidden = max <= 1 || tabs.scrollLeft <= 1;
+            next.hidden = max <= 1 || tabs.scrollLeft >= max - 1;
+        };
+
+        tabs.addEventListener('scroll', updateArrows, { passive: true });
+        window.addEventListener('resize', updateArrows);
+        window.addEventListener('load', updateArrows);
+        updateArrows();
     });
 });
