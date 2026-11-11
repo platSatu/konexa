@@ -50,7 +50,7 @@
                                 <ul class="hero-chips list-unstyled mb-0">
                                     <li><i class="bi bi-check-circle-fill"></i> Daftar gratis</li>
                                     <li><i class="bi bi-check-circle-fill"></i> Trial 7 hari</li>
-                                    <li><i class="bi bi-check-circle-fill"></i> Tanpa coding</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Pages & tiket gratis</li>
                                 </ul>
                             </div>
                             <div class="col-12 col-lg-6 hero-visual">
