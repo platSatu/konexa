@@ -55,8 +55,8 @@
     ];
 @endphp
 
-@section('title', 'Management Kursus')
-@section('meta_description', 'Kelola tempat kursus dengan bizbos: pendaftaran online, jadwal & absensi, tagihan bulanan, portal orang tua dan pengajar, notifikasi WhatsApp, kuis, sampai tarik saldo.')
+@section('title_full', 'Kelola Tempat Kursus Tanpa Repot | '.config('app.name'))
+@section('meta_description', 'Pendaftaran online, placement test, absensi scan QR, tagihan otomatis, sampai kabar ke orang tua lewat WhatsApp. Lebih banyak waktu untuk mengajar, bukan mengurus.')
 @section('meta_image', asset('images/produk/tiket-dashboard.webp'))
 
 @push('styles')

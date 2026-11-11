@@ -39,8 +39,8 @@
     ];
 @endphp
 
-@section('title', 'Tiket Event')
-@section('meta_description', 'Jual tiket event secara online dengan bizbos: pembayaran otomatis, e-ticket ber-QR, scan di pintu masuk, dan hasil penjualan langsung masuk ke Saldo.')
+@section('title_full', 'Jual Tiket Event Online Tanpa Biaya Langganan | '.config('app.name'))
+@section('meta_description', 'Buat halaman event, terima pembayaran online, kirim e-ticket QR otomatis, dan scan peserta di pintu masuk. Tanpa biaya langganan, bayar hanya saat tiket terjual.')
 @section('meta_image', asset('images/produk/tiket-eticket.webp'))
 
 @push('styles')

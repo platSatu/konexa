@@ -57,8 +57,8 @@
     ];
 @endphp
 
-@section('title', 'Management WhatsApp')
-@section('meta_description', 'Kelola WhatsApp bisnis dengan bizbos: inbox untuk tim, chatbot dan AI, auto reply, broadcast terjadwal, integrasi Google Form, sampai API untuk developer.')
+@section('title_full', 'Satu Nomor WhatsApp, Dilayani Bersama Tim | '.config('app.name'))
+@section('meta_description', 'Inbox bersama untuk tim CS, chatbot dan AI yang paham produk Anda, broadcast terjadwal, dan auto reply 24 jam. Pelanggan terlayani lebih cepat, Anda pun lebih tenang.')
 @section('meta_image', asset('images/produk/tiket-dashboard.webp'))
 
 @push('styles')

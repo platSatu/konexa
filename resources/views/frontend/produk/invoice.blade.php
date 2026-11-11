@@ -54,8 +54,8 @@
     ];
 @endphp
 
-@section('title', 'Management Invoice')
-@section('meta_description', 'Kirim tagihan dengan link bayar online lewat bizbos: invoice satuan atau bulanan, pengingat dan denda otomatis, dashboard tagihan untuk pelanggan, sampai tarik saldo.')
+@section('title_full', 'Tagih Pelanggan Tanpa Mengejar-ngejar | '.config('app.name'))
+@section('meta_description', 'Kirim tagihan dengan link bayar VA, QRIS, dan e-wallet. Pengingat jatuh tempo berjalan sendiri, status lunas tercatat otomatis, dan uangnya masuk ke saldo Anda.')
 @section('meta_image', asset('images/produk/tiket-dashboard.webp'))
 
 @push('styles')

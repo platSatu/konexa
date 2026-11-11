@@ -5,7 +5,7 @@
     sengaja TIDAK diisi di sini supaya memakai isian Teleios (Superadmin >
     Web > Pengaturan Web > Meta Description). Nama dari APP_NAME.
 --}}
-@section('title_full', config('app.name').' | Solusi Modern untuk WhatsApp Bisnis Anda')
+@section('title_full', config('app.name').' | Satu Aplikasi, Semua Urusan Usaha Beres')
 
 @section('content')
 

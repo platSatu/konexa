@@ -1,8 +1,8 @@
 @extends('layouts.frontend')
 
 {{-- Layout menambahkan prefix "{APP_NAME} : " otomatis, lihat layouts/frontend.blade.php --}}
-@section('title', 'Kontak')
-@section('meta_description', 'Hubungi tim '.config('app.name').' — tanya apa saja soal chatbot AI, broadcast WhatsApp, CRM, atau paket harga. Kami siap membantu.')
+@section('title_full', 'Ngobrol dengan Tim '.config('app.name').', Kami Siap Membantu')
+@section('meta_description', 'Ada pertanyaan soal jadwal kursus, tagihan, tiket event, atau WhatsApp? Tim '.config('app.name').' siap membantu memilih paket yang paling pas untuk usaha Anda.')
 
 @section('content')
 
