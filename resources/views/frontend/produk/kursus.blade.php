@@ -16,7 +16,7 @@
         ['water', 'Renang & Olahraga', 'sky'],
         ['palette', 'Seni & Menggambar', 'peach'],
         ['mic', 'Vokal & Tari', 'lilac'],
-        ['moon-stars', 'Mengaji & Tahsin', 'mint'],
+        ['grid', 'Kursus Lainnya', 'mint'],
     ];
 
     $flow = [
