@@ -23,7 +23,7 @@
         ['ui-checks', 'Form pendaftaran', 'Bagikan link daftar online. Calon murid atau orang tua mengisi data sendiri, Anda tinggal menyetujui.', 'peach'],
         ['patch-question', 'Placement test', 'Calon murid ikut tes penempatan online, bisa gratis atau berbayar. Skornya langsung keluar, kelas yang pas pun mudah dipilih.', 'sun'],
         ['person-check', 'Jadi murid', 'Murid masuk ke kelas bulanan atau paket pertemuan. Jadwal pengajar dan ruangan dicek otomatis supaya tidak bentrok.', 'mint'],
-        ['clipboard-check', 'Belajar & absen', 'Pengajar mengabsen dari HP, cukup klik atau scan kartu QR murid. Pengingat les terkirim lewat WhatsApp sehari sebelumnya.', 'sky'],
+        ['qr-code-scan', 'Belajar & absen scan QR', 'Pengajar absen dengan scan QR di tempat les, lalu scan kartu QR murid dari HP. Jam hadir keduanya tercatat, dan pengingat les terkirim lewat WhatsApp sehari sebelumnya.', 'sky'],
         ['receipt', 'Tagihan & bayar', 'Tagihan terbit otomatis dari jadwal, lengkap dengan link bayar online. Pengingat jatuh tempo dan bukti lunas terkirim lewat WhatsApp.', 'lilac'],
         ['house-heart', 'Pantau bersama', 'Orang tua melihat jadwal, kehadiran, dan tagihan anak dari portalnya sendiri.', 'peach'],
     ];
@@ -43,7 +43,7 @@
 
     $benefits = [
         ['folder-check', 'Data tidak lagi tercecer', 'Murid, jadwal, absensi, dan tagihan tersimpan di satu tempat, mudah dicari kapan saja.', 'sky'],
-        ['person-workspace', 'Honor pengajar lebih tertib', 'Bagian untuk pengajar tercatat otomatis dari setiap absensi, sehingga pembagian hasil lebih rapi dan transparan.', 'mint'],
+        ['person-workspace', 'Kehadiran & honor lebih tertib', 'Jam hadir pengajar dan murid tercatat dari scan QR, bagian honor pengajar pun terhitung otomatis. Pembagian hasil jadi lebih rapi dan transparan.', 'mint'],
         ['emoji-smile', 'Orang tua lebih tenang', 'Orang tua dapat memantau jadwal dan kehadiran anak, serta menerima kabar penting tepat waktu.', 'peach'],
     ];
 
@@ -81,6 +81,7 @@
                     </div>
                     <ul class="pd-chips list-unstyled mb-0">
                         <li><i class="bi bi-check-circle-fill"></i> Pendaftaran online</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Absensi scan QR</li>
                         <li><i class="bi bi-check-circle-fill"></i> Portal orang tua</li>
                         <li><i class="bi bi-check-circle-fill"></i> Pengingat WhatsApp</li>
                     </ul>
@@ -161,12 +162,13 @@
                     <article class="pd-role pd-tone--mint">
                         <div>
                             <span class="pd-role-tag">Pengajar</span>
-                            <h3>Absen dari HP, honor dihitung sendiri</h3>
-                            <p>Pengajar melihat jadwal mengajarnya dan mengisi absensi selepas kelas. Bagian honornya ikut tercatat dari absensi tersebut.</p>
+                            <h3>Absen scan QR dari HP, honor dihitung sendiri</h3>
+                            <p>Sampai di tempat les, pengajar scan QR untuk absen, lalu scan kartu QR murid satu per satu. Setiap kartu hanya terhitung sekali per sesi, dan bagian honornya ikut tercatat dari absensi tersebut.</p>
                         </div>
                         <ul class="pd-mock list-unstyled" aria-hidden="true">
-                            <li><span>16.00</span><b>Matematika SD</b><em class="is-ok">3 hadir</em></li>
-                            <li><span>18.00</span><b>English Kids</b><em class="is-warn">Belum diabsen</em></li>
+                            <li><span>16.00</span><b>Matematika SD</b><em class="is-ok">Pengajar hadir 15.52</em></li>
+                            <li><span>16.00</span><b>Scan kartu murid</b><em class="is-ok">3 dari 4</em></li>
+                            <li><span>18.00</span><b>English Kids</b><em class="is-warn">Belum absen</em></li>
                         </ul>
                     </article>
                 </div>
