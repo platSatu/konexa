@@ -21,8 +21,8 @@
 @php
     // Bingkai dari Susunan Beranda (Teleios) -- judul, background, tombol.
     $section = ($section ?? []) + ['style' => '', 'is_dark' => false];
-    // Beranda cukup 10 FAQ teratas (urutan dari superadmin); FAQ lainnya tetap dipakai live chat.
-    $faqs = array_slice($faqs ?? [], 0, 10);
+    // Beranda cukup 6 FAQ teratas (urutan dari superadmin); FAQ lainnya tetap dipakai live chat.
+    $faqs = array_slice($faqs ?? [], 0, 6);
 @endphp
 <section id="faq" class="py-5 faq-section {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
     {{--
