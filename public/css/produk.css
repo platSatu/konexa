@@ -69,6 +69,7 @@
 
 .pd-rotate {
     display: inline-block;
+    white-space: nowrap; /* kata yang berganti tidak terpotong ke baris baru */
     padding: 0 .35rem;
     border-radius: 8px;
     background: linear-gradient(transparent 55%, rgba(255, 200, 87, .7) 55%);
@@ -341,7 +342,9 @@
 .pd-flow {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    /* jumlah kolom mengikuti jumlah langkah (5 atau 6) */
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
     gap: 1.25rem;
     margin: 0;
 }
@@ -475,7 +478,7 @@
 
 
 @media (max-width: 991.98px) {
-    .pd-flow { grid-template-columns: 1fr; gap: 1.5rem; }
+    .pd-flow { grid-auto-flow: row; grid-template-columns: 1fr; gap: 1.5rem; }
     .pd-flow::before { top: 0; bottom: 0; left: 31px; right: auto; border-top: 0; border-left: 3px dashed rgba(219, 91, 76, .3); }
     .pd-flow-item { display: grid; grid-template-columns: 64px 1fr; column-gap: 1rem; text-align: left; }
     .pd-flow-icon { grid-row: span 2; margin: 0; }

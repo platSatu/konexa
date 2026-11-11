@@ -20,11 +20,12 @@
     ];
 
     $flow = [
-        ['link-45deg', 'Pendaftaran', 'Bagikan link daftar online. Calon murid mengisi data, Anda tinggal menyetujui.', 'peach'],
-        ['person-check', 'Jadi murid', 'Murid masuk ke kelas dengan jadwal rutin mingguan. Pengajar dan ruangan dicek supaya tidak bentrok.', 'sun'],
-        ['clipboard-check', 'Belajar & absen', 'Pengajar mengabsen dari HP. Murid yang izin bisa dibuatkan sesi pengganti.', 'mint'],
-        ['receipt', 'Tagihan & bayar', 'Kirim tagihan bulanan dengan link bayar online. Pengingat jatuh tempo otomatis.', 'sky'],
-        ['house-heart', 'Pantau bersama', 'Orang tua melihat jadwal dan kehadiran anak dari portalnya sendiri.', 'lilac'],
+        ['ui-checks', 'Form pendaftaran', 'Bagikan link daftar online. Calon murid atau orang tua mengisi data sendiri, Anda tinggal menyetujui.', 'peach'],
+        ['patch-question', 'Placement test', 'Calon murid ikut tes penempatan online, bisa gratis atau berbayar. Skornya langsung keluar, kelas yang pas pun mudah dipilih.', 'sun'],
+        ['person-check', 'Jadi murid', 'Murid masuk ke kelas bulanan atau paket pertemuan. Jadwal pengajar dan ruangan dicek otomatis supaya tidak bentrok.', 'mint'],
+        ['clipboard-check', 'Belajar & absen', 'Pengajar mengabsen dari HP, cukup klik atau scan kartu QR murid. Pengingat les terkirim lewat WhatsApp sehari sebelumnya.', 'sky'],
+        ['receipt', 'Tagihan & bayar', 'Tagihan terbit otomatis dari jadwal, lengkap dengan link bayar online. Pengingat jatuh tempo dan bukti lunas terkirim lewat WhatsApp.', 'lilac'],
+        ['house-heart', 'Pantau bersama', 'Orang tua melihat jadwal, kehadiran, dan tagihan anak dari portalnya sendiri.', 'peach'],
     ];
 
     $highlights = [
@@ -72,7 +73,7 @@
                 <div class="col-lg-6">
                     <span class="pd-eyebrow"><i class="bi bi-mortarboard"></i> bizbos Kursus</span>
                     <h1 class="pd-hero-title">Halo, <span class="pd-script">Pemilik Kursus!</span></h1>
-                    <p class="pd-hero-ask">Punya tempat <span class="pd-rotate" data-words="les musik?|bimbel?|kursus bahasa?|kelas coding?|les renang?">les musik?</span></p>
+                    <p class="pd-hero-ask">Punya tempat <span class="pd-rotate" data-words="les musik?|bimbel?|les bahasa?|les coding?|les renang?">les musik?</span></p>
                     <p class="pd-hero-lead">Dari pendaftaran murid, jadwal dan absensi, tagihan bulanan, sampai honor pengajar. Semuanya berjalan otomatis, orang tua pun bisa ikut memantau.</p>
                     <div class="d-flex flex-wrap gap-2 mb-4">
                         <a href="{{ $registerUrl }}" class="btn btn-primary btn-lg pd-btn">Mulai Kelola Kursus <i class="bi bi-arrow-right"></i></a>
