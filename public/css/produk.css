@@ -89,6 +89,14 @@
 
 .pd-btn { font-weight: 700; border-radius: 14px; padding: .8rem 1.5rem; }
 
+/* Tombol hero tetap sejajar di tablet & desktop: ukurannya mengecil mengikuti lebar kolom, teks tidak terlipat. */
+.pd-hero .pd-btn { white-space: nowrap; }
+
+@media (min-width: 576px) {
+    .pd-hero .d-flex:has(> .pd-btn) { flex-wrap: nowrap !important; }
+    .pd-hero .pd-btn { font-size: clamp(.95rem, 1.35vw, 1.25rem); padding: .8rem clamp(1rem, 1.5vw, 1.5rem); }
+}
+
 .pd-btn-ghost {
     background: #fff;
     border: 1px solid rgba(219, 91, 76, .3);
