@@ -55,7 +55,9 @@
     ];
 @endphp
 
-@section('title_full', 'Aplikasi Kursus: Kelola Murid, Absensi & SPP | '.config('app.name'))
+{{-- Jangan pakai "&" di @section(...): Laravel meng-escape isinya, lalu layout
+     meng-escape lagi, sehingga tampil "&amp;" di <title>. Tulis "dan" atau pakai koma. --}}
+@section('title_full', 'Aplikasi Kursus: Murid, Absensi, SPP | '.config('app.name'))
 @section('meta_description', 'Aplikasi kursus musik, bimbel, dan les bahasa: pendaftaran online, placement test, absensi scan QR, tagihan SPP, sampai pengingat WhatsApp ke orang tua.')
 @section('meta_image', asset('images/produk/tiket-dashboard.webp'))
 

@@ -57,7 +57,9 @@
     ];
 @endphp
 
-@section('title_full', 'Aplikasi WhatsApp Bisnis Multi Admin & Chatbot | '.config('app.name'))
+{{-- Jangan pakai "&" di @section(...): Laravel meng-escape isinya, lalu layout
+     meng-escape lagi, sehingga tampil "&amp;" di <title>. Tulis "dan" atau pakai koma. --}}
+@section('title_full', 'Aplikasi WhatsApp Bisnis Multi Admin | '.config('app.name'))
 @section('meta_description', 'Aplikasi WhatsApp bisnis: satu nomor dipakai banyak CS, chatbot dan AI yang paham produk Anda, broadcast terjadwal, dan auto reply 24 jam.')
 @section('meta_image', asset('images/produk/tiket-dashboard.webp'))
 

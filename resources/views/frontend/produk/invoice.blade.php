@@ -54,7 +54,9 @@
     ];
 @endphp
 
-@section('title_full', 'Aplikasi Invoice & Tagihan Online Otomatis | '.config('app.name'))
+{{-- Jangan pakai "&" di @section(...): Laravel meng-escape isinya, lalu layout
+     meng-escape lagi, sehingga tampil "&amp;" di <title>. Tulis "dan" atau pakai koma. --}}
+@section('title_full', 'Aplikasi Invoice dan Tagihan Online | '.config('app.name'))
 @section('meta_description', 'Aplikasi invoice online: kirim tagihan dengan link bayar VA, QRIS, dan e-wallet. Pengingat jatuh tempo berjalan sendiri, status lunas tercatat otomatis.')
 @section('meta_image', asset('images/produk/tiket-dashboard.webp'))
 
