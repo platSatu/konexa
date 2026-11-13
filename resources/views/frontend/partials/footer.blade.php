@@ -154,9 +154,18 @@
         </div>
     </div>
 </footer>
-{{-- Tombol floating "Chat WhatsApp", fixed di pojok kanan-bawah viewport, tampil di semua halaman (footer di-include di tiap halaman frontend). --}}
+{{--
+    Tombol floating "Chat WhatsApp", fixed di pojok kanan-bawah viewport, tampil
+    di semua halaman (footer di-include di tiap halaman frontend).
+    .whatsapp-float-ping = cincin denyut, .whatsapp-float-hint = gelembung ajakan
+    yang muncul sebentar lalu hilang sendiri. Keduanya aria-hidden: pembaca layar
+    cukup mendapat aria-label tombolnya, tidak perlu hiasan. Animasi & teks
+    gelembung diatur di .whatsapp-float-* pada public/css/frontend.css.
+--}}
 @if ($waNumber !== '')
     <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener" class="whatsapp-float-btn" aria-label="Chat via WhatsApp">
         <i class="bi bi-whatsapp"></i>
+        <span class="whatsapp-float-ping" aria-hidden="true"></span>
     </a>
+    <span class="whatsapp-float-hint" aria-hidden="true">Ada yang mau ditanyakan? 👋</span>
 @endif

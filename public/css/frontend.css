@@ -1737,6 +1737,70 @@ a.contact-channel:hover {
     background-color: #1ebe5b;
     transform: scale(1.08);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    animation: none; /* berhenti bergoyang begitu disentuh, supaya enak diklik */
+}
+
+/*
+ * Supaya tombolnya tidak cuma diam dan lebih mengundang untuk ditanyai:
+ *   1. cincin denyut pelan di belakangnya (.whatsapp-float-ping)
+ *   2. goyangan pendek ~1 detik setiap 7 detik, bukan bergetar terus-menerus
+ *      -- gerakan tanpa henti justru bikin pengunjung terganggu
+ *   3. satu gelembung ajakan (.whatsapp-float-hint) yang muncul sebentar
+ *      lalu hilang sendiri dan tidak kembali
+ * Semuanya CSS murni, tanpa JS tambahan. Pengunjung yang memilih "kurangi
+ * gerakan" di OS-nya tidak mendapat animasi apa pun (lihat blok
+ * prefers-reduced-motion di bawah). Markup-nya di partials/footer.blade.php.
+ */
+.whatsapp-float-btn {
+    animation: wa-float-nudge 7s ease-in-out 3s infinite;
+}
+
+.whatsapp-float-ping {
+    position: absolute;
+    inset: -4px;
+    border: 2px solid #25d366;
+    border-radius: 50%;
+    opacity: 0;
+    animation: wa-float-ping 2.6s ease-out 1s infinite;
+}
+
+.whatsapp-float-hint {
+    position: fixed;
+    right: 90px;
+    bottom: 34px;
+    max-width: 200px;
+    padding: 9px 14px;
+    border-radius: 14px 14px 2px 14px;
+    background-color: #fff;
+    color: #2b2622;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.35;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    pointer-events: none; /* murni ajakan: tidak pernah menghalangi klik apa pun */
+    z-index: 1049; /* selalu di bawah tombolnya (1050) */
+    animation: wa-float-hint 14s ease-in-out 2.5s 1 forwards;
+}
+
+@keyframes wa-float-nudge {
+    0%, 86%, 100% { transform: rotate(0); }
+    88% { transform: rotate(-12deg); }
+    90% { transform: rotate(10deg); }
+    92% { transform: rotate(-8deg); }
+    94% { transform: rotate(6deg); }
+    96% { transform: rotate(-3deg); }
+}
+
+@keyframes wa-float-ping {
+    0% { transform: scale(0.85); opacity: 0.55; }
+    70%, 100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes wa-float-hint {
+    0% { opacity: 0; transform: translateX(10px); }
+    6%, 60% { opacity: 1; transform: translateX(0); }
+    70%, 100% { opacity: 0; transform: translateX(10px); }
 }
 
 @media (max-width: 575.98px) {
@@ -1747,6 +1811,21 @@ a.contact-channel:hover {
         height: 48px;
         font-size: 24px;
     }
+
+    .whatsapp-float-hint {
+        right: 74px;
+        bottom: 24px;
+        max-width: 165px;
+        padding: 7px 11px;
+        font-size: 13px;
+    }
+}
+
+/* Hormati preferensi user yang minta animasi dikurangi di OS/browser-nya */
+@media (prefers-reduced-motion: reduce) {
+    .whatsapp-float-btn { animation: none; }
+    .whatsapp-float-ping { display: none; }
+    .whatsapp-float-hint { animation: none; opacity: 0; }
 }
 
 /* ------------------------------------------------------------------
