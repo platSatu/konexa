@@ -18,11 +18,14 @@
         </li>
         {{-- Dropdown Layanan (gaya: frontend.css bagian "Menu Layanan"). Layanan baru cukup ditambah di $services. --}}
         @php
+            // Urutan sengaja: solusi utuh (Kursus, Event) lebih dulu, baru alat bantunya
+            // (WhatsApp, Invoice) -- mengikuti cara orang mencari. Ini bukan urutan alur
+            // kerja; alur kerja ada di partials/hero-flow.blade.php, jangan disamakan.
             $services = [
-                ['frontend.ticket', 'ticket-perforated', 'Management Event', 'Jual tiket online, e-ticket & scan QR peserta', 'peach'],
                 ['frontend.course', 'mortarboard', 'Management Kursus', 'Pendaftaran murid, jadwal, absensi & tagihan', 'sun'],
-                ['frontend.invoice', 'receipt', 'Management Invoice', 'Tagihan dengan link bayar & pengingat otomatis', 'sky'],
+                ['frontend.ticket', 'ticket-perforated', 'Management Event', 'Jual tiket online, e-ticket & scan QR peserta', 'peach'],
                 ['frontend.whatsapp', 'whatsapp', 'Management WhatsApp', 'Inbox tim, chatbot, AI & broadcast terjadwal', 'mint'],
+                ['frontend.invoice', 'receipt', 'Management Invoice', 'Tagihan dengan link bayar & pengingat otomatis', 'sky'],
             ];
             $serviceActive = collect($services)->contains(fn (array $service) => request()->routeIs($service[0]));
         @endphp
