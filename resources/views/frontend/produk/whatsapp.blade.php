@@ -57,8 +57,8 @@
     ];
 @endphp
 
-@section('title_full', 'Satu Nomor WhatsApp, Dilayani Bersama Tim | '.config('app.name'))
-@section('meta_description', 'Inbox bersama untuk tim CS, chatbot dan AI yang paham produk Anda, broadcast terjadwal, dan auto reply 24 jam. Pelanggan terlayani lebih cepat, Anda pun lebih tenang.')
+@section('title_full', 'Aplikasi WhatsApp Bisnis Multi Admin & Chatbot | '.config('app.name'))
+@section('meta_description', 'Aplikasi WhatsApp bisnis: satu nomor dipakai banyak CS, chatbot dan AI yang paham produk Anda, broadcast terjadwal, dan auto reply 24 jam.')
 @section('meta_image', asset('images/produk/tiket-dashboard.webp'))
 
 @push('styles')
@@ -76,7 +76,7 @@
                     <span class="pd-eyebrow"><i class="bi bi-whatsapp"></i> bizbos WhatsApp</span>
                     <h1 class="pd-hero-title">Chat pelanggan <span class="pd-script">numpuk?</span></h1>
                     <p class="pd-hero-ask">Balas lebih cepat <span class="pd-rotate" data-words="bersama tim.|pakai chatbot.|dengan AI.|lewat broadcast.">bersama tim.</span></p>
-                    <p class="pd-hero-lead">Satu nomor WhatsApp untuk banyak CS, balasan otomatis 24 jam, broadcast terjadwal, sampai tersambung ke website dan Google Form Anda.</p>
+                    <p class="pd-hero-lead">Aplikasi WhatsApp bisnis: satu nomor untuk banyak CS, balasan otomatis 24 jam, broadcast terjadwal, sampai tersambung ke website dan Google Form Anda.</p>
                     <div class="d-flex flex-wrap gap-2 mb-4">
                         <a href="{{ $registerUrl }}" class="btn btn-primary btn-lg pd-btn">Mulai Pakai WhatsApp <i class="bi bi-arrow-right"></i></a>
                         <a href="#alur" class="btn btn-lg pd-btn pd-btn-ghost"><i class="bi bi-signpost-split"></i> Lihat Alurnya</a>
@@ -110,7 +110,7 @@
     {{-- INTEREST: dipakai siapa --}}
     <section class="pd-section" data-reveal>
         <div class="container">
-            <h2 class="pd-title text-center">Untuk bisnis yang ramai<br>chat pelanggan</h2>
+            <h2 class="pd-title text-center">Aplikasi WhatsApp untuk bisnis<br>yang ramai chat pelanggan</h2>
             <div class="row g-3 justify-content-center mt-2">
                 @foreach ($useCases as [$icon, $label, $tone])
                     <div class="col-6 col-md-4 col-lg-3">

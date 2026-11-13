@@ -39,8 +39,8 @@
     ];
 @endphp
 
-@section('title_full', 'Jual Tiket Event Online Tanpa Biaya Langganan | '.config('app.name'))
-@section('meta_description', 'Buat halaman event, terima pembayaran online, kirim e-ticket QR otomatis, dan scan peserta di pintu masuk. Tanpa biaya langganan, bayar hanya saat tiket terjual.')
+@section('title_full', 'Aplikasi Jual Tiket Event Online | '.config('app.name'))
+@section('meta_description', 'Aplikasi jual tiket event online: buat halaman event, terima pembayaran, kirim e-ticket QR, dan scan peserta di pintu masuk. Tanpa biaya langganan.')
 @section('meta_image', asset('images/produk/tiket-eticket.webp'))
 
 @push('styles')
@@ -58,7 +58,7 @@
                     <span class="pd-eyebrow"><i class="bi bi-ticket-perforated"></i> bizbos Tiket</span>
                     <h1 class="pd-hero-title">Hi, <span class="pd-script">Event Creator!</span></h1>
                     <p class="pd-hero-ask">Mau bikin <span class="pd-rotate" data-words="seminar?|workshop?|konser?|kelas?|fun run?">seminar?</span></p>
-                    <p class="pd-hero-lead">Jual tiket, terima pembayaran online, dan scan peserta di pintu masuk. Semuanya dari satu dashboard, tanpa biaya di depan.</p>
+                    <p class="pd-hero-lead">Aplikasi jual tiket online untuk event apa pun: terima pembayaran, kirim e-ticket QR, dan scan peserta di pintu masuk. Semuanya dari satu dashboard, tanpa biaya di depan.</p>
                     <div class="d-flex flex-wrap gap-2 mb-4">
                         <a href="{{ $registerUrl }}" class="btn btn-primary btn-lg pd-btn">Buat Event Sekarang <i class="bi bi-arrow-right"></i></a>
                         @if ($percentLabel)
@@ -90,7 +90,7 @@
     {{-- INTEREST: jenis event --}}
     <section class="pd-section" data-reveal>
         <div class="container">
-            <h2 class="pd-title text-center">Beragam jenis event,<br>semua bisa pakai bizbos</h2>
+            <h2 class="pd-title text-center">Jual tiket online untuk<br>beragam jenis event</h2>
             <div class="row g-3 justify-content-center mt-2">
                 @foreach ($eventTypes as [$icon, $label, $tone])
                     <div class="col-6 col-md-4 col-lg-3">

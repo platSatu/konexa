@@ -9,9 +9,9 @@
     $registerUrl = 'https://app.bizbos.id/auth/register';
 
     $courseTypes = [
-        ['music-note-beamed', 'Les Musik', 'lilac'],
+        ['music-note-beamed', 'Kursus Musik', 'lilac'],
         ['book', 'Bimbel & Les Privat', 'sky'],
-        ['translate', 'Kursus Bahasa', 'mint'],
+        ['translate', 'Les Bahasa Inggris', 'mint'],
         ['code-slash', 'Coding & Robotik', 'sun'],
         ['water', 'Renang & Olahraga', 'sky'],
         ['palette', 'Seni & Menggambar', 'peach'],
@@ -24,7 +24,7 @@
         ['patch-question', 'Placement test', 'Calon murid ikut tes penempatan online, bisa gratis atau berbayar. Skornya langsung keluar, kelas yang pas pun mudah dipilih.', 'sun'],
         ['person-check', 'Jadi murid', 'Murid masuk ke kelas bulanan atau paket pertemuan. Jadwal pengajar dan ruangan dicek otomatis supaya tidak bentrok.', 'mint'],
         ['qr-code-scan', 'Belajar & absen scan QR', 'Pengajar absen dengan scan QR di tempat les, lalu scan kartu QR murid dari HP. Jam hadir keduanya tercatat, dan pengingat les terkirim lewat WhatsApp sehari sebelumnya.', 'sky'],
-        ['receipt', 'Tagihan & bayar', 'Tagihan terbit otomatis dari jadwal, lengkap dengan link bayar online. Pengingat jatuh tempo dan bukti lunas terkirim lewat WhatsApp.', 'lilac'],
+        ['receipt', 'Tagihan & bayar', 'Tagihan SPP terbit otomatis dari jadwal, lengkap dengan link bayar online. Pengingat jatuh tempo dan bukti lunas terkirim lewat WhatsApp.', 'lilac'],
         ['house-heart', 'Pantau bersama', 'Orang tua melihat jadwal, kehadiran, dan tagihan anak dari portalnya sendiri.', 'peach'],
     ];
 
@@ -55,8 +55,8 @@
     ];
 @endphp
 
-@section('title_full', 'Kelola Tempat Kursus Tanpa Repot | '.config('app.name'))
-@section('meta_description', 'Pendaftaran online, placement test, absensi scan QR, tagihan otomatis, sampai kabar ke orang tua lewat WhatsApp. Lebih banyak waktu untuk mengajar, bukan mengurus.')
+@section('title_full', 'Aplikasi Kursus: Kelola Murid, Absensi & SPP | '.config('app.name'))
+@section('meta_description', 'Aplikasi kursus musik, bimbel, dan les bahasa: pendaftaran online, placement test, absensi scan QR, tagihan SPP, sampai pengingat WhatsApp ke orang tua.')
 @section('meta_image', asset('images/produk/tiket-dashboard.webp'))
 
 @push('styles')
@@ -73,8 +73,8 @@
                 <div class="col-lg-6">
                     <span class="pd-eyebrow"><i class="bi bi-mortarboard"></i> bizbos Kursus</span>
                     <h1 class="pd-hero-title">Halo, <span class="pd-script">Pemilik Kursus!</span></h1>
-                    <p class="pd-hero-ask">Punya tempat <span class="pd-rotate" data-words="les musik?|bimbel?|les bahasa?|les coding?|les renang?">les musik?</span></p>
-                    <p class="pd-hero-lead">Dari pendaftaran murid, jadwal dan absensi, tagihan bulanan, sampai honor pengajar. Semuanya berjalan otomatis, orang tua pun bisa ikut memantau.</p>
+                    <p class="pd-hero-ask">Punya tempat <span class="pd-rotate" data-words="kursus musik?|bimbel?|les bahasa Inggris?|les privat?|kursus coding?|kursus renang?">kursus musik?</span></p>
+                    <p class="pd-hero-lead">Aplikasi kursus yang mengurus pendaftaran murid, jadwal dan absensi, tagihan bulanan (SPP), sampai honor pengajar. Semuanya berjalan otomatis, orang tua pun bisa ikut memantau.</p>
                     <div class="d-flex flex-wrap gap-2 mb-4">
                         <a href="{{ $registerUrl }}" class="btn btn-primary btn-lg pd-btn">Mulai Kelola Kursus <i class="bi bi-arrow-right"></i></a>
                         <a href="#alur" class="btn btn-lg pd-btn pd-btn-ghost"><i class="bi bi-signpost-split"></i> Lihat Alurnya</a>
@@ -102,7 +102,7 @@
     {{-- INTEREST: jenis kursus --}}
     <section class="pd-section" data-reveal>
         <div class="container">
-            <h2 class="pd-title text-center">Cocok untuk semua jenis<br>tempat kursus</h2>
+            <h2 class="pd-title text-center">Aplikasi kursus untuk<br>semua jenis tempat les</h2>
             <div class="row g-3 justify-content-center mt-2">
                 @foreach ($courseTypes as [$icon, $label, $tone])
                     <div class="col-6 col-md-4 col-lg-3">

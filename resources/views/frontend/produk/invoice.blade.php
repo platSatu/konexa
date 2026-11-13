@@ -54,8 +54,8 @@
     ];
 @endphp
 
-@section('title_full', 'Tagih Pelanggan Tanpa Mengejar-ngejar | '.config('app.name'))
-@section('meta_description', 'Kirim tagihan dengan link bayar VA, QRIS, dan e-wallet. Pengingat jatuh tempo berjalan sendiri, status lunas tercatat otomatis, dan uangnya masuk ke saldo Anda.')
+@section('title_full', 'Aplikasi Invoice & Tagihan Online Otomatis | '.config('app.name'))
+@section('meta_description', 'Aplikasi invoice online: kirim tagihan dengan link bayar VA, QRIS, dan e-wallet. Pengingat jatuh tempo berjalan sendiri, status lunas tercatat otomatis.')
 @section('meta_image', asset('images/produk/tiket-dashboard.webp'))
 
 @push('styles')
@@ -73,7 +73,7 @@
                     <span class="pd-eyebrow"><i class="bi bi-receipt"></i> bizbos Invoice</span>
                     <h1 class="pd-hero-title">Capek <span class="pd-script">nagih</span> satu per satu?</h1>
                     <p class="pd-hero-ask">Biar bizbos yang urus <span class="pd-rotate" data-words="iuran bulanan.|SPP sekolah.|sewa kos.|tagihan jasa.|langganan.">iuran bulanan.</span></p>
-                    <p class="pd-hero-lead">Kirim tagihan dengan link bayar online, ingatkan pelanggan secara otomatis, dan lihat siapa yang sudah lunas tanpa mengecek mutasi rekening.</p>
+                    <p class="pd-hero-lead">Aplikasi invoice online untuk mengirim tagihan dengan link bayar, mengingatkan pelanggan secara otomatis, dan melihat siapa yang sudah lunas tanpa mengecek mutasi rekening.</p>
                     <div class="d-flex flex-wrap gap-2 mb-4">
                         <a href="{{ $registerUrl }}" class="btn btn-primary btn-lg pd-btn">Mulai Kirim Tagihan <i class="bi bi-arrow-right"></i></a>
                         <a href="#alur" class="btn btn-lg pd-btn pd-btn-ghost"><i class="bi bi-signpost-split"></i> Lihat Alurnya</a>
@@ -100,7 +100,7 @@
     {{-- INTEREST: jenis usaha --}}
     <section class="pd-section" data-reveal>
         <div class="container">
-            <h2 class="pd-title text-center">Untuk usaha apa pun<br>yang rutin menagih</h2>
+            <h2 class="pd-title text-center">Aplikasi tagihan untuk usaha<br>apa pun yang rutin menagih</h2>
             <div class="row g-3 justify-content-center mt-2">
                 @foreach ($businessTypes as [$icon, $label, $tone])
                     <div class="col-6 col-md-4 col-lg-3">
