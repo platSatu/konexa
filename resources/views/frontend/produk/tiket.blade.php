@@ -267,6 +267,21 @@
                     <p>Kartu itu punya QR sendiri dan dipakai lagi untuk absen di tiap sesi. Anda tahu siapa hadir di kelas mana sepanjang acara, bukan sekadar siapa yang masuk gedung.</p>
                 </li>
             </ol>
+
+            <div class="row g-4 g-lg-5 mt-1">
+                <div class="col-md-6">
+                    <figure class="pd-shot pd-shot--flat mb-0">
+                        <img src="{{ asset('images/produk/tiket-registrasi.webp') }}" alt="Halaman registrasi ulang: petugas Gate B memasukkan PIN 6 angka" loading="lazy" width="1200" height="1116">
+                    </figure>
+                    <p class="small text-muted text-center mt-3 mb-0">Tiap pos masuk dengan PIN-nya sendiri.</p>
+                </div>
+                <div class="col-md-6">
+                    <figure class="pd-shot pd-shot--flat mb-0">
+                        <img src="{{ asset('images/produk/tiket-idcard.webp') }}" alt="Preview ID card peserta ukuran KTP dengan QR untuk absensi kelas" loading="lazy" width="1200" height="1116">
+                    </figure>
+                    <p class="small text-muted text-center mt-3 mb-0">Kartu peserta ber-QR, tercetak di kiosk.</p>
+                </div>
+            </div>
         </div>
     </section>
 
