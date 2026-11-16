@@ -21,7 +21,7 @@
 
     $flow = [
         ['ui-checks', 'Form pendaftaran', 'Bagikan link daftar online. Calon murid atau orang tua mengisi data sendiri, Anda tinggal menyetujui.', 'peach'],
-        ['patch-question', 'Placement test', 'Calon murid ikut tes penempatan online, bisa gratis atau berbayar. Skornya langsung keluar, kelas yang pas pun mudah dipilih.', 'sun'],
+        ['patch-question', 'Placement test', 'Kirim kode tes ke calon murid yang Anda undang. Hanya pemegang kode yang bisa membuka soalnya, dan nilainya keluar begitu selesai — kelas yang pas pun mudah ditentukan.', 'sun'],
         ['person-check', 'Jadi murid', 'Murid masuk ke kelas bulanan atau paket pertemuan. Jadwal pengajar dan ruangan dicek otomatis supaya tidak bentrok.', 'mint'],
         ['qr-code-scan', 'Belajar & absen scan QR', 'Pengajar absen dengan scan QR di tempat les, lalu scan kartu QR murid dari HP. Jam hadir keduanya tercatat, dan pengingat les terkirim lewat WhatsApp sehari sebelumnya.', 'sky'],
         ['receipt', 'Tagihan & bayar', 'Tagihan SPP terbit otomatis dari jadwal, lengkap dengan link bayar online. Pengingat jatuh tempo dan bukti lunas terkirim lewat WhatsApp.', 'lilac'],
@@ -29,7 +29,7 @@
     ];
 
     $highlights = [
-        ['patch-question', 'Kuis & tes online', 'Buat tes penempatan, kuis latihan, atau ujian akhir lewat link. Jawaban dan skor tercatat rapi untuk setiap peserta.', 'lilac'],
+        ['patch-question', 'Placement test & kuis online', 'Tes penempatan, kuis latihan, atau ujian akhir lewat satu link. Dikunci kode supaya hanya murid undangan yang bisa masuk, dan jawaban setiap peserta tercatat rapi.', 'lilac'],
         ['credit-card-2-front', 'Pembayaran online', 'Murid membayar lewat Virtual Account, e-wallet, atau QRIS. Status lunas tercatat sendiri, tanpa cek mutasi manual.', 'sun'],
         ['bank', 'Tarik saldo ke rekening', 'Uang yang masuk terkumpul di Saldo dan bisa ditarik ke rekening atas nama Anda kapan pun dibutuhkan.', 'mint'],
     ];
@@ -53,12 +53,47 @@
         ['Atur jadwal', 'Pasang jadwal rutin, pengajar, dan ruangan. Sesi dibuat otomatis.'],
         ['Tagih & pantau', 'Kirim tagihan bulanan, pantau absensi, dan honor pengajar terhitung sendiri.'],
     ];
+
+    // Data terstruktur Schema.org. Google memakainya untuk mengenali halaman ini sebagai aplikasi
+    // manajemen kursus, bukan sekadar artikel. Isinya WAJIB sama dengan yang benar-benar tampil
+    // di halaman -- menulis fitur yang tidak ada di sini bisa membuat halaman kena penalti.
+    $schema = [
+        '@context' => 'https://schema.org',
+        '@graph' => [
+            [
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => [
+                    ['@type' => 'ListItem', 'position' => 1, 'name' => 'Beranda', 'item' => url('/')],
+                    ['@type' => 'ListItem', 'position' => 2, 'name' => 'Aplikasi Kursus', 'item' => url()->current()],
+                ],
+            ],
+            [
+                '@type' => 'SoftwareApplication',
+                'name' => config('app.name').' Kursus',
+                'applicationCategory' => 'BusinessApplication',
+                'operatingSystem' => 'Web',
+                'url' => url()->current(),
+                'inLanguage' => 'id-ID',
+                'description' => 'Aplikasi manajemen kursus dan bimbel: pendaftaran murid online, placement test berkode undangan, absensi scan QR, tagihan SPP otomatis, honor pengajar, dan pengingat WhatsApp ke orang tua.',
+                'featureList' => [
+                    'Pendaftaran murid online',
+                    'Placement test khusus murid undangan',
+                    'Jadwal kelas dengan cek bentrok pengajar dan ruangan',
+                    'Absensi scan QR untuk pengajar dan murid',
+                    'Tagihan SPP otomatis dengan pembayaran online',
+                    'Perhitungan honor pengajar',
+                    'Portal orang tua dan pengajar',
+                    'Pengingat dan notifikasi WhatsApp',
+                ],
+            ],
+        ],
+    ];
 @endphp
 
 {{-- Jangan pakai "&" di @section(...): Laravel meng-escape isinya, lalu layout
      meng-escape lagi, sehingga tampil "&amp;" di <title>. Tulis "dan" atau pakai koma. --}}
-@section('title_full', 'Aplikasi Kursus: Murid, Absensi, SPP | '.config('app.name'))
-@section('meta_description', 'Aplikasi kursus musik, bimbel, dan les bahasa: pendaftaran online, placement test, absensi scan QR, tagihan SPP, sampai pengingat WhatsApp ke orang tua.')
+@section('title_full', 'Aplikasi Kursus: Placement Test, Absensi, SPP | '.config('app.name'))
+@section('meta_description', 'Aplikasi kursus musik, bimbel, dan les bahasa: pendaftaran online, placement test berkode undangan, absensi scan QR, tagihan SPP, dan pengingat WhatsApp ke orang tua.')
 @section('meta_image', asset('images/produk/tiket-dashboard.webp'))
 
 @push('styles')
@@ -130,6 +165,39 @@
                     </li>
                 @endforeach
             </ol>
+        </div>
+    </section>
+
+    {{-- INTEREST: placement test khusus murid undangan (memperdalam langkah 2 di alur atas) --}}
+    <section class="pd-section" id="placement-test" aria-labelledby="placement-test-title" data-reveal>
+        <div class="container">
+            <div class="row align-items-center g-4 g-lg-5">
+                <div class="col-lg-6">
+                    <h2 class="pd-title" id="placement-test-title">Placement test khusus<br class="d-none d-md-inline"> murid yang Anda undang</h2>
+                    <p class="pd-lead">Anda yang menentukan siapa boleh ikut. Berikan kode tes kepada calon murid, lalu hanya pemegang kode itu yang bisa membuka soalnya — link yang tersebar ke orang lain tidak akan bisa dipakai.</p>
+                    <p class="pd-lead">Begitu selesai, nilainya langsung keluar mengikuti batas yang Anda tetapkan sendiri, misalnya Pemula, Menengah, atau Lanjutan. Anda tinggal menempatkan murid di kelas yang pas, tanpa perlu memeriksa jawaban satu per satu.</p>
+                    <ul class="pd-chips list-unstyled mb-0">
+                        <li><i class="bi bi-check-circle-fill"></i> Kode dari admin</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Nilai otomatis</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Hasil ke WhatsApp</li>
+                        <li><i class="bi bi-check-circle-fill"></i> Gratis atau berbayar</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <article class="pd-role pd-tone--sun">
+                        <div>
+                            <span class="pd-role-tag">Yang dialami murid</span>
+                            <h3>Masukkan kode, kerjakan, terima hasilnya</h3>
+                            <p>Tanpa perlu membuat akun. Cukup buka link, masukkan kode dari Anda, lalu kerjakan.</p>
+                        </div>
+                        <ul class="pd-mock list-unstyled" aria-hidden="true">
+                            <li><span>1</span><b>Masukkan kode tes</b><em>dari admin</em></li>
+                            <li><span>2</span><b>Kerjakan soalnya</b><em class="is-warn">20 menit</em></li>
+                            <li><span>3</span><b>Nilai: Lanjutan</b><em class="is-ok">Terkirim ke WhatsApp</em></li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -241,5 +309,8 @@
 @endsection
 
 @push('scripts')
+    {{-- JSON-LD dibiarkan di akhir halaman: Google tetap membacanya di mana pun letaknya,
+         dan di sini ia tidak menunda tampilnya halaman. --}}
+    <script type="application/ld+json">@json($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG)</script>
     <script src="{{ asset('js/produk.js') }}?v={{ filemtime(public_path('js/produk.js')) }}" defer></script>
 @endpush
