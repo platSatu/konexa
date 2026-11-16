@@ -103,23 +103,13 @@
                 custom-nya. Twitter/X belum punya kolom ikon custom
                 (belum diminta), jadi selalu pakai ikon font.
             --}}
+            {{--
+                Ikon WhatsApp sengaja TIDAK ada di deretan ini (16 Nov 2026, permintaan user):
+                sudah terwakili tombol floating di pojok kanan-bawah, jadi tidak perlu dobel --
+                alasan yang sama seperti nomor HP yang dihapus dari teks kontak di atas.
+                $waNumber tetap dipakai tombol floating di bagian bawah file ini, jangan dihapus.
+            --}}
             <div class="d-flex align-items-center gap-3 flex-wrap">
-                {{--
-                    WhatsApp sengaja paling depan: ini jalur utama pelanggan menghubungi kami.
-                    Nomornya dari $waNumber di atas (pengaturan web > handphone), jadi selalu
-                    sama dengan tombol floating -- tidak ada kolom url terpisah yang bisa lupa
-                    diisi. Harus di DALAM div ini supaya ikut perataan dan jarak antar ikon.
-                --}}
-                @if ($waNumber !== '')
-                    <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener" class="footer-social-icon" aria-label="WhatsApp">
-                        @if (data_get($webSetting, 'icon_whatsapp_url'))
-                            <img src="{{ $webSetting['icon_whatsapp_url'] }}" alt="WhatsApp" class="footer-social-icon-img" loading="lazy">
-                        @else
-                            <i class="bi bi-whatsapp"></i>
-                        @endif
-                    </a>
-                @endif
-
                 @if (data_get($webSetting, 'instagram_url'))
                     <a href="{{ $webSetting['instagram_url'] }}" target="_blank" rel="noopener" class="footer-social-icon" aria-label="Instagram">
                         @if (data_get($webSetting, 'icon_instagram_url'))
