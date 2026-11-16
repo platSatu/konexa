@@ -24,11 +24,11 @@
 
     $features = [
         ['ui-checks', 'Form data pembeli', 'Tanyakan ukuran kaos, asal instansi, atau data lain yang Anda butuhkan saat checkout.', 'mint'],
-        ['person-badge', 'ID card peserta', 'Cetak kartu peserta langsung dari data pendaftar, tanpa ketik ulang.', 'sun'],
+        ['person-badge', 'ID card peserta', 'Peserta menukar e-ticket jadi kartu ber-QR di kiosk. Ukuran KTP untuk kartu PVC, atau A5 untuk tali lanyard.', 'sun'],
         ['wallet2', 'Hasil masuk ke Saldo', 'Uang tiket masuk otomatis setiap pembayaran lunas dan bisa ditarik ke rekening.', 'peach'],
         ['credit-card', 'Banyak metode bayar', 'Virtual Account, e-wallet, dan QRIS. Status lunas tercatat sendiri.', 'sky'],
-        ['palette', 'Desain e-ticket sendiri', 'Sesuaikan warna dan tampilan e-ticket dengan identitas event Anda.', 'lilac'],
-        ['people', 'Akun petugas scan', 'Beri akses scan ke kru tanpa membagikan akun utama Anda.', 'mint'],
+        ['palette', 'Desain e-ticket sendiri', 'Pasang gambar event sebagai latar tiket dan pilih warnanya. ID card peserta ikut menyesuaikan.', 'lilac'],
+        ['people', 'Akun petugas scan', 'Kru masuk dengan PIN 6 angka milik posnya sendiri, tanpa menyentuh akun utama Anda.', 'mint'],
     ];
 
     $steps = [
@@ -37,10 +37,44 @@
         ['Bagikan link', 'Sebar link ke media sosial, grup WhatsApp, atau email.'],
         ['Scan di hari-H', 'Peserta datang, QR di-scan, langsung tercatat hadir.'],
     ];
+
+    // Data terstruktur Schema.org, pola sama dengan halaman Kursus. Isinya WAJIB sama dengan yang
+    // benar-benar tampil di halaman ini -- menulis fitur yang tidak ada bisa membuat halaman kena penalti.
+    $schema = [
+        '@context' => 'https://schema.org',
+        '@graph' => [
+            [
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => [
+                    ['@type' => 'ListItem', 'position' => 1, 'name' => 'Beranda', 'item' => url('/')],
+                    ['@type' => 'ListItem', 'position' => 2, 'name' => 'Aplikasi Tiket Event', 'item' => url()->current()],
+                ],
+            ],
+            [
+                '@type' => 'SoftwareApplication',
+                'name' => config('app.name').' Tiket',
+                'applicationCategory' => 'BusinessApplication',
+                'operatingSystem' => 'Web',
+                'url' => url()->current(),
+                'inLanguage' => 'id-ID',
+                'description' => 'Aplikasi jual tiket event online: halaman event, pembayaran online, e-ticket QR, registrasi ulang di pintu masuk, cetak ID card peserta di kiosk, dan absensi tiap kelas.',
+                'featureList' => [
+                    'Halaman event dan kategori tiket',
+                    'Pembayaran Virtual Account, e-wallet, dan QRIS',
+                    'E-ticket QR terkirim otomatis',
+                    'Registrasi ulang dengan scan QR',
+                    'Akun petugas scan dengan PIN per pos',
+                    'Cetak ID card peserta di kiosk',
+                    'Absensi peserta di setiap kelas',
+                    'Desain e-ticket dan ID card sendiri',
+                ],
+            ],
+        ],
+    ];
 @endphp
 
-@section('title_full', 'Aplikasi Jual Tiket Event Online | '.config('app.name'))
-@section('meta_description', 'Aplikasi jual tiket event online: buat halaman event, terima pembayaran, kirim e-ticket QR, dan scan peserta di pintu masuk. Tanpa biaya langganan.')
+@section('title_full', 'Aplikasi Jual Tiket Event, Registrasi Ulang | '.config('app.name'))
+@section('meta_description', 'Aplikasi jual tiket event online: terima pembayaran, kirim e-ticket QR, scan registrasi ulang di pintu masuk, dan cetak ID card peserta di kiosk. Tanpa biaya langganan.')
 @section('meta_image', asset('images/produk/tiket-eticket.webp'))
 
 @push('styles')
@@ -202,14 +236,70 @@
         </div>
     </section>
 
+    {{-- DESIRE: operasional hari-H (petugas, registrasi ulang, ID card, absensi kelas) --}}
+    <section class="pd-section" id="hari-h" aria-labelledby="hari-h-title" data-reveal>
+        <div class="container">
+            <h2 class="pd-title text-center" id="hari-h-title">Hari-H berjalan rapi, dari<br class="d-none d-md-inline"> pintu masuk sampai kartu peserta</h2>
+            <p class="pd-lead text-center mx-auto mb-5" style="max-width: 42rem;">Untuk event yang butuh lebih dari sekadar scan masuk — konferensi berhari-hari, pelatihan dengan banyak kelas, atau acara dengan beberapa pintu.</p>
+            <ol class="pd-flow list-unstyled">
+                <li class="pd-flow-item">
+                    <span class="pd-flow-icon pd-tone--sky"><i class="bi bi-shield-lock"></i></span>
+                    <span class="pd-flow-num">1</span>
+                    <h3>Petugas masuk dengan PIN</h3>
+                    <p>Tiap pos punya halaman dan PIN 6 angka sendiri — Gate A, Gate B, atau meja kiosk. Kru cukup diberi PIN-nya, dan akun utama Anda tidak pernah berpindah tangan.</p>
+                </li>
+                <li class="pd-flow-item">
+                    <span class="pd-flow-icon pd-tone--peach"><i class="bi bi-qr-code-scan"></i></span>
+                    <span class="pd-flow-num">2</span>
+                    <h3>Registrasi ulang di pintu masuk</h3>
+                    <p>E-ticket peserta di-scan, kehadirannya langsung tercatat. Tiket yang sudah dipakai otomatis ditolak, jadi satu kode tidak bisa masuk dua kali.</p>
+                </li>
+                <li class="pd-flow-item">
+                    <span class="pd-flow-icon pd-tone--sun"><i class="bi bi-person-badge"></i></span>
+                    <span class="pd-flow-num">3</span>
+                    <h3>Tukar jadi ID card</h3>
+                    <p>Di kiosk, e-ticket ditukar menjadi kartu peserta yang langsung tercetak. Pilih ukuran KTP untuk kartu PVC atau A5 untuk tali lanyard, tegak atau mendatar. Tulisan di kartu Anda tentukan sendiri — PESERTA, DELEGASI, atau VISITOR — lengkap dengan kategori tiketnya.</p>
+                </li>
+                <li class="pd-flow-item">
+                    <span class="pd-flow-icon pd-tone--mint"><i class="bi bi-clipboard-check"></i></span>
+                    <span class="pd-flow-num">4</span>
+                    <h3>Absensi di setiap kelas</h3>
+                    <p>Kartu itu punya QR sendiri dan dipakai lagi untuk absen di tiap sesi. Anda tahu siapa hadir di kelas mana sepanjang acara, bukan sekadar siapa yang masuk gedung.</p>
+                </li>
+            </ol>
+        </div>
+    </section>
+
     {{-- ACTION --}}
     @include('frontend.produk._steps', ['title' => 'Mulai jual tiket dalam 4 langkah', 'steps' => $steps])
     @include('frontend.produk._cta', ['before' => 'Siap jual tiket', 'highlight' => 'event', 'after' => ' Anda?', 'subtitle' => 'Daftar gratis, buat page tiket, dan bagikan link-nya hari ini juga.', 'button' => 'Buat Event Sekarang'])
+
+    {{-- Sengaja paling bawah dan dibuat tenang: ini layanan tambahan, bukan syarat memakai aplikasi,
+         jadi tidak boleh bersaing dengan ajakan utama di atasnya. --}}
+    <section class="pd-section pd-section--soft" aria-labelledby="tim-register-title" data-reveal>
+        <div class="container">
+            <div class="pd-notify">
+                <div class="pd-notify-head">
+                    <span class="pd-card-icon pd-notify-badge"><i class="bi bi-people"></i></span>
+                    <div>
+                        <h2 class="h5 fw-bold mb-1" id="tim-register-title">Butuh tim registrasi di hari-H?</h2>
+                        <p class="mb-0">Kalau Anda belum punya kru untuk menjaga pintu masuk dan meja kiosk, kami bisa bantu sediakan. Sifatnya tambahan saja — aplikasinya tetap bisa Anda jalankan sendiri tanpa kami.</p>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="{{ route('frontend.contact') }}" class="btn pd-btn pd-btn-ghost"><i class="bi bi-headset"></i> Hubungi Kami</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     @include('frontend.partials.footer')
 @endsection
 
 @push('scripts')
+    {{-- JSON-LD dibiarkan di akhir halaman: Google tetap membacanya di mana pun letaknya,
+         dan di sini ia tidak menunda tampilnya halaman. --}}
+    <script type="application/ld+json">@json($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG)</script>
     <script src="{{ asset('js/produk.js') }}?v={{ filemtime(public_path('js/produk.js')) }}" defer></script>
     <script>
         (function () {
