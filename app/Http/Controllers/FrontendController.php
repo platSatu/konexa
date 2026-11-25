@@ -348,9 +348,13 @@ class FrontendController extends Controller
                     'services' => $services,
                     'packages' => $sorted->all(),
                     'comparison' => $this->comparisonRows($sorted),
+                    // Urutan tab: paket Kursus dulu (termurah -> termahal), lalu kelompok lain seperti sebelumnya.
+                    'order' => str_contains(strtolower(implode(' ', $services)), 'kursus')
+                        ? [0, (float) ($paid->min('price') ?? 0)]
+                        : [1, -count($services)],
                 ];
             })
-            ->sortByDesc(fn (array $group) => count($group['services']))
+            ->sortBy(fn (array $group) => $group['order'])
             ->values()
             ->all();
     }
