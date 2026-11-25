@@ -57,7 +57,7 @@
     <div class="container">
         @include('frontend.partials.sections._heading', [
             'defaultTitle' => 'Paket Layanan',
-            'defaultSubtitle' => 'Pilih paket sesuai layanan yang dibutuhkan bisnis Anda. Paket berlaku untuk setiap branch.',
+            'defaultSubtitle' => 'Pilih paket sesuai kebutuhan kursus Anda. Satu paket untuk pusat dan semua cabang, tanpa biaya tambahan per cabang.',
         ])
 
         @if (empty($packageGroups))
@@ -130,6 +130,10 @@
                         <p class="package-swipe-hint d-md-none">Geser untuk melihat paket lain <i class="bi bi-arrow-right"></i></p>
                     @endif
 
+                    {{-- 4 paket dalam satu tab (mis. Kursus: Trial, Bulanan, 6 & 12 bulan) = 4 kolom di layar lebar; selain itu 3 kolom. --}}
+                    @php
+                        $packageCol = count($group['packages']) >= 4 ? 'col-12 col-md-6 col-xl-3' : 'col-12 col-md-6 col-lg-4';
+                    @endphp
                     <div class="row g-4 justify-content-center package-row">
                         @foreach ($group['packages'] as $package)
                             @php
@@ -149,7 +153,7 @@
                                 }
                                 $savings = (int) ($package['savings'] ?? 0);
                             @endphp
-                            <div class="col-12 col-md-6 col-lg-4 d-flex package-col" style="--i: {{ $loop->index }}">
+                            <div class="{{ $packageCol }} d-flex package-col" style="--i: {{ $loop->index }}">
                                 <div class="package-card w-100 h-100 d-flex flex-column p-4 {{ $isFeatured ? 'package-card--featured' : '' }}">
                                     @if ($isFeatured)
                                         <span class="package-badge">TERPOPULER</span>
