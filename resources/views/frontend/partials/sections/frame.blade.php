@@ -29,3 +29,6 @@
         @include('frontend.partials.sections._buttons')
     </div>
 </section>
+@if ($isSteps && ($showVideoAfterSteps ?? false))
+    @include('frontend.partials.lihat-bizbos')
+@endif
