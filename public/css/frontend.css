@@ -2940,3 +2940,61 @@ a.contact-channel:hover {
     .vp-play::before, .lb-panel { animation: none; }
     .vp-poster img, .vp-play, .lb-tab, .vp-link { transition: none; }
 }
+
+/* =====================================================================
+   Perbaikan tampilan HP & desktop (beranda)
+   ===================================================================== */
+
+/* 1. Label atas hero: selalu satu baris, lebar tetap (lihat script di hero.blade.php) */
+.hero-eyebrow { white-space: nowrap; max-width: 100%; }
+.hero-light .pd-rotate { text-align: left; }
+
+/* 2. Tombol "Lihat harga" dll. (btn-outline-primary) ikut warna brand, bukan biru Bootstrap */
+.btn-outline-primary {
+    --bs-btn-color: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #c95345;
+    --bs-btn-active-border-color: #c95345;
+    --bs-btn-focus-shadow-rgb: var(--bs-primary-rgb);
+}
+
+/* 3. Tombol CTA: panah tidak turun ke baris baru */
+.cta-btn-primary, .hero-btn { white-space: nowrap; }
+
+@media (max-width: 991.98px) {
+    /* 4. Kartu "momen lega" tetap tampil (dan bergerak) di HP & tablet,
+          diletakkan di atas & bawah ilustrasi supaya tidak menutupi kartu alur */
+    .hero-moment { display: flex; font-size: .78rem; padding: .55rem .8rem; border-radius: 14px; }
+    .hero-moment-icon { width: 1.9rem; height: 1.9rem; font-size: 1rem; border-radius: 10px; }
+    .hero-light .hero-visual { padding-top: 3.6rem; padding-bottom: 3.6rem; }
+    .hero-moment--paid { left: 4px; top: 0; }
+    .hero-moment--reminder { right: 4px; bottom: 0; }
+}
+
+@media (max-width: 575.98px) {
+    /* 1b. Label hero mengecil mengikuti lebar layar supaya muat satu baris */
+    .hero-eyebrow { font-size: clamp(.74rem, 3.5vw, .95rem); padding: .4rem .85rem; gap: .3rem; }
+
+    /* 5. Tombol hero sama lebar, mudah diketuk */
+    .hero-content .hero-btn { flex: 1 1 100%; justify-content: center; text-align: center; }
+
+    /* 6. Gelembung "Ada yang mau ditanyakan?" tidak menutupi teks di HP
+          (tombol WhatsApp-nya tetap ada) */
+    .whatsapp-float-hint { display: none; }
+
+    /* 7. Kartu "Cocok untuk berbagai tempat belajar" selebar layar */
+    .home-icon-item { flex: 1 1 100%; max-width: none; }
+
+    /* 8. Tombol CTA penutup: teks lebih kecil sedikit supaya muat satu baris */
+    .cta-btn-primary { font-size: 1.05rem; padding-inline: 1.25rem; }
+}
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .home-icon-item { flex: 1 1 calc(50% - 1.25rem); max-width: none; }
+}
+@media (max-width: 359.98px) {
+    .hero-eyebrow-lead { display: none; }   /* layar sangat kecil: cukup "✦ kursus bahasa Inggris" */
+}

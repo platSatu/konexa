@@ -34,7 +34,7 @@
                     <div class="container py-5">
                         <div class="row align-items-center g-4 g-lg-5">
                             <div class="col-12 col-lg-6 hero-content">
-                                <span class="hero-eyebrow"><i class="bi bi-stars"></i> Untuk pemilik <span class="pd-rotate" data-words="tempat kursus|kursus bahasa Inggris|kursus Mandarin|kursus bahasa Korea|kursus bahasa Jepang|bimbel|les musik|kursus coding">tempat kursus</span></span>
+                                <span class="hero-eyebrow"><i class="bi bi-stars"></i> <span class="hero-eyebrow-lead">Untuk pemilik</span> <span class="pd-rotate" data-words="tempat kursus|kursus bahasa Inggris|kursus Mandarin|kursus bahasa Korea|kursus bahasa Jepang|bimbel|les musik|kursus coding">tempat kursus</span></span>
                                 @if (! empty($slide['text']))
                                     <h1 class="display-4 fw-bold">{{ $slide['text'] }}</h1>
                                 @endif
@@ -78,6 +78,27 @@
 @push('scripts')
     <script src="{{ asset('js/produk.js') }}?v={{ filemtime(public_path('js/produk.js')) }}" defer></script>
     <script>
+        // Teks berputar di label atas ("Untuk pemilik ...") selalu selebar kata terpanjang,
+        // jadi label tidak melebar-menyempit / pindah baris dan judul di bawahnya tidak ikut naik-turun.
+        (function () {
+            var r = document.querySelector('.hero-light .pd-rotate');
+            if (!r || !r.dataset.words) return;
+            function fit() {
+                r.style.minWidth = '';
+                var m = document.createElement('span');
+                m.className = 'pd-rotate';
+                m.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;left:-9999px';
+                r.parentNode.appendChild(m);
+                var w = 0;
+                r.dataset.words.split('|').forEach(function (t) { m.textContent = t; w = Math.max(w, m.getBoundingClientRect().width); });
+                m.remove();
+                r.style.minWidth = Math.ceil(w) + 'px';
+            }
+            fit();
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+            window.addEventListener('resize', fit);
+        })();
+
         // Ilustrasi bergeser sedikit mengikuti mouse (desktop saja, dimatikan bila "kurangi gerakan").
         (function () {
             var hero = document.getElementById('heroCarousel');
