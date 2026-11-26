@@ -11,11 +11,13 @@
     // Bingkai dari Susunan Beranda (Teleios) -- judul, background, tombol.
     $section = ($section ?? []) + ['style' => '', 'is_dark' => false];
 @endphp
+{{-- Kalau belum ada fitur dari Superadmin, section tidak ditampilkan sama sekali (bukan pesan kosong). --}}
+@if (! empty($features))
 <section id="features" data-reveal class="py-5 features-section {{ $section['style'] === '' ? 'features-section--tinted' : '' }} {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
     <div class="container">
         @include('frontend.partials.sections._heading', [
-            'defaultTitle' => 'Fitur Unggulan',
-            'defaultSubtitle' => 'Semua yang Anda butuhkan untuk mengelola percakapan WhatsApp bisnis dalam satu platform — dari otomasi berbasis AI sampai manajemen pelanggan yang terintegrasi.',
+            'defaultTitle' => 'Yang bisa bizbos bantu kerjakan untuk Anda',
+            'defaultSubtitle' => 'Dari murid mendaftar sampai SPP lunas, pekerjaan admin yang berulang dikerjakan otomatis. Anda tinggal mengecek dari HP.',
         ])
 
         @if (empty($features))
@@ -30,19 +32,21 @@
                         $tileSize = $tileSizes[$loop->index % count($tileSizes)];
                         // Fallback kalau deskripsi belum diisi di Superadmin > Web > Fitur.
                         $featureDescription = trim((string) ($feature['description'] ?? ''))
-                            ?: 'Fitur ini dirancang untuk membantu bisnis Anda berjalan lebih efisien dan otomatis, tanpa ribet.';
+                            ?: '';
                     @endphp
                     <article class="feature-tile feature-tile--{{ $tileSize }}" style="--i: {{ $loop->index }}">
                         <div class="feature-tile-text">
                             <h3 class="feature-tile-title">{{ $feature['name'] }}</h3>
-                            <p class="feature-tile-desc">{{ $featureDescription }}</p>
+                            @if ($featureDescription !== '')
+                                <p class="feature-tile-desc">{{ $featureDescription }}</p>
+                            @endif
                         </div>
                         @if (! empty($feature['images_url']))
                             <div class="feature-tile-art">
                                 <img src="{{ $feature['images_url'] }}" alt="{{ $feature['name'] }}" loading="lazy">
                             </div>
                         @endif
-                        @if (in_array($tileSize, ['small', 'tall'], true))
+                        @if ($featureDescription !== '' && in_array($tileSize, ['small', 'tall'], true))
                             <p class="feature-tile-hover" aria-hidden="true">{{ $featureDescription }}</p>
                         @endif
                     </article>
@@ -57,3 +61,4 @@
         @include('frontend.partials.sections._buttons')
     </div>
 </section>
+@endif

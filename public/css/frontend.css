@@ -2424,3 +2424,194 @@ a.contact-channel:hover {
 .contact-field .contact-input { padding-left: 2.6rem; }
 .contact-page .contact-input { background: #faf7f5; border-color: transparent; }
 .contact-page .contact-input:focus { background: #fff; border-color: var(--bs-primary); box-shadow: 0 0 0 .2rem rgba(219, 91, 76, .15); }
+
+
+/* =====================================================================
+ * Hero: kartu "momen lega" melayang di atas ilustrasi alur
+ * (frontend/partials/hero.blade.php). Contoh kabar yang diterima pemilik
+ * kursus -- SPP lunas, pengingat terkirim. Disembunyikan di layar kecil.
+ * ===================================================================== */
+.hero-light .hero-visual { position: relative; }
+
+.hero-moment {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    padding: .7rem 1rem;
+    border-radius: 16px;
+    background: #fff;
+    color: #1f1a17;
+    font-size: .85rem;
+    line-height: 1.25;
+    box-shadow: 0 16px 36px rgba(60, 30, 20, .16);
+    animation: float-soft 6s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.hero-moment small { display: block; color: #6b6461; font-weight: 500; }
+.hero-moment-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 12px;
+    font-size: 1.15rem;
+}
+
+.hero-moment--paid { left: 2%; top: -2%; }
+.hero-moment--paid .hero-moment-icon { background: #e5f6ec; color: #23885a; }
+.hero-moment--reminder { right: 0; bottom: -4%; animation-delay: -3s; }
+.hero-moment--reminder .hero-moment-icon { background: #e6f6ec; color: #25a35a; }
+
+@media (max-width: 991.98px) {
+    .hero-moment { display: none; }
+}
+
+
+/* =====================================================================
+ * Kenal dengan situasi ini? (frontend/partials/kenal-situasi.blade.php)
+ * Kartu "rasa sakit": ilustrasi adegan (partials/ilustrasi/situasi-*),
+ * waktu kejadian, judul, perasaan -- lalu pita hijau "Dengan bizbos".
+ * ===================================================================== */
+.situasi-section {
+    padding: 5.5rem 0;
+    background: linear-gradient(180deg, #fff 0%, #fffaf7 100%);
+    color: #1f1a17;
+}
+
+.situasi-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    margin-bottom: 1rem;
+    padding: .35rem .9rem;
+    border-radius: 999px;
+    background: #fff4ef;
+    color: var(--bs-primary);
+    font-weight: 700;
+    font-size: .9rem;
+}
+
+.situasi-title { font-weight: 700; font-size: clamp(1.7rem, 3.4vw, 2.6rem); line-height: 1.25; margin-bottom: 1rem; }
+.situasi-lead { max-width: 42rem; color: #6b6461; font-size: 1.08rem; line-height: 1.8; font-weight: 500; }
+
+.situasi-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 26px;
+    background: #fff;
+    box-shadow: 0 18px 44px rgba(60, 30, 20, .09);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.situasi-card:hover { transform: translateY(-4px); box-shadow: 0 26px 56px rgba(60, 30, 20, .14); }
+
+.situasi-pain { flex: 1 1 auto; padding: 1.4rem 1.5rem 1.5rem; }
+.situasi-tone--night { background: #f1f0f7; --situasi-accent: #4b4f78; }
+.situasi-tone--sun { background: #fff8e6; --situasi-accent: #b7791f; }
+.situasi-tone--mint { background: #effaf3; --situasi-accent: #23885a; }
+.situasi-tone--sky { background: #eff5fd; --situasi-accent: #2f6fba; }
+
+.situasi-art-wrap { margin-bottom: 1.1rem; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 26px rgba(60, 30, 20, .1); }
+.situasi-art { display: block; width: 100%; height: auto; font-family: 'Comfortaa', 'Segoe UI', system-ui, sans-serif; }
+
+.situasi-time {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    margin-bottom: .5rem;
+    font-size: .8rem;
+    font-weight: 700;
+    color: var(--situasi-accent);
+}
+
+.situasi-card-title { font-size: 1.2rem; font-weight: 700; line-height: 1.45; margin-bottom: .6rem; }
+.situasi-pain-text { margin: 0; color: #5a5250; line-height: 1.75; }
+
+.situasi-after {
+    display: flex;
+    gap: .9rem;
+    align-items: flex-start;
+    padding: 1.15rem 1.5rem 1.3rem;
+    background: #fff;
+    border-top: 2px dashed #d6efe0;
+}
+
+.situasi-after p { margin: .25rem 0 0; font-weight: 600; line-height: 1.65; }
+
+.situasi-check {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: #23885a;
+    color: #fff;
+    font-size: 1.2rem;
+    box-shadow: 0 6px 14px rgba(35, 136, 90, .3);
+}
+
+.situasi-tag { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #23885a; }
+
+.situasi-closing {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 2.5rem;
+    margin-top: 3.5rem;
+    padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.5rem, 4vw, 3rem);
+    border-radius: 26px;
+    background: #2b2f4a;
+    color: #fff;
+}
+
+.situasi-closing-text { flex: 1 1 26rem; }
+.situasi-closing h3 { font-size: clamp(1.25rem, 2.4vw, 1.6rem); font-weight: 700; margin-bottom: .5rem; }
+.situasi-closing p { margin: 0; color: rgba(255, 255, 255, .78); line-height: 1.75; }
+.situasi-closing-action { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; }
+.situasi-closing-action small { color: rgba(255, 255, 255, .7); }
+
+/* Animasi kecil di ilustrasi */
+.situasi-art .sa-blink { animation: sa-blink 1.2s steps(1) infinite; }
+.situasi-art .sa-twinkle { animation: sa-twinkle 3s ease-in-out infinite; }
+.situasi-art .sa-float { animation: sa-float 5s ease-in-out infinite; }
+.situasi-art .sa-shake { transform-box: fill-box; transform-origin: center; animation: sa-shake 2.4s ease-in-out infinite; }
+.situasi-art .sa-vibe { animation: sa-twinkle 1.2s ease-in-out infinite; }
+.situasi-art .sa-pulse { transform-box: fill-box; transform-origin: center; animation: sa-pulse 1.8s ease-in-out infinite; }
+.situasi-art .sa-typing circle { animation: sa-twinkle 1.2s ease-in-out infinite; }
+.situasi-art .sa-typing circle:nth-child(3) { animation-delay: .2s; }
+.situasi-art .sa-typing circle:nth-child(4) { animation-delay: .4s; }
+.reveal-ready [data-reveal]:not(.is-visible) .sa-pop { opacity: 0; }
+.reveal-ready [data-reveal].is-visible .sa-pop { animation: sa-pop .45s ease-out both; }
+
+@keyframes sa-blink { 50% { opacity: 0; } }
+@keyframes sa-twinkle { 50% { opacity: .25; } }
+@keyframes sa-float { 50% { transform: translateY(-4px); } }
+@keyframes sa-shake {
+    0%, 60%, 100% { transform: rotate(0); }
+    64% { transform: rotate(-4deg); } 68% { transform: rotate(4deg); }
+    72% { transform: rotate(-3deg); } 76% { transform: rotate(3deg); } 80% { transform: rotate(0); }
+}
+@keyframes sa-pulse { 50% { transform: scale(1.12); } }
+@keyframes sa-pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.reveal-ready [data-reveal]:not(.is-visible) .situasi-card { opacity: 0; transform: translateY(18px); }
+.reveal-ready [data-reveal].is-visible .situasi-card {
+    opacity: 1;
+    transform: none;
+    transition: opacity .5s ease, transform .5s ease, box-shadow .25s ease;
+    transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-moment,
+    .situasi-art * { animation: none !important; }
+    .situasi-card, .situasi-card:hover { transition: none; transform: none; }
+}

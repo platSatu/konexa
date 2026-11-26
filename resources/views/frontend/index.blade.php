@@ -5,7 +5,8 @@
     sengaja TIDAK diisi di sini supaya memakai isian Teleios (Superadmin >
     Web > Pengaturan Web > Meta Description). Nama dari APP_NAME.
 --}}
-@section('title_full', config('app.name').' | Satu Aplikasi, Semua Urusan Usaha Beres')
+{{-- Jangan pakai "&" di @section(...): tampil "&amp;" di <title>. Pakai "dan" atau koma. --}}
+@section('title_full', config('app.name').' | Aplikasi Tempat Kursus dan Bimbel: Pendaftaran, Absensi, SPP Otomatis')
 
 @section('content')
 

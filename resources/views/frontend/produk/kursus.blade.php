@@ -11,7 +11,7 @@
     $courseTypes = [
         ['music-note-beamed', 'Kursus Musik', 'lilac'],
         ['book', 'Bimbel & Les Privat', 'sky'],
-        ['translate', 'Les Bahasa Inggris', 'mint'],
+        ['translate', 'Bahasa Inggris, Mandarin, Korea, Jepang', 'mint'],
         ['code-slash', 'Coding & Robotik', 'sun'],
         ['water', 'Renang & Olahraga', 'sky'],
         ['palette', 'Seni & Menggambar', 'peach'],
@@ -94,7 +94,7 @@
      meng-escape lagi, sehingga tampil "&amp;" di <title>. Tulis "dan" atau pakai koma. --}}
 @section('title_full', 'Aplikasi Kursus: Placement Test, Absensi, SPP | '.config('app.name'))
 @section('meta_description', 'Aplikasi kursus musik, bimbel, dan les bahasa: pendaftaran online, placement test berkode undangan, absensi scan QR, tagihan SPP, dan pengingat WhatsApp ke orang tua.')
-@section('meta_image', asset('images/produk/tiket-dashboard.webp'))
+{{-- meta_image sengaja tidak diisi: memakai gambar share bawaan dari Pengaturan Web (gambar dashboard tiket tidak cocok untuk halaman kursus). --}}
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/produk.css') }}?v={{ filemtime(public_path('css/produk.css')) }}">
@@ -110,7 +110,7 @@
                 <div class="col-lg-6">
                     <span class="pd-eyebrow"><i class="bi bi-mortarboard"></i> bizbos Kursus</span>
                     <h1 class="pd-hero-title">Halo, <span class="pd-script">Pemilik Kursus!</span></h1>
-                    <p class="pd-hero-ask">Punya tempat <span class="pd-rotate" data-words="kursus musik?|bimbel?|les bahasa Inggris?|les privat?|kursus coding?|kursus renang?">kursus musik?</span></p>
+                    <p class="pd-hero-ask">Punya tempat <span class="pd-rotate" data-words="kursus bahasa Inggris?|kursus Mandarin?|kursus bahasa Korea?|kursus bahasa Jepang?|bimbel?|kursus musik?|kursus coding?">kursus bahasa Inggris?</span></p>
                     <p class="pd-hero-lead">Aplikasi kursus yang mengurus pendaftaran murid, jadwal dan absensi, tagihan bulanan (SPP), sampai honor pengajar. Semuanya berjalan otomatis, orang tua pun bisa ikut memantau.</p>
                     <div class="d-flex flex-wrap gap-2 mb-4">
                         <a href="{{ $registerUrl }}" class="btn btn-primary btn-lg pd-btn">Mulai Kelola Kursus <i class="bi bi-arrow-right"></i></a>
@@ -126,7 +126,23 @@
                 <div class="col-lg-6">
                     <div class="pd-hero-visual">
                         <figure class="pd-shot pd-shot--back">
-                            <img src="{{ asset('images/produk/tiket-dashboard.webp') }}" alt="Dashboard bizbos dengan jadwal hari ini" width="1600" height="805">
+                            <div class="kd-mock" role="img" aria-label="Contoh dashboard kursus di bizbos: jadwal hari ini, tagihan, dan absensi">
+                                <div class="kd-bar"><span></span><span></span><span></span><b>Dashboard Kursus</b></div>
+                                <div class="kd-body">
+                                    <div class="kd-stats">
+                                        <div class="kd-stat kd-stat--mint"><small>Murid aktif</small><strong>128</strong></div>
+                                        <div class="kd-stat kd-stat--sun"><small>SPP bulan ini</small><strong>86% lunas</strong></div>
+                                        <div class="kd-stat kd-stat--peach"><small>Kelas hari ini</small><strong>9 sesi</strong></div>
+                                    </div>
+                                    <div class="kd-list">
+                                        <div class="kd-list-title">Jadwal hari ini</div>
+                                        <div class="kd-row"><span class="kd-time">15.00</span><span class="kd-name">English for Kids · Kelas A</span><em class="kd-ok">Sudah absen</em></div>
+                                        <div class="kd-row"><span class="kd-time">16.30</span><span class="kd-name">Mandarin Dasar · Kelas B</span><em class="kd-ok">Sudah absen</em></div>
+                                        <div class="kd-row"><span class="kd-time">18.00</span><span class="kd-name">Bahasa Korea · Pemula</span><em class="kd-warn">Belum mulai</em></div>
+                                        <div class="kd-row"><span class="kd-time">19.00</span><span class="kd-name">Bahasa Jepang · N5</span><em>Terjadwal</em></div>
+                                    </div>
+                                </div>
+                            </div>
                         </figure>
                         <div class="pd-float pd-float--sold"><i class="bi bi-person-plus-fill"></i><span><strong>Pendaftar baru</strong><small>Menunggu persetujuan Anda</small></span></div>
                         <div class="pd-float pd-float--scan"><i class="bi bi-whatsapp"></i><span><strong>Pengingat terkirim</strong><small>Kelas besok jam 16.00</small></span></div>
@@ -213,7 +229,11 @@
                             <h3>Dashboard yang langsung menunjukkan yang perlu ditangani</h3>
                             <p>Pemasukan bulan ini, sesi yang belum diabsen, tagihan yang hampir jatuh tempo, dan jadwal hari ini dalam satu layar.</p>
                         </div>
-                        <img src="{{ asset('images/produk/tiket-dashboard.webp') }}" alt="Dashboard pemilik kursus" class="pd-bento-img" loading="lazy" width="1600" height="805">
+                        <ul class="pd-mock list-unstyled mt-3" aria-hidden="true">
+                            <li><span>Hari ini</span><b>Pemasukan bulan ini</b><em class="is-ok">Rp 18,4 jt</em></li>
+                            <li><span>3 sesi</span><b>Belum diabsen</b><em class="is-warn">Cek sekarang</em></li>
+                            <li><span>5 murid</span><b>Tagihan jatuh tempo minggu ini</b><em>Pengingat aktif</em></li>
+                        </ul>
                     </article>
                 </div>
                 <div class="col-lg-6 d-flex flex-column gap-4">

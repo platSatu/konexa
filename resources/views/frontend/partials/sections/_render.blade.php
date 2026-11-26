@@ -3,6 +3,10 @@
     @switch($section['type'])
         @case('hero')
             @include('frontend.partials.hero')
+            {{-- Section keluhan sebelum-sesudah, tetap tampil tepat di bawah hero beranda. --}}
+            @if (request()->routeIs('frontend.index'))
+                @include('frontend.partials.kenal-situasi')
+            @endif
             @break
         @case('running_text')
             @include('frontend.partials.running-text')

@@ -530,3 +530,33 @@
 }
 
 .pd-bubble--out { align-self: flex-end; border-radius: 14px 4px 14px 14px; background: #dcf8c6; }
+
+
+/* ---------- Ilustrasi dashboard kursus (pengganti screenshot dashboard tiket di /kursus) ---------- */
+.kd-mock { background: #fff; color: var(--pd-ink); font-size: .85rem; }
+.kd-bar { display: flex; align-items: center; gap: .35rem; padding: .7rem 1rem; background: #f4ece9; }
+.kd-bar span { width: .6rem; height: .6rem; border-radius: 50%; background: #cfc3bf; }
+.kd-bar span:first-child { background: #db5b4c; }
+.kd-bar span:nth-child(2) { background: #ffc857; }
+.kd-bar b { margin-left: .5rem; font-size: .8rem; color: var(--pd-muted); }
+.kd-body { padding: 1.1rem; }
+.kd-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; margin-bottom: 1rem; }
+.kd-stat { padding: .7rem .8rem; border-radius: 12px; }
+.kd-stat small { display: block; color: var(--pd-muted); font-size: .72rem; }
+.kd-stat strong { font-size: 1.05rem; }
+.kd-stat--mint { background: var(--pd-tone-mint); }
+.kd-stat--sun { background: var(--pd-tone-sun); }
+.kd-stat--peach { background: var(--pd-tone-peach); }
+.kd-list { border: 1px solid #f1e6e2; border-radius: 12px; overflow: hidden; }
+.kd-list-title { padding: .55rem .8rem; font-weight: 700; font-size: .78rem; color: var(--pd-muted); background: #fffaf7; }
+.kd-row { display: flex; align-items: center; gap: .7rem; padding: .55rem .8rem; border-top: 1px solid #f1e6e2; }
+.kd-time { flex: 0 0 auto; font-weight: 700; color: var(--bs-primary); font-size: .8rem; }
+.kd-name { flex: 1 1 auto; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.kd-row em { flex: 0 0 auto; font-style: normal; font-size: .72rem; font-weight: 700; padding: .15rem .5rem; border-radius: 999px; background: #f3efed; color: var(--pd-muted); }
+.kd-row em.kd-ok { background: var(--pd-tone-mint); color: #23885a; }
+.kd-row em.kd-warn { background: var(--pd-tone-sun); color: #b7791f; }
+
+@media (max-width: 575.98px) {
+    .kd-stats { grid-template-columns: 1fr 1fr; }
+    .kd-stat:last-child { display: none; }
+}

@@ -56,8 +56,8 @@
 <section id="packages" data-reveal class="py-5 packages-section {{ $section['style'] === '' ? 'packages-section--tinted' : '' }} {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
     <div class="container">
         @include('frontend.partials.sections._heading', [
-            'defaultTitle' => 'Paket Layanan',
-            'defaultSubtitle' => 'Pilih paket sesuai kebutuhan kursus Anda. Satu paket untuk pusat dan semua cabang, tanpa biaya tambahan per cabang.',
+            'defaultTitle' => 'Harga yang masuk akal untuk tempat kursus',
+            'defaultSubtitle' => 'Mulai gratis dulu, bayar kalau sudah cocok. Satu paket berlaku untuk pusat dan semua cabang. Butuh lebih? Di bizbos juga ada aplikasi WhatsApp Bisnis, Tagihan, Halaman Web, dan Tiket Event yang bisa ditambahkan kapan saja.',
         ])
 
         @if (empty($packageGroups))
@@ -134,10 +134,15 @@
                     @php
                         $packageCol = count($group['packages']) >= 4 ? 'col-12 col-md-6 col-xl-3' : 'col-12 col-md-6 col-lg-4';
                     @endphp
+                    @php
+                        // Label "Paling banyak dipilih" hanya untuk SATU paket per tab (yang pertama
+                        // dicentang is_featured di Superadmin), supaya labelnya tetap bermakna.
+                        $featuredKey = collect(array_values($group['packages']))->search(fn ($p) => ! empty($p['is_featured']));
+                    @endphp
                     <div class="row g-4 justify-content-center package-row">
                         @foreach ($group['packages'] as $package)
                             @php
-                                $isFeatured = (bool) ($package['is_featured'] ?? false);
+                                $isFeatured = $featuredKey !== false && $loop->index === $featuredKey;
                                 $isTrial = (bool) ($package['is_trial'] ?? false);
                                 $price = (float) ($package['price'] ?? 0);
                                 $months = (int) ($package['months'] ?? 1);
@@ -156,7 +161,7 @@
                             <div class="{{ $packageCol }} d-flex package-col" style="--i: {{ $loop->index }}">
                                 <div class="package-card w-100 h-100 d-flex flex-column p-4 {{ $isFeatured ? 'package-card--featured' : '' }}">
                                     @if ($isFeatured)
-                                        <span class="package-badge">TERPOPULER</span>
+                                        <span class="package-badge">PALING BANYAK DIPILIH</span>
                                     @endif
 
                                     <div class="d-flex flex-wrap gap-2 mb-2">
@@ -183,9 +188,10 @@
                                         @endif
                                     </p>
 
-                                    <a href="{{ $contactHref($package) }}" target="_blank" rel="noopener" data-track-name="{{ $package['name'] ?? 'Paket' }}"
-                                        class="btn {{ $isFeatured ? 'btn-package-featured' : 'btn-package-outline' }} w-100 mb-4">
-                                        {{ $isTrial ? 'Coba Gratis' : 'Pilih Paket' }}
+                                    {{-- Trial langsung ke pendaftaran (tanpa menunggu balasan admin); paket berbayar tetap lewat WhatsApp. --}}
+                                    <a href="{{ $isTrial ? 'https://app.bizbos.id/auth/register' : $contactHref($package) }}" target="_blank" rel="noopener" data-track-name="{{ $package['name'] ?? 'Paket' }}"
+                                        class="btn {{ ($isFeatured || $isTrial) ? 'btn-package-featured' : 'btn-package-outline' }} w-100 mb-4">
+                                        {{ $isTrial ? 'Coba Gratis Sekarang' : 'Pilih Paket Ini' }}
                                     </a>
 
                                     <ul class="package-feature-list list-unstyled mb-0 flex-grow-1">
@@ -250,7 +256,7 @@
                                         <tr>
                                             <th scope="col">Fitur</th>
                                             @foreach ($group['packages'] as $package)
-                                                <th scope="col" class="{{ ! empty($package['is_featured']) ? 'is-featured' : '' }}">{{ $package['column_label'] ?? '-' }}</th>
+                                                <th scope="col" class="{{ $loop->index === $featuredKey ? 'is-featured' : '' }}">{{ $package['column_label'] ?? '-' }}</th>
                                             @endforeach
                                         </tr>
                                     </thead>

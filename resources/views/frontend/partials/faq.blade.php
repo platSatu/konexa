@@ -24,6 +24,8 @@
     // Beranda cukup 6 FAQ teratas (urutan dari superadmin); FAQ lainnya tetap dipakai live chat.
     $faqs = array_slice($faqs ?? [], 0, 6);
 @endphp
+{{-- Kalau FAQ belum diisi di Superadmin, section tidak ditampilkan. --}}
+@if (! empty($faqs))
 <section id="faq" class="py-5 faq-section {{ $section['is_dark'] ? 'text-white' : '' }}" style="{{ $section['style'] }}">
     {{--
         container-fluid + .faq-container (bukan .container Bootstrap biasa)
@@ -36,11 +38,11 @@
     <div class="container-fluid faq-container">
         <div class="faq-header d-flex flex-column flex-lg-row align-items-lg-center justify-content-lg-between gap-3 gap-lg-4 mb-4 mb-lg-5">
             <div class="d-flex align-items-center gap-3 flex-grow-1">
-                <h2 class="faq-heading mb-0">{{ ($section['title'] ?? null) ?: 'FAQs' }}</h2>
+                <h2 class="faq-heading mb-0">{{ ($section['title'] ?? null) ?: 'Masih ragu?' }}</h2>
                 <span class="faq-heading-line d-none d-lg-block" aria-hidden="true"></span>
             </div>
             <p class="faq-header-desc {{ $section['is_dark'] ? 'text-white-50' : 'text-muted' }} mb-0">
-                {{ ($section['subtitle'] ?? null) ?: 'Jawaban singkat untuk hal yang paling sering ditanyakan. Belum ketemu? Tanyakan saja lewat live chat, kami siap bantu.' }}
+                {{ ($section['subtitle'] ?? null) ?: 'Wajar kok. Ini pertanyaan yang paling sering ditanyakan pemilik kursus sebelum mulai. Belum ketemu jawabannya? Tanya saja lewat live chat, kami bantu.' }}
             </p>
         </div>
 
@@ -77,3 +79,4 @@
         @include('frontend.partials.sections._buttons')
     </div>
 </section>
+@endif

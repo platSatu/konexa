@@ -14,7 +14,7 @@
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('frontend.index') ? 'active' : '' }}"
                 aria-current="{{ request()->routeIs('frontend.index') ? 'page' : 'false' }}"
-                href="{{ route('frontend.index') }}">Home</a>
+                href="{{ route('frontend.index') }}">Beranda</a>
         </li>
         {{-- Dropdown Layanan (gaya: frontend.css bagian "Menu Layanan"). Layanan baru cukup ditambah di $services. --}}
         @php
@@ -22,18 +22,18 @@
             // (WhatsApp, Invoice) -- mengikuti cara orang mencari. Ini bukan urutan alur
             // kerja; alur kerja ada di partials/hero-flow.blade.php, jangan disamakan.
             $services = [
-                ['frontend.course', 'mortarboard', 'Management Kursus', 'Pendaftaran murid, jadwal, absensi & tagihan', 'sun'],
-                ['frontend.ticket', 'ticket-perforated', 'Management Event', 'Jual tiket online, e-ticket & scan QR peserta', 'peach'],
-                ['frontend.whatsapp', 'whatsapp', 'Management WhatsApp', 'Inbox tim, chatbot, AI & broadcast terjadwal', 'mint'],
-                ['frontend.invoice', 'receipt', 'Management Invoice', 'Tagihan dengan link bayar & pengingat otomatis', 'sky'],
+                ['frontend.course', 'mortarboard', 'Aplikasi Kursus', 'Murid daftar online, jadwal, absensi & SPP', 'sun'],
+                ['frontend.ticket', 'ticket-perforated', 'Jual Tiket Event', 'Tiket online, e-ticket & scan QR peserta', 'peach'],
+                ['frontend.whatsapp', 'whatsapp', 'WhatsApp Bisnis', 'Balas chat bareng tim, auto reply & broadcast', 'mint'],
+                ['frontend.invoice', 'receipt', 'Tagihan & Pembayaran', 'Kirim tagihan + link bayar, pengingat otomatis', 'sky'],
             ];
             $serviceActive = collect($services)->contains(fn (array $service) => request()->routeIs($service[0]));
         @endphp
         <li class="nav-item dropdown nav-services">
             <a class="nav-link dropdown-toggle {{ $serviceActive ? 'active' : '' }}" href="#" role="button"
-                data-bs-toggle="dropdown" aria-expanded="false">Layanan</a>
+                data-bs-toggle="dropdown" aria-expanded="false">Solusi</a>
             <div class="dropdown-menu services-menu">
-                <div class="services-menu-label">Layanan bizbos</div>
+                <div class="services-menu-label">Aplikasi di bizbos</div>
                 @foreach ($services as [$routeName, $icon, $label, $hint, $tone])
                     <a class="service-item {{ request()->routeIs($routeName) ? 'is-active' : '' }}"
                         aria-current="{{ request()->routeIs($routeName) ? 'page' : 'false' }}" href="{{ route($routeName) }}">
@@ -55,11 +55,17 @@
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('frontend.contact') ? 'active' : '' }}"
                 aria-current="{{ request()->routeIs('frontend.contact') ? 'page' : 'false' }}"
-                href="{{ route('frontend.contact') }}">Contact</a>
+                href="{{ route('frontend.contact') }}">Kontak</a>
         </li>
         {{-- Live chat sekarang dibuka dari tombol bulat melayang di kanan bawah (frontend/partials/chat-widget.blade.php). --}}
-        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-            <a class="btn btn-primary fw-semibold px-4" href="https://app.bizbos.id/auth/login">Login</a>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('frontend.index') }}#packages">Harga</a>
+        </li>
+        <li class="nav-item ms-lg-2">
+            <a class="nav-link fw-semibold" href="https://app.bizbos.id/auth/login">Masuk</a>
+        </li>
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+            <a class="btn btn-primary fw-semibold px-4" href="https://app.bizbos.id/auth/register">Coba Gratis</a>
         </li>
     </ul>
 </div>

@@ -7,10 +7,10 @@
 --}}
 @php
     $slides = array_values($headers ?? []) ?: [[
-        'text' => 'Satu Aplikasi. Semua Beres.',
-        'descriptions' => 'Registrasi, notifikasi WhatsApp, jadwal, absensi, sampai pembayaran, cukup diurus dalam satu aplikasi.',
+        'text' => 'Urus murid, jadwal, dan SPP tanpa pusing tiap akhir bulan.',
+        'descriptions' => 'Murid daftar sendiri, absen cukup scan QR, tagihan dan pengingat les terkirim otomatis ke WhatsApp orang tua. Anda tinggal pantau dari HP, dan bisa kembali fokus mengajar.',
         'button_action' => 'active',
-        'button_text' => 'Coba Sekarang, Gratis!',
+        'button_text' => 'Coba Gratis 30 Hari',
         'button_link' => 'https://app.bizbos.id/auth/register',
     ]];
     $multi = count($slides) > 1;
@@ -34,7 +34,7 @@
                     <div class="container py-5">
                         <div class="row align-items-center g-4 g-lg-5">
                             <div class="col-12 col-lg-6 hero-content">
-                                <span class="hero-eyebrow"><i class="bi bi-stars"></i> Untuk <span class="pd-rotate" data-words="event|kursus|tagihan|WhatsApp|toko online">event</span></span>
+                                <span class="hero-eyebrow"><i class="bi bi-stars"></i> Untuk pemilik <span class="pd-rotate" data-words="tempat kursus|kursus bahasa Inggris|kursus Mandarin|kursus bahasa Korea|kursus bahasa Jepang|bimbel|les musik|kursus coding">tempat kursus</span></span>
                                 @if (! empty($slide['text']))
                                     <h1 class="display-4 fw-bold">{{ $slide['text'] }}</h1>
                                 @endif
@@ -45,17 +45,26 @@
                                     @if (($slide['button_action'] ?? 'inactive') === 'active' && ! empty($slide['button_text']) && ! empty($slide['button_link']))
                                         <a href="{{ $slide['button_link'] }}" class="btn btn-primary btn-lg hero-btn">{{ $slide['button_text'] }} <i class="bi bi-arrow-right"></i></a>
                                     @endif
-                                    <a href="#packages" class="btn btn-lg hero-btn hero-btn-ghost"><i class="bi bi-tags"></i> Lihat Harga</a>
+                                    <a href="#kenal-situasi" class="btn btn-lg hero-btn hero-btn-ghost"><i class="bi bi-play-circle"></i> Lihat bedanya</a>
                                 </div>
                                 <ul class="hero-chips list-unstyled mb-0">
-                                    <li><i class="bi bi-check-circle-fill"></i> Daftar gratis</li>
-                                    <li><i class="bi bi-check-circle-fill"></i> Trial 7 hari</li>
-                                    <li><i class="bi bi-check-circle-fill"></i> Pages & tiket gratis</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Gratis 30 hari</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Bisa dipakai dari HP</li>
+                                    <li><i class="bi bi-check-circle-fill"></i> Satu akun untuk semua cabang</li>
                                 </ul>
                             </div>
                             <div class="col-12 col-lg-6 hero-visual">
                                 <div class="hero-parallax" data-hero-parallax>
                                     @include('frontend.partials.hero-flow', ['uid' => 'hero-flow-'.$index])
+                                </div>
+                                {{-- Kartu "momen lega" melayang: contoh kabar yang diterima pemilik kursus (data contoh, bukan data asli). --}}
+                                <div class="hero-moment hero-moment--paid" aria-hidden="true">
+                                    <span class="hero-moment-icon"><i class="bi bi-check2-circle"></i></span>
+                                    <span><strong>SPP Nadia sudah lunas</strong><small>Dibayar lewat QRIS · baru saja</small></span>
+                                </div>
+                                <div class="hero-moment hero-moment--reminder" aria-hidden="true">
+                                    <span class="hero-moment-icon"><i class="bi bi-whatsapp"></i></span>
+                                    <span><strong>Pengingat les terkirim</strong><small>Ke semua orang tua kelas besok</small></span>
                                 </div>
                             </div>
                         </div>
