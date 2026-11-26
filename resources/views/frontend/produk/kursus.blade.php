@@ -228,6 +228,7 @@
                             <span class="pd-role-tag">Pemilik kursus</span>
                             <h3>Dashboard yang langsung menunjukkan yang perlu ditangani</h3>
                             <p>Pemasukan bulan ini, sesi yang belum diabsen, tagihan yang hampir jatuh tempo, dan jadwal hari ini dalam satu layar.</p>
+                            <button type="button" class="vc-btn" data-cuplikan="jadwal"><i class="bi bi-play-circle-fill"></i> Lihat jadwalnya <small>10 detik</small></button>
                         </div>
                         <ul class="pd-mock list-unstyled mt-3" aria-hidden="true">
                             <li><span>Hari ini</span><b>Pemasukan bulan ini</b><em class="is-ok">Rp 18,4 jt</em></li>
@@ -254,6 +255,7 @@
                             <span class="pd-role-tag">Pengajar</span>
                             <h3>Absen scan QR dari HP, honor dihitung sendiri</h3>
                             <p>Sampai di tempat les, pengajar scan QR untuk absen, lalu scan kartu QR murid satu per satu. Setiap kartu hanya terhitung sekali per sesi, dan bagian honornya ikut tercatat dari absensi tersebut.</p>
+                            <button type="button" class="vc-btn" data-cuplikan="absensi"><i class="bi bi-play-circle-fill"></i> Lihat cara absen <small>10 detik</small></button>
                         </div>
                         <ul class="pd-mock list-unstyled" aria-hidden="true">
                             <li><span>16.00</span><b>Matematika SD</b><em class="is-ok">Pengajar hadir 15.52</em></li>
@@ -326,6 +328,7 @@
     @include('frontend.produk._cta', ['before' => 'Siap bikin kursus Anda lebih', 'highlight' => 'rapi', 'after' => '?', 'subtitle' => 'Daftar gratis, buat kelas pertama, dan bagikan link pendaftarannya hari ini.', 'button' => 'Mulai Kelola Kursus'])
 
     @include('frontend.partials.footer')
+    @include('frontend.partials.video-cuplikan')
 @endsection
 
 @push('scripts')

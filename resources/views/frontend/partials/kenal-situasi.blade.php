@@ -14,6 +14,8 @@
             'time' => 'Akhir bulan, 23.47',
             'title' => 'Sudah hampir tengah malam, Anda masih merekap absensi dari buku.',
             'pain' => 'Ada tanda tangan yang terlewat, ada halaman yang sobek. Besok pagi pengajar menanyakan honornya. Salah hitung sedikit saja, Anda yang tidak enak hati, atau Anda yang menanggung selisihnya.',
+            // tombol cuplikan video (lihat partials/video-cuplikan.blade.php)
+            'video' => ['key' => 'absensi', 'label' => 'Lihat solusinya'],
         ],
         [
             'art' => 'tagih',
@@ -57,6 +59,11 @@
                             <span class="situasi-time"><i class="bi bi-clock-history"></i> {{ $situation['time'] }}</span>
                             <h3 class="situasi-card-title">{{ $situation['title'] }}</h3>
                             <p class="situasi-pain-text">{{ $situation['pain'] }}</p>
+                            @if (!empty($situation['video']))
+                                <button type="button" class="vc-btn" data-cuplikan="{{ $situation['video']['key'] }}">
+                                    <i class="bi bi-play-circle-fill"></i> {{ $situation['video']['label'] }} <small>10 detik</small>
+                                </button>
+                            @endif
                         </div>
                     </article>
                 </div>
@@ -75,3 +82,4 @@
         </div>
     </div>
 </section>
+@include('frontend.partials.video-cuplikan')
