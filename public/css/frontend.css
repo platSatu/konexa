@@ -2560,23 +2560,39 @@ a.contact-channel:hover {
 .situasi-tag { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #23885a; }
 
 .situasi-closing {
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem 2.5rem;
     margin-top: 3.5rem;
-    padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.5rem, 4vw, 3rem);
+    padding: clamp(1.75rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem);
     border-radius: 26px;
-    background: #2b2f4a;
     color: #fff;
+    background-color: #2b2f4a;
+    background-image:
+        radial-gradient(ellipse 45% 80% at 100% 100%, rgba(255, 200, 87, .35), transparent 70%),
+        radial-gradient(circle, rgba(255, 255, 255, .08) 1px, transparent 1.5px);
+    background-size: auto, 20px 20px;
 }
 
-.situasi-closing-text { flex: 1 1 26rem; }
-.situasi-closing h3 { font-size: clamp(1.25rem, 2.4vw, 1.6rem); font-weight: 700; margin-bottom: .5rem; }
-.situasi-closing p { margin: 0; color: rgba(255, 255, 255, .78); line-height: 1.75; }
-.situasi-closing-action { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; }
-.situasi-closing-action small { color: rgba(255, 255, 255, .7); }
+.situasi-closing-text { flex: 1 1 28rem; }
+.situasi-closing-warn {
+    display: flex;
+    gap: .5rem;
+    align-items: flex-start;
+    margin-bottom: .9rem !important;
+    color: #ffb4a8 !important;
+    font-weight: 600;
+}
+.situasi-closing h3 { font-size: clamp(1.3rem, 2.5vw, 1.75rem); font-weight: 700; margin-bottom: .5rem; }
+.situasi-closing p { margin: 0; color: rgba(255, 255, 255, .8); line-height: 1.75; }
+.situasi-closing-action { flex: 0 0 auto; }
+.situasi-closing-btn { color: #2b2f4a; font-weight: 700; }
+.situasi-closing-btn .bi { display: inline-block; animation: sa-nudge 1.6s ease-in-out infinite; }
+@keyframes sa-nudge { 50% { transform: translateY(4px); } }
 
 /* Animasi kecil di ilustrasi */
 .situasi-art .sa-blink { animation: sa-blink 1.2s steps(1) infinite; }
@@ -2602,16 +2618,164 @@ a.contact-channel:hover {
 @keyframes sa-pulse { 50% { transform: scale(1.12); } }
 @keyframes sa-pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-.reveal-ready [data-reveal]:not(.is-visible) .situasi-card { opacity: 0; transform: translateY(18px); }
+.reveal-ready [data-reveal]:not(.is-visible) .situasi-card { opacity: 0; }
 .reveal-ready [data-reveal].is-visible .situasi-card {
-    opacity: 1;
-    transform: none;
-    transition: opacity .5s ease, transform .5s ease, box-shadow .25s ease;
-    transition-delay: calc(var(--i, 0) * 90ms);
+    animation: home-rise .55s ease backwards;
+    animation-delay: calc(var(--i, 0) * 90ms);
 }
 
 @media (prefers-reduced-motion: reduce) {
     .hero-moment,
     .situasi-art * { animation: none !important; }
     .situasi-card, .situasi-card:hover { transition: none; transform: none; }
+}
+
+
+
+/* =====================================================================
+ * Section Superadmin: icon_grid (partials/sections/icon_grid.blade.php)
+ * Warna lembut bergantian per kartu (sama dengan palet halaman produk),
+ * plus mode "alur" bernomor yang tampil sebagai stepper bersambung.
+ * ===================================================================== */
+.home-tone--peach { --tone-bg: #ffece6; --tone-accent: #d9533f; }
+.home-tone--sun { --tone-bg: #fff4d6; --tone-accent: #b7791f; }
+.home-tone--mint { --tone-bg: #e5f6ec; --tone-accent: #23885a; }
+.home-tone--sky { --tone-bg: #e6f0fc; --tone-accent: #2f6fba; }
+.home-tone--lilac { --tone-bg: #efeafb; --tone-accent: #6a4fc1; }
+
+.home-section h2 { font-size: clamp(1.7rem, 3.2vw, 2.4rem); }
+
+/* Kartu biasa */
+.home-icon-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.25rem; }
+.home-icon-item {
+    flex: 1 1 230px;
+    max-width: 268px;
+    padding: 1.5rem 1.4rem;
+    border-radius: 22px;
+    background: var(--tone-bg);
+    text-align: left;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+.home-icon-item:hover { transform: translateY(-4px); box-shadow: 0 18px 36px rgba(60, 30, 20, .1); }
+.home-icon-item .home-icon-badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: #fff;
+    color: var(--tone-accent);
+    font-size: 1.6rem;
+    box-shadow: 0 8px 18px rgba(60, 30, 20, .08);
+}
+.home-icon-item:hover .home-icon-badge { transform: rotate(-6deg) scale(1.05); }
+.home-icon-title { font-size: 1.05rem; font-weight: 700; line-height: 1.4; margin-bottom: .4rem; color: #1f1a17; }
+.home-icon-desc { color: #5a5250; font-size: .93rem; line-height: 1.65; }
+.home-section--dark .home-icon-item { background: rgba(255, 255, 255, .08); }
+.home-section--dark .home-icon-title { color: #fff; }
+.home-section--dark .home-icon-desc { color: rgba(255, 255, 255, .7); }
+
+/* Alur bernomor (stepper) */
+.home-section--steps {
+    background-color: #fff7f2;
+    background-image:
+        radial-gradient(ellipse 40% 60% at 0% 0%, rgba(255, 200, 87, .25), transparent 70%),
+        radial-gradient(circle, rgba(219, 91, 76, .08) 1px, transparent 1.5px);
+    background-size: auto, 22px 22px;
+}
+
+.home-steps {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--steps, 5), minmax(0, 1fr));
+    gap: 1.5rem;
+    counter-reset: none;
+}
+
+.home-steps::before {
+    content: "";
+    position: absolute;
+    top: 38px;
+    left: calc(100% / var(--steps, 5) / 2);
+    right: calc(100% / var(--steps, 5) / 2);
+    height: 3px;
+    background: repeating-linear-gradient(90deg, #f0a093 0 10px, transparent 10px 18px);
+}
+
+.home-steps::after {
+    content: "";
+    position: absolute;
+    top: 33px;
+    left: calc(100% / var(--steps, 5) / 2);
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #f59e0b;
+    box-shadow: 0 0 10px rgba(245, 158, 11, .9);
+    animation: home-steps-run 6s linear infinite;
+}
+
+@keyframes home-steps-run {
+    from { left: calc(100% / var(--steps, 5) / 2); opacity: 0; }
+    8% { opacity: 1; }
+    92% { opacity: 1; }
+    to { left: calc(100% - 100% / var(--steps, 5) / 2 - 13px); opacity: 0; }
+}
+
+.home-step { position: relative; text-align: center; padding: 0 .25rem; }
+.home-step-marker { position: relative; z-index: 1; width: 78px; height: 78px; margin: 0 auto 1.1rem; }
+.home-step-icon {
+    display: grid;
+    place-items: center;
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    background: var(--tone-bg);
+    color: var(--tone-accent);
+    font-size: 1.8rem;
+    box-shadow: 0 12px 26px rgba(60, 30, 20, .12);
+    transition: transform .25s ease;
+}
+.home-step-icon img { max-width: 40px; max-height: 40px; object-fit: contain; }
+.home-step:hover .home-step-icon { transform: translateY(-4px) rotate(-6deg); }
+.home-step-num {
+    position: absolute;
+    top: -4px;
+    right: -6px;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    background: var(--bs-primary);
+    color: #fff;
+    font-size: .85rem;
+    font-weight: 700;
+}
+.home-step-title { font-size: 1.05rem; font-weight: 700; line-height: 1.4; margin-bottom: .45rem; color: #1f1a17; }
+.home-step-desc { margin: 0; color: #5a5250; font-size: .93rem; line-height: 1.65; }
+
+@media (max-width: 991.98px) {
+    .home-steps { grid-template-columns: 1fr; gap: 1.75rem; }
+    .home-steps::before { top: 39px; bottom: 39px; left: 37px; right: auto; width: 3px; height: auto; background: repeating-linear-gradient(180deg, #f0a093 0 10px, transparent 10px 18px); }
+    .home-steps::after { display: none; }
+    .home-step { display: grid; grid-template-columns: 78px 1fr; column-gap: 1.1rem; text-align: left; padding: 0; }
+    .home-step-marker { grid-row: span 2; margin: 0; }
+    .home-step-title { margin-top: .9rem; }
+}
+
+/* Muncul bergiliran saat di-scroll */
+.reveal-ready [data-reveal]:not(.is-visible) .home-step,
+.reveal-ready [data-reveal]:not(.is-visible) .home-icon-item { opacity: 0; }
+.reveal-ready [data-reveal].is-visible .home-step,
+.reveal-ready [data-reveal].is-visible .home-icon-item {
+    /* fill "backwards": jeda awal tetap tersembunyi, setelah selesai efek hover tidak tertimpa */
+    animation: home-rise .55s ease backwards;
+    animation-delay: calc(var(--i, 0) * 90ms);
+}
+@keyframes home-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .home-steps::after, .situasi-closing-btn .bi { animation: none; display: none; }
+    .home-icon-item, .home-icon-item:hover, .home-step-icon { transition: none; transform: none; }
 }
