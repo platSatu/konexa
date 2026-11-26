@@ -2431,7 +2431,8 @@ a.contact-channel:hover {
  * (frontend/partials/hero.blade.php). Contoh kabar yang diterima pemilik
  * kursus -- SPP lunas, pengingat terkirim. Disembunyikan di layar kecil.
  * ===================================================================== */
-.hero-light .hero-visual { position: relative; }
+/* Ruang kosong di atas & bawah ilustrasi untuk kartu melayang, supaya tidak menutupi kartu alur. */
+.hero-light .hero-visual { position: relative; padding-top: 4.25rem; padding-bottom: 4.25rem; }
 
 .hero-moment {
     position: absolute;
@@ -2461,13 +2462,14 @@ a.contact-channel:hover {
     font-size: 1.15rem;
 }
 
-.hero-moment--paid { left: 2%; top: -2%; }
+.hero-moment--paid { left: 0; top: 0; }
 .hero-moment--paid .hero-moment-icon { background: #e5f6ec; color: #23885a; }
-.hero-moment--reminder { right: 0; bottom: -4%; animation-delay: -3s; }
+.hero-moment--reminder { right: 0; bottom: 0; animation-delay: -3s; }
 .hero-moment--reminder .hero-moment-icon { background: #e6f6ec; color: #25a35a; }
 
 @media (max-width: 991.98px) {
     .hero-moment { display: none; }
+    .hero-light .hero-visual { padding-top: 0; padding-bottom: 0; }
 }
 
 
