@@ -17,14 +17,28 @@
     <div class="container">
         @include('frontend.partials.sections._heading', [
             'defaultTitle' => 'Yang bisa bizbos bantu kerjakan untuk Anda',
-            'defaultSubtitle' => 'Dari murid mendaftar sampai SPP lunas, pekerjaan admin yang berulang dikerjakan otomatis. Anda tinggal mengecek dari HP.',
+            'defaultSubtitle' => 'Dari murid mendaftar sampai SPP lunas, pekerjaan admin yang berulang dikerjakan otomatis.',
         ])
 
         @if (empty($features))
             <p class="text-center text-muted mb-0">Belum ada fitur saat ini.</p>
         @else
             @php
-                $tileSizes = ['big', 'wide', 'small', 'small', 'tall', 'wide', 'small', 'tall', 'wide', 'small', 'small', 'small'];
+                // Susunan kotak dipilih sesuai JUMLAH fitur supaya grid 4 kolom selalu penuh
+                // (tidak ada kotak yang turun sendirian). 'full' = selebar grid, 1 baris.
+                // Lebih dari 8 fitur memakai pola 12 kotak berulang seperti sebelumnya.
+                $tileLayouts = [
+                    1 => ['full'],
+                    2 => ['big', 'big'],
+                    3 => ['big', 'wide', 'wide'],
+                    4 => ['big', 'wide', 'small', 'small'],
+                    5 => ['big', 'wide', 'small', 'small', 'full'],
+                    6 => ['big', 'wide', 'small', 'small', 'wide', 'wide'],
+                    7 => ['big', 'wide', 'small', 'small', 'wide', 'small', 'small'],
+                    8 => ['big', 'wide', 'small', 'small', 'big', 'wide', 'small', 'small'],
+                ];
+                $tileSizes = $tileLayouts[count($features)]
+                    ?? ['big', 'wide', 'small', 'small', 'tall', 'wide', 'small', 'tall', 'wide', 'small', 'small', 'small'];
             @endphp
             <div class="features-bento">
                 @foreach ($features as $feature)

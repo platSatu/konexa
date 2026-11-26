@@ -965,6 +965,7 @@ section {
 .feature-tile--big  { grid-column: span 2; grid-row: span 2; }
 .feature-tile--wide { grid-column: span 2; }
 .feature-tile--tall { grid-row: span 2; }
+.feature-tile--full { grid-column: 1 / -1; }
 
 .feature-tile-text {
     position: relative;
@@ -975,6 +976,7 @@ section {
 
 .feature-tile--big .feature-tile-text  { max-width: 62%; padding: 26px 28px; }
 .feature-tile--wide .feature-tile-text { max-width: 50%; }
+.feature-tile--full .feature-tile-text { max-width: 55%; padding: 26px 28px; }
 
 .feature-tile-title {
     margin: 0;
@@ -1017,6 +1019,7 @@ section {
 
 .feature-tile--big .feature-tile-art   { width: 68%; height: 60%; }
 .feature-tile--wide .feature-tile-art  { width: 48%; height: 100%; }
+.feature-tile--full .feature-tile-art  { width: 40%; height: 100%; }
 .feature-tile--tall .feature-tile-art  { width: 100%; height: 62%; }
 .feature-tile--small .feature-tile-art { width: 62%; height: 62%; }
 
@@ -1070,6 +1073,7 @@ section {
 
     .feature-tile-text,
     .feature-tile--wide .feature-tile-text { max-width: 100%; padding: 14px 16px; }
+    .feature-tile--full .feature-tile-text { max-width: 60%; padding: 18px 20px; }
     .feature-tile--big .feature-tile-text { max-width: 85%; padding: 20px; }
     .feature-tile-title { font-size: .95rem; }
     .feature-tile--big .feature-tile-title { font-size: 1.35rem; }
@@ -2128,7 +2132,8 @@ a.contact-channel:hover {
     .feature-tile,
     .feature-tile--big,
     .feature-tile--wide,
-    .feature-tile--tall {
+    .feature-tile--tall,
+    .feature-tile--full {
         grid-row: auto;
         grid-column: auto;
         height: 300px;
